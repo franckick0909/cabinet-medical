@@ -74,16 +74,16 @@ export default function PatientPage() {
 
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="space-y-6 bg-white rounded-lg border-2 border-gray-200 p-6"
+        className="space-y-4 sm:space-y-6 bg-white rounded-lg border-2 border-gray-200 p-4 sm:p-6"
       >
         {/* Civilité */}
         <div className="">
-          <label className="block text-xl font-semibold text-gray-900 mb-4">
+          <label className="block text-base sm:text-xl font-semibold text-gray-900 mb-3 sm:mb-4">
             Civilité
           </label>
 
-          <div className="flex gap-4">
-            <label className="flex-1 flex items-center justify-center p-4 rounded-lg border-2 border-gray-200 hover:border-blue-300 hover:bg-blue-50/30 cursor-pointer transition-all">
+          <div className="flex gap-2 sm:gap-4">
+            <label className="flex-1 flex items-center justify-center p-3 sm:p-4 rounded-lg border-2 border-gray-200 hover:border-blue-300 hover:bg-blue-50/30 cursor-pointer transition-all">
               <input
                 type="radio"
                 value="Madame"
@@ -91,14 +91,14 @@ export default function PatientPage() {
                 onChange={(e) =>
                   handleCiviliteChange(e.target.value as "Madame" | "Monsieur")
                 }
-                className="w-5 h-5 border-2 border-gray-300 text-blue-600 focus:ring-2 focus:ring-blue-500 cursor-pointer mr-3"
+                className="w-5 h-5 border-2 border-gray-300 text-blue-600 focus:ring-2 focus:ring-blue-500 cursor-pointer mr-2 sm:mr-3 flex-shrink-0"
               />
-              <span className="text-base font-medium text-gray-900">
+              <span className="text-sm sm:text-base font-medium text-gray-900">
                 Madame
               </span>
             </label>
 
-            <label className="flex-1 flex items-center justify-center p-4 rounded-lg border-2 border-gray-200 hover:border-blue-300 hover:bg-blue-50/30 cursor-pointer transition-all">
+            <label className="flex-1 flex items-center justify-center p-3 sm:p-4 rounded-lg border-2 border-gray-200 hover:border-blue-300 hover:bg-blue-50/30 cursor-pointer transition-all">
               <input
                 type="radio"
                 value="Monsieur"
@@ -106,9 +106,9 @@ export default function PatientPage() {
                 onChange={(e) =>
                   handleCiviliteChange(e.target.value as "Madame" | "Monsieur")
                 }
-                className="w-5 h-5 border-2 border-gray-300 text-blue-600 focus:ring-2 focus:ring-blue-500 cursor-pointer mr-3"
+                className="w-5 h-5 border-2 border-gray-300 text-blue-600 focus:ring-2 focus:ring-blue-500 cursor-pointer mr-2 sm:mr-3 flex-shrink-0"
               />
-              <span className="text-base font-medium text-gray-900">
+              <span className="text-sm sm:text-base font-medium text-gray-900">
                 Monsieur
               </span>
             </label>
@@ -122,7 +122,7 @@ export default function PatientPage() {
 
         {/* Nom et Prénom */}
         <div className="">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
             <Input
               label="Prénom"
               {...register("prenom")}
@@ -154,8 +154,10 @@ export default function PatientPage() {
 
         {/* Contact */}
         <div className="">
-          <h3 className="text-xl font-semibold text-gray-900 mb-4">Contact</h3>
-          <div className="space-y-4">
+          <h3 className="text-base sm:text-xl font-semibold text-gray-900 mb-3 sm:mb-4">
+            Contact
+          </h3>
+          <div className="space-y-3 sm:space-y-4">
             <Input
               label="Numéro de téléphone"
               type="tel"
@@ -165,7 +167,7 @@ export default function PatientPage() {
               required
               fullWidth
             />
-            <p className="text-sm text-gray-600">
+            <p className="text-xs sm:text-sm text-gray-600">
               Le professionnel vous contactera sur ce numéro pour convenir
               d&apos;un rendez-vous
             </p>
@@ -179,7 +181,7 @@ export default function PatientPage() {
             />
 
             {/* Checkbox "Je n'ai pas d'email" */}
-            <label className="flex items-center p-3 rounded-lg border-2 border-gray-200 hover:border-blue-300 hover:bg-blue-50/30 cursor-pointer transition-all">
+            <label className="flex items-center p-3 sm:p-4 rounded-lg border-2 border-gray-200 hover:border-blue-300 hover:bg-blue-50/30 cursor-pointer transition-all">
               <input
                 type="checkbox"
                 checked={pasEmail}
@@ -189,9 +191,9 @@ export default function PatientPage() {
                     setValue("email", "");
                   }
                 }}
-                className="w-5 h-5 rounded border-2 border-gray-300 text-blue-600 focus:ring-2 focus:ring-blue-500 cursor-pointer"
+                className="w-5 h-5 rounded border-2 border-gray-300 text-blue-600 focus:ring-2 focus:ring-blue-500 cursor-pointer flex-shrink-0"
               />
-              <span className="ml-3 text-base font-medium text-gray-900">
+              <span className="ml-2 sm:ml-3 text-sm sm:text-base font-medium text-gray-900">
                 Je n&apos;ai pas d&apos;email
               </span>
             </label>
@@ -210,13 +212,15 @@ export default function PatientPage() {
         </div>
 
         {/* Adresse */}
-        <div className="bg-white rounded-lg border-2 border-gray-200 p-6">
-          <h3 className="text-xl font-semibold text-gray-900 mb-4">Adresse </h3>
-          <p className="text-sm text-gray-600 mb-4">
+        <div className="bg-white rounded-lg border-2 border-gray-200 p-4 sm:p-6">
+          <h3 className="text-base sm:text-xl font-semibold text-gray-900 mb-3 sm:mb-4">
+            Adresse{" "}
+          </h3>
+          <p className="text-xs sm:text-sm text-gray-600 mb-3 sm:mb-4">
             Lieu où les soins &quot;à domicile&quot; seront réalisés
           </p>
 
-          <div className="space-y-4">
+          <div className="space-y-3 sm:space-y-4">
             <AddressAutocomplete
               label="Adresse"
               value={adresseInput}
@@ -231,8 +235,8 @@ export default function PatientPage() {
               fullWidth
             />
 
-            <div className="bg-blue-50 rounded-lg border-2 border-blue-200 p-4">
-              <p className="text-sm text-gray-700">
+            <div className="bg-blue-50 rounded-lg border-2 border-blue-200 p-3 sm:p-4">
+              <p className="text-xs sm:text-sm text-gray-700">
                 💡 <strong>Astuce :</strong> Tapez au moins 3 caractères. Vous
                 pouvez commencer par votre code postal (ex: 75002 rue de la
                 Paix) ou directement par votre numéro et rue (ex: 15 rue de la
@@ -246,12 +250,12 @@ export default function PatientPage() {
               placeholder="Bâtiment, codes, étage..."
               fullWidth
             />
-            <p className="text-sm text-gray-600">
+            <p className="text-xs sm:text-sm text-gray-600">
               Indiquez les informations pour simplifier l&apos;accès au lieu de
               rendez-vous (bâtiment, codes, étage, etc...)
             </p>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
               <Input
                 label="Code postal"
                 {...register("codePostal")}
@@ -287,15 +291,16 @@ export default function PatientPage() {
         </div>
 
         {/* Navigation */}
-        <div className="flex justify-between pt-6 border-t border-gray-200">
+        <div className="flex flex-col sm:flex-row justify-between gap-3 pt-4 sm:pt-6 border-t border-gray-200">
           <Button
             type="button"
             variant="secondary"
             onClick={() => router.back()}
+            className="w-full sm:w-auto"
           >
             Retour
           </Button>
-          <Button type="submit" size="lg">
+          <Button type="submit" size="lg" className="w-full sm:w-auto">
             Continuer
           </Button>
         </div>

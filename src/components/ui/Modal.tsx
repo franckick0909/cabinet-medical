@@ -21,10 +21,10 @@ export function Modal({
   const modalRef = useRef<HTMLDivElement>(null);
 
   const sizes = {
-    sm: "max-w-[70vw]",
-    md: "max-w-[70vw]",
-    lg: "max-w-[70vw]",
-    xl: "max-w-[70vw]",
+    sm: "max-w-full sm:max-w-md md:max-w-lg",
+    md: "max-w-full sm:max-w-xl md:max-w-2xl",
+    lg: "max-w-full sm:max-w-2xl md:max-w-4xl lg:max-w-5xl",
+    xl: "max-w-full sm:max-w-3xl md:max-w-5xl lg:max-w-6xl",
   };
 
   useEffect(() => {
@@ -54,7 +54,7 @@ export function Modal({
   if (!isOpen) return null;
 
   return createPortal(
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4">
       {/* Backdrop */}
       <div
         className="absolute inset-0 bg-black/50 backdrop-blur-sm"
@@ -64,19 +64,21 @@ export function Modal({
       {/* Modal */}
       <div
         ref={modalRef}
-        className={`relative bg-white rounded-2xl shadow-2xl w-full ${sizes[size]} max-h-[90vh] overflow-hidden flex flex-col`}
+        className={`relative bg-white rounded-xl sm:rounded-2xl shadow-2xl w-full ${sizes[size]} max-h-[95vh] sm:max-h-[90vh] overflow-hidden flex flex-col`}
       >
         {/* Header */}
         {title && (
-          <div className="px-6 py-4 border-b border-gray-200 flex items-center justify-between">
-            <h2 className="text-xl font-semibold text-gray-900">{title}</h2>
+          <div className="px-4 sm:px-6 py-3 sm:py-4 border-b border-gray-200 flex items-center justify-between flex-shrink-0">
+            <h2 className="text-lg sm:text-xl font-semibold text-gray-900 truncate pr-2">
+              {title}
+            </h2>
             <button
               onClick={onClose}
-              className="text-gray-400 hover:text-gray-600 transition-colors"
+              className="text-gray-400 hover:text-gray-600 transition-colors flex-shrink-0"
               aria-label="Fermer la modale"
             >
               <svg
-                className="w-6 h-6"
+                className="w-5 h-5 sm:w-6 sm:h-6"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -93,7 +95,7 @@ export function Modal({
         )}
 
         {/* Content */}
-        <div className="flex-1 overflow-y-auto p-6">{children}</div>
+        <div className="flex-1 overflow-y-auto p-4 sm:p-6">{children}</div>
       </div>
     </div>,
     document.body

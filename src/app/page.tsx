@@ -6,12 +6,12 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
       {/* Hero Section */}
-      <div className="container mx-auto px-4 py-16">
-        <div className="max-w-4xl mx-auto text-center mb-16">
-          <h1 className="text-5xl md:text-6xl font-bold text-gray-900 mb-6">
+      <div className="container mx-auto px-4 py-8 md:py-16">
+        <div className="max-w-4xl mx-auto text-center mb-12 md:mb-16">
+          <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold text-gray-900 mb-4 md:mb-6">
             Cabinet Médical
           </h1>
-          <p className="text-xl md:text-2xl text-gray-600 mb-8">
+          <p className="text-lg sm:text-xl md:text-2xl text-gray-600 mb-6 md:mb-8 px-2">
             Prenez rendez-vous en ligne pour vos soins à domicile
           </p>
           <Link href="/demande/soins">
@@ -56,19 +56,20 @@ export default function Home() {
                 Professionnels qualifiés
               </h3>
               <p className="text-gray-600">
-                Une équipe d&apos;infirmiers diplômés d&apos;État à votre service
+                Une équipe d&apos;infirmiers diplômés d&apos;État à votre
+                service
               </p>
             </Card>
           </div>
         </div>
 
         {/* CTA Section */}
-        <div className="max-w-3xl mx-auto mt-16">
-          <Card className="p-12 text-center bg-gradient-to-r from-blue-600 to-purple-600 text-white border-0">
-            <h2 className="text-3xl font-bold mb-4">
+        <div className="max-w-3xl mx-auto mt-12 md:mt-16">
+          <Card className="p-6 sm:p-8 md:p-12 text-center bg-gradient-to-r from-blue-600 to-purple-600 text-white border-0">
+            <h2 className="text-2xl sm:text-3xl font-bold mb-3 md:mb-4">
               Besoin de soins à domicile ?
             </h2>
-            <p className="text-lg mb-6 text-blue-100">
+            <p className="text-base sm:text-lg mb-5 md:mb-6 text-blue-100">
               Faites votre demande en ligne en moins de 5 minutes
             </p>
             <Link href="/demande/soins">
@@ -80,19 +81,21 @@ export default function Home() {
         </div>
 
         {/* Contact */}
-        <div className="max-w-3xl mx-auto mt-12 text-center">
-          <p className="text-gray-600">
+        <div className="max-w-3xl mx-auto mt-8 md:mt-12 text-center px-2">
+          <p className="text-sm sm:text-base text-gray-600">
             Des questions ? Contactez-nous au{" "}
             <a
               href="tel:0123456789"
-              className="text-blue-600 hover:underline font-semibold"
+              className="text-blue-600 hover:underline font-semibold whitespace-nowrap"
             >
               01 23 45 67 89
-            </a>{" "}
-            ou par email à{" "}
+            </a>
+            <br className="sm:hidden" />{" "}
+            <span className="hidden sm:inline">ou par email à </span>
+            <span className="sm:hidden">ou </span>
             <a
               href="mailto:contact@cabinet-medical.fr"
-              className="text-blue-600 hover:underline font-semibold"
+              className="text-blue-600 hover:underline font-semibold break-all sm:break-normal"
             >
               contact@cabinet-medical.fr
             </a>

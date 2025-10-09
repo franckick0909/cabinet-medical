@@ -426,20 +426,20 @@ export default function SoinsPage() {
       />
 
       {/* Checkboxes Grid */}
-      <div className="bg-white rounded-lg border-2 border-gray-200 p-6 mb-6">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div className="bg-white rounded-lg border-2 border-gray-200 p-4 sm:p-6 mb-4 sm:mb-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
           {typesSoins.map((soin) => (
             <label
               key={soin.id}
-              className="flex items-start p-4 rounded-lg border-2 border-gray-200 hover:border-blue-300 hover:bg-blue-50/30 cursor-pointer transition-all group"
+              className="flex items-start p-3 sm:p-4 rounded-lg border-2 border-gray-200 hover:border-blue-300 hover:bg-blue-50/30 cursor-pointer transition-all group"
             >
               <input
                 type="checkbox"
                 checked={selectedSoins.includes(soin.id)}
                 onChange={() => handleCheckboxChange(soin.id)}
-                className="w-5 h-5 mt-0.5 rounded border-2 border-gray-300 text-blue-600 focus:ring-2 focus:ring-blue-500 cursor-pointer"
+                className="w-5 h-5 mt-0.5 rounded border-2 border-gray-300 text-blue-600 focus:ring-2 focus:ring-blue-500 cursor-pointer flex-shrink-0"
               />
-              <span className="ml-3 text-base font-medium text-gray-900 leading-snug">
+              <span className="ml-2 sm:ml-3 text-sm sm:text-base font-medium text-gray-900 leading-snug">
                 {soin.titre}
               </span>
             </label>
@@ -449,13 +449,13 @@ export default function SoinsPage() {
 
       {/* Section: Soins sélectionnés */}
       {selectedSoins.length > 0 && (
-        <div className="bg-blue-50 rounded-lg border-2 border-blue-200 p-6 mb-6">
-          <h3 className="text-base font-semibold text-gray-900 mb-4">
+        <div className="bg-blue-50 rounded-lg border-2 border-blue-200 p-4 sm:p-6 mb-4 sm:mb-6">
+          <h3 className="text-sm sm:text-base font-semibold text-gray-900 mb-3 sm:mb-4">
             🔵 {selectedSoins.length} soin{selectedSoins.length > 1 ? "s" : ""}{" "}
             sélectionné{selectedSoins.length > 1 ? "s" : ""}
           </h3>
 
-          <div className="space-y-3">
+          <div className="space-y-2 sm:space-y-3">
             {selectedSoins.map((soinId) => {
               const soin = typesSoins.find((s) => s.id === soinId);
               if (!soin) return null;
@@ -463,12 +463,14 @@ export default function SoinsPage() {
               return (
                 <div
                   key={soinId}
-                  className="bg-white rounded-lg p-4 border border-blue-200 flex items-center justify-between"
+                  className="bg-white rounded-lg p-3 sm:p-4 border border-blue-200 flex items-center justify-between gap-2"
                 >
-                  <div>
-                    <p className="font-medium text-gray-900">{soin.titre}</p>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-sm sm:text-base font-medium text-gray-900 truncate">
+                      {soin.titre}
+                    </p>
                     {soinsDetails[soinId] && (
-                      <p className="text-sm text-gray-600 mt-1">
+                      <p className="text-xs sm:text-sm text-gray-600 mt-1">
                         Détails renseignés
                       </p>
                     )}
@@ -477,7 +479,7 @@ export default function SoinsPage() {
                     <button
                       type="button"
                       onClick={() => handleEditSoin(soinId)}
-                      className="text-sm text-blue-600 hover:text-blue-700 hover:underline font-medium"
+                      className="text-xs sm:text-sm text-blue-600 hover:text-blue-700 hover:underline font-medium flex-shrink-0"
                     >
                       Modifier
                     </button>
@@ -487,21 +489,26 @@ export default function SoinsPage() {
             })}
           </div>
 
-          <p className="text-sm text-gray-600 mt-4">
+          <p className="text-xs sm:text-sm text-gray-600 mt-3 sm:mt-4">
             💡 Vous pouvez ajouter d&apos;autres soins ci-dessus
           </p>
         </div>
       )}
 
       {/* Navigation */}
-      <div className="flex justify-between items-center pt-6 border-t border-gray-200">
-        <Button variant="secondary" onClick={() => router.push("/")}>
+      <div className="flex flex-col sm:flex-row justify-between items-stretch sm:items-center gap-3 pt-4 sm:pt-6 border-t border-gray-200">
+        <Button
+          variant="secondary"
+          onClick={() => router.push("/")}
+          className="w-full sm:w-auto"
+        >
           Retour
         </Button>
         <Button
           onClick={handleContinue}
           disabled={selectedSoins.length === 0}
           size="lg"
+          className="w-full sm:w-auto"
         >
           Continuer
         </Button>
@@ -515,10 +522,10 @@ export default function SoinsPage() {
         size="lg"
       >
         <form onSubmit={handleSubmitDetails}>
-          <div className="space-y-5">
+          <div className="space-y-4 sm:space-y-5">
             {currentSoin?.questions?.map((question) => (
               <div key={question.id}>
-                <label className="block text-base font-medium text-gray-900 mb-2">
+                <label className="block text-sm sm:text-base font-medium text-gray-900 mb-2">
                   {question.label}
                   {question.required && (
                     <span className="text-red-500 ml-1">*</span>
@@ -529,7 +536,7 @@ export default function SoinsPage() {
                   <input
                     type="text"
                     required={question.required}
-                    className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900 text-base"
+                    className="w-full px-3 sm:px-4 py-2 sm:py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900 text-sm sm:text-base"
                     value={(formData[question.id] as string) || ""}
                     onChange={(e) =>
                       setFormData({
@@ -544,11 +551,11 @@ export default function SoinsPage() {
                 {question.type === "select" && (
                   <div>
                     {/* Convertir les select en radio buttons pour meilleure accessibilité */}
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-3">
                       {question.options?.map((option) => (
                         <label
                           key={option}
-                          className="flex items-start p-3 rounded-lg border-2 border-gray-200 hover:border-blue-300 hover:bg-blue-50/30 cursor-pointer transition-all"
+                          className="flex items-start p-2 sm:p-3 rounded-lg border-2 border-gray-200 hover:border-blue-300 hover:bg-blue-50/30 cursor-pointer transition-all"
                         >
                           <input
                             type="radio"
@@ -567,7 +574,7 @@ export default function SoinsPage() {
                             }
                             className="w-5 h-5 mt-0.5 border-2 border-gray-300 text-blue-600 focus:ring-2 focus:ring-blue-500 cursor-pointer flex-shrink-0"
                           />
-                          <span className="ml-3 text-base font-medium text-gray-900 leading-tight">
+                          <span className="ml-2 sm:ml-3 text-sm sm:text-base font-medium text-gray-900 leading-tight">
                             {option}
                           </span>
                         </label>
@@ -603,12 +610,12 @@ export default function SoinsPage() {
 
                 {question.type === "checkbox" && (
                   <div>
-                    {/* Grille pour les checkboxes - 2 colonnes sur tablette, 3 sur desktop */}
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+                    {/* Grille pour les checkboxes - responsive */}
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-3">
                       {question.options?.map((option) => (
                         <label
                           key={option}
-                          className="flex items-start p-3 rounded-lg border-2 border-gray-200 hover:border-blue-300 hover:bg-blue-50/30 cursor-pointer transition-all"
+                          className="flex items-start p-2 sm:p-3 rounded-lg border-2 border-gray-200 hover:border-blue-300 hover:bg-blue-50/30 cursor-pointer transition-all"
                         >
                           <input
                             type="checkbox"
@@ -624,7 +631,7 @@ export default function SoinsPage() {
                             }
                             className="w-5 h-5 mt-0.5 rounded border-2 border-gray-300 text-blue-600 focus:ring-2 focus:ring-blue-500 cursor-pointer flex-shrink-0"
                           />
-                          <span className="ml-3 text-base font-medium text-gray-900 leading-tight">
+                          <span className="ml-2 sm:ml-3 text-sm sm:text-base font-medium text-gray-900 leading-tight">
                             {option}
                           </span>
                         </label>
@@ -633,14 +640,14 @@ export default function SoinsPage() {
 
                     {/* Champ conditionnel "Autre" pour les checkboxes */}
                     {isAutreSelected(question.id) && (
-                      <div className="mt-4 p-4 bg-blue-50 rounded-lg border-2 border-blue-200">
+                      <div className="mt-3 sm:mt-4 p-3 sm:p-4 bg-blue-50 rounded-lg border-2 border-blue-200">
                         <label className="block text-sm font-medium text-gray-900 mb-2">
                           Précisez le type de plaie :
                         </label>
                         <input
                           type="text"
                           placeholder="Entrez les détails..."
-                          className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900 text-base bg-white"
+                          className="w-full px-3 sm:px-4 py-2 sm:py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900 text-sm sm:text-base bg-white"
                           value={
                             (formData[
                               `${question.id}_autre_details`
@@ -660,12 +667,12 @@ export default function SoinsPage() {
 
                 {question.type === "radio" && (
                   <div>
-                    {/* Grille pour les radio buttons - 2 colonnes sur tablette, 3 sur desktop */}
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+                    {/* Grille pour les radio buttons - responsive */}
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-3">
                       {question.options?.map((option) => (
                         <label
                           key={option}
-                          className="flex items-start p-3 rounded-lg border-2 border-gray-200 hover:border-blue-300 hover:bg-blue-50/30 cursor-pointer transition-all"
+                          className="flex items-start p-2 sm:p-3 rounded-lg border-2 border-gray-200 hover:border-blue-300 hover:bg-blue-50/30 cursor-pointer transition-all"
                         >
                           <input
                             type="radio"
@@ -678,7 +685,7 @@ export default function SoinsPage() {
                             }
                             className="w-5 h-5 mt-0.5 border-2 border-gray-300 text-blue-600 focus:ring-2 focus:ring-blue-500 cursor-pointer flex-shrink-0"
                           />
-                          <span className="ml-3 text-base font-medium text-gray-900 leading-tight">
+                          <span className="ml-2 sm:ml-3 text-sm sm:text-base font-medium text-gray-900 leading-tight">
                             {option}
                           </span>
                         </label>
@@ -687,14 +694,14 @@ export default function SoinsPage() {
 
                     {/* Champ conditionnel "Autre" pour les radio */}
                     {isAutreSelected(question.id) && (
-                      <div className="mt-4 p-4 bg-blue-50 rounded-lg border-2 border-blue-200">
+                      <div className="mt-3 sm:mt-4 p-3 sm:p-4 bg-blue-50 rounded-lg border-2 border-blue-200">
                         <label className="block text-sm font-medium text-gray-900 mb-2">
                           Précisez :
                         </label>
                         <input
                           type="text"
                           placeholder="Entrez les détails..."
-                          className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900 text-base bg-white"
+                          className="w-full px-3 sm:px-4 py-2 sm:py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900 text-sm sm:text-base bg-white"
                           value={
                             (formData[
                               `${question.id}_autre_details`
@@ -716,7 +723,7 @@ export default function SoinsPage() {
                   <textarea
                     required={question.required}
                     rows={3}
-                    className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900 text-base"
+                    className="w-full px-3 sm:px-4 py-2 sm:py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900 text-sm sm:text-base"
                     value={(formData[question.id] as string) || ""}
                     onChange={(e) =>
                       setFormData({
@@ -731,15 +738,18 @@ export default function SoinsPage() {
             ))}
           </div>
 
-          <div className="mt-6 flex justify-end space-x-3">
+          <div className="mt-4 sm:mt-6 flex flex-col-reverse sm:flex-row justify-end gap-2 sm:gap-3">
             <Button
               type="button"
               variant="secondary"
               onClick={() => setIsModalOpen(false)}
+              className="w-full sm:w-auto"
             >
               Fermer
             </Button>
-            <Button type="submit">Valider</Button>
+            <Button type="submit" className="w-full sm:w-auto">
+              Valider
+            </Button>
           </div>
         </form>
       </Modal>

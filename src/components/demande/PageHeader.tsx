@@ -39,7 +39,7 @@ export function PageHeader({ step, title, subtitle }: PageHeaderProps) {
 
       {/* Titre et sous-titre */}
       <h1 className="text-3xl font-bold text-gray-900 mb-2">{title}</h1>
-      {subtitle && <p className="text-base text-red-500">{subtitle}</p>}
+      {subtitle && <p className="text-base text-gray-500">{subtitle}</p>}
     </div>
   );
 }

@@ -63,14 +63,14 @@ export default function DisponibilitesPage() {
         currentStep={3}
       />
 
-      <div className="space-y-6">
+      <div className="space-y-4 sm:space-y-6">
         {/* Lieu des soins */}
-        <div className="bg-white rounded-lg border-2 border-gray-200 p-6">
-          <label className="block text-base font-medium text-gray-900 mb-4">
+        <div className="bg-white rounded-lg border-2 border-gray-200 p-4 sm:p-6">
+          <label className="block text-sm sm:text-base font-medium text-gray-900 mb-3 sm:mb-4">
             Lieu des soins *
           </label>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3">
             {[
               { value: "À domicile", label: "À domicile" },
               { value: "En cabinet", label: "En cabinet" },
@@ -79,7 +79,7 @@ export default function DisponibilitesPage() {
             ].map((option) => (
               <label
                 key={option.value}
-                className="flex items-start p-4 rounded-lg border-2 border-gray-200 hover:border-blue-300 hover:bg-blue-50/30 cursor-pointer transition-all"
+                className="flex items-start p-3 sm:p-4 rounded-lg border-2 border-gray-200 hover:border-blue-300 hover:bg-blue-50/30 cursor-pointer transition-all"
               >
                 <input
                   type="radio"
@@ -89,7 +89,7 @@ export default function DisponibilitesPage() {
                   onChange={(e) => setLieuSoins(e.target.value)}
                   className="w-5 h-5 mt-0.5 border-2 border-gray-300 text-blue-600 focus:ring-2 focus:ring-blue-500 cursor-pointer flex-shrink-0"
                 />
-                <span className="ml-3 text-base font-medium text-gray-900 leading-tight">
+                <span className="ml-2 sm:ml-3 text-sm sm:text-base font-medium text-gray-900 leading-tight">
                   {option.label}
                 </span>
               </label>
@@ -97,7 +97,7 @@ export default function DisponibilitesPage() {
           </div>
 
           {lieuSoins === "Autre" && (
-            <div className="mt-4 p-4 bg-blue-50 rounded-lg border-2 border-blue-200">
+            <div className="mt-3 sm:mt-4 p-3 sm:p-4 bg-blue-50 rounded-lg border-2 border-blue-200">
               <label className="block text-sm font-medium text-gray-900 mb-2">
                 Précisez le lieu :
               </label>
@@ -113,7 +113,7 @@ export default function DisponibilitesPage() {
         </div>
 
         {/* Date de début */}
-        <div className="bg-white rounded-lg border-2 border-gray-200 p-6">
+        <div className="bg-white rounded-lg border-2 border-gray-200 p-4 sm:p-6">
           <Input
             label="Date de début des soins"
             type="date"
@@ -126,12 +126,12 @@ export default function DisponibilitesPage() {
         </div>
 
         {/* Durée des soins */}
-        <div className="bg-white rounded-lg border-2 border-gray-200 p-6">
-          <label className="block text-base font-medium text-gray-900 mb-4">
+        <div className="bg-white rounded-lg border-2 border-gray-200 p-4 sm:p-6">
+          <label className="block text-sm sm:text-base font-medium text-gray-900 mb-3 sm:mb-4">
             Durée des soins (en jours) *
           </label>
 
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 sm:gap-3">
             {[
               { value: "1", label: "1 jour" },
               { value: "7", label: "7 jours" },
@@ -143,7 +143,7 @@ export default function DisponibilitesPage() {
             ].map((option) => (
               <label
                 key={option.value}
-                className="flex items-start p-4 rounded-lg border-2 border-gray-200 hover:border-blue-300 hover:bg-blue-50/30 cursor-pointer transition-all"
+                className="flex items-start p-2 sm:p-4 rounded-lg border-2 border-gray-200 hover:border-blue-300 hover:bg-blue-50/30 cursor-pointer transition-all"
               >
                 <input
                   type="radio"
@@ -153,7 +153,7 @@ export default function DisponibilitesPage() {
                   onChange={(e) => setDuree(e.target.value)}
                   className="w-5 h-5 mt-0.5 border-2 border-gray-300 text-blue-600 focus:ring-2 focus:ring-blue-500 cursor-pointer flex-shrink-0"
                 />
-                <span className="ml-3 text-base font-medium text-gray-900 leading-tight">
+                <span className="ml-2 sm:ml-3 text-xs sm:text-base font-medium text-gray-900 leading-tight">
                   {option.label}
                 </span>
               </label>
@@ -162,7 +162,7 @@ export default function DisponibilitesPage() {
 
           {/* Champ conditionnel pour durée personnalisée */}
           {duree === "autre" && (
-            <div className="mt-4 p-4 bg-blue-50 rounded-lg border-2 border-blue-200">
+            <div className="mt-3 sm:mt-4 p-3 sm:p-4 bg-blue-50 rounded-lg border-2 border-blue-200">
               <label className="block text-sm font-medium text-gray-900 mb-2">
                 Précisez la durée en jours :
               </label>
@@ -179,41 +179,41 @@ export default function DisponibilitesPage() {
         </div>
 
         {/* Disponibilités horaires */}
-        <div className="bg-white rounded-lg border-2 border-gray-200 p-6">
-          <label className="block text-base font-medium text-gray-900 mb-4">
+        <div className="bg-white rounded-lg border-2 border-gray-200 p-4 sm:p-6">
+          <label className="block text-sm sm:text-base font-medium text-gray-900 mb-3 sm:mb-4">
             Disponibilités horaires *
           </label>
 
-          <p className="text-sm text-gray-600 mb-4">
+          <p className="text-xs sm:text-sm text-gray-600 mb-3 sm:mb-4">
             L&apos;heure de passage précise sera à définir avec le professionnel
             de santé
           </p>
 
           {/* Checkbox "Toute la journée" */}
-          <label className="flex items-center p-4 rounded-lg border-2 border-gray-200 hover:border-blue-300 hover:bg-blue-50/30 cursor-pointer transition-all mb-4">
+          <label className="flex items-center p-3 sm:p-4 rounded-lg border-2 border-gray-200 hover:border-blue-300 hover:bg-blue-50/30 cursor-pointer transition-all mb-3 sm:mb-4">
             <input
               type="checkbox"
               checked={touteLaJournee}
               onChange={(e) => setTouteLaJournee(e.target.checked)}
               className="w-5 h-5 rounded border-2 border-gray-300 text-blue-600 focus:ring-2 focus:ring-blue-500 cursor-pointer"
             />
-            <span className="ml-3 text-base font-medium text-gray-900">
+            <span className="ml-2 sm:ml-3 text-sm sm:text-base font-medium text-gray-900">
               Disponible toute la journée
             </span>
           </label>
 
           {!touteLaJournee && (
             <>
-              <p className="text-sm font-medium text-gray-900 mb-3">
+              <p className="text-xs sm:text-sm font-medium text-gray-900 mb-3">
                 Sélectionnez un créneau d&apos;au moins 2 heures.
               </p>
 
               {/* Liste des créneaux */}
-              <div className="space-y-4">
+              <div className="space-y-3 sm:space-y-4">
                 {creneaux.map((creneau, index) => (
-                  <div key={index} className="flex items-end gap-4">
+                  <div key={index} className="flex items-end gap-2 sm:gap-4">
                     <div className="flex-1">
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                      <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1 sm:mb-2">
                         De
                       </label>
                       <select
@@ -223,7 +223,7 @@ export default function DisponibilitesPage() {
                           newCreneaux[index].debut = e.target.value;
                           setCreneaux(newCreneaux);
                         }}
-                        className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-base bg-white text-gray-900"
+                        className="w-full px-2 sm:px-4 py-2 sm:py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm sm:text-base bg-white text-gray-900"
                         aria-label="Heure de début"
                       >
                         {Array.from({ length: 15 }, (_, i) => i + 7).map(
@@ -237,7 +237,7 @@ export default function DisponibilitesPage() {
                     </div>
 
                     <div className="flex-1">
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                      <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1 sm:mb-2">
                         À
                       </label>
                       <select
@@ -247,7 +247,7 @@ export default function DisponibilitesPage() {
                           newCreneaux[index].fin = e.target.value;
                           setCreneaux(newCreneaux);
                         }}
-                        className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-base bg-white text-gray-900"
+                        className="w-full px-2 sm:px-4 py-2 sm:py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm sm:text-base bg-white text-gray-900"
                         aria-label="Heure de fin"
                       >
                         {Array.from({ length: 15 }, (_, i) => i + 7).map(
@@ -269,7 +269,7 @@ export default function DisponibilitesPage() {
                           );
                           setCreneaux(newCreneaux);
                         }}
-                        className="px-4 py-3 text-red-600 hover:text-red-700 hover:bg-red-50 rounded-lg transition-all font-medium border-2 border-transparent hover:border-red-200"
+                        className="px-2 sm:px-4 py-2 sm:py-3 text-red-600 hover:text-red-700 hover:bg-red-50 rounded-lg transition-all font-medium border-2 border-transparent hover:border-red-200 flex-shrink-0"
                         aria-label="Supprimer ce créneau"
                       >
                         🗑️
@@ -283,7 +283,7 @@ export default function DisponibilitesPage() {
                   onClick={() => {
                     setCreneaux([...creneaux, { debut: "7", fin: "21" }]);
                   }}
-                  className="text-sm text-blue-600 hover:text-blue-700 hover:underline font-medium"
+                  className="text-xs sm:text-sm text-blue-600 hover:text-blue-700 hover:underline font-medium"
                 >
                   + Ajouter un créneau
                 </button>
@@ -294,8 +294,8 @@ export default function DisponibilitesPage() {
 
         {/* Note informative si domicile */}
         {lieuSoins === "À domicile" && (
-          <div className="bg-blue-50 rounded-lg border-2 border-blue-200 p-6">
-            <p className="text-sm text-gray-800">
+          <div className="bg-blue-50 rounded-lg border-2 border-blue-200 p-4 sm:p-6">
+            <p className="text-xs sm:text-sm text-gray-800">
               ℹ️ <strong>À l&apos;étape suivante</strong>, nous vous demanderons
               l&apos;adresse complète où les soins seront réalisés.
             </p>
@@ -304,8 +304,12 @@ export default function DisponibilitesPage() {
       </div>
 
       {/* Navigation */}
-      <div className="flex justify-between pt-6 mt-6 border-t border-gray-200">
-        <Button variant="secondary" onClick={() => router.back()}>
+      <div className="flex flex-col sm:flex-row justify-between gap-3 pt-4 sm:pt-6 mt-4 sm:mt-6 border-t border-gray-200">
+        <Button
+          variant="secondary"
+          onClick={() => router.back()}
+          className="w-full sm:w-auto"
+        >
           Retour
         </Button>
         <Button
@@ -318,6 +322,7 @@ export default function DisponibilitesPage() {
             (lieuSoins === "Autre" && !lieu)
           }
           size="lg"
+          className="w-full sm:w-auto"
         >
           Continuer
         </Button>

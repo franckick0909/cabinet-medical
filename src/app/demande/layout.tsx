@@ -7,15 +7,20 @@ export default function DemandeLayout({
 }) {
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
-      <div className="container max-w-full mx-auto px-4 py-8">
-        <div className="flex gap-8 items-start justify-baseline">
+      <div className="w-full px-2 sm:px-4 lg:px-6 xl:px-8 py-4 md:py-8">
+        <div className="flex flex-col lg:flex-row gap-6 lg:gap-8 items-start">
           {/* Contenu principal */}
-          <div className="flex-2 min-w-0 ">{children}</div>
+          <div className="w-full lg:flex-[2] min-w-0">{children}</div>
 
-          {/* Sidebar récapitulative */}
-          <div className="flex-1 flex-shrink-0 sticky top-14">
+          {/* Sidebar récapitulative - cachée sur mobile, visible sur desktop */}
+          <div className="hidden lg:block lg:flex-[1] lg:sticky lg:top-4 max-w-md">
             <RecapSidebar />
           </div>
+        </div>
+
+        {/* Sidebar récapitulative mobile - en bas sur mobile */}
+        <div className="lg:hidden mt-6">
+          <RecapSidebar />
         </div>
       </div>
     </div>

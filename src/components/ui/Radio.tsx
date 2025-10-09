@@ -13,21 +13,23 @@ export const Radio = forwardRef<HTMLInputElement, RadioProps>(
           ref={ref}
           type="radio"
           className={`
-            w-5 h-5 mt-0.5 border-2 border-gray-300
+            w-4 h-4 sm:w-5 sm:h-5 mt-0.5 border-2 border-gray-300
             text-blue-600 
             focus:ring-2 focus:ring-blue-500 focus:ring-offset-0
             transition-all duration-200
-            cursor-pointer
+            cursor-pointer flex-shrink-0
             ${className}
           `}
           {...props}
         />
-        <div className="ml-3 flex-1">
-          <span className="text-base font-medium text-gray-900 group-hover:text-blue-600 transition-colors">
+        <div className="ml-2 sm:ml-3 flex-1">
+          <span className="text-sm sm:text-base font-medium text-gray-900 group-hover:text-blue-600 transition-colors">
             {label}
           </span>
           {description && (
-            <p className="text-sm text-gray-500 mt-0.5">{description}</p>
+            <p className="text-xs sm:text-sm text-gray-500 mt-0.5">
+              {description}
+            </p>
           )}
         </div>
       </label>

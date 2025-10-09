@@ -11,8 +11,8 @@ function ConfirmationContent() {
   const demandeId = searchParams.get("id");
 
   return (
-    <div className="max-w-3xl mx-auto">
-      <Card className="p-12 text-center">
+    <div className="max-w-3xl mx-auto px-4">
+      <Card className="p-6 sm:p-8 md:p-12 text-center">
         {/* Icône de succès */}
         <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
           <svg
@@ -31,11 +31,11 @@ function ConfirmationContent() {
         </div>
 
         {/* Message de confirmation */}
-        <h1 className="text-3xl font-bold text-gray-900 mb-4">
+        <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-4">
           Demande envoyée avec succès ! 🎉
         </h1>
 
-        <p className="text-lg text-gray-600 mb-6">
+        <p className="text-base sm:text-lg text-gray-600 mb-6">
           Votre demande de soins a bien été enregistrée.
         </p>
 
@@ -48,20 +48,20 @@ function ConfirmationContent() {
           </div>
         )}
 
-        <div className="space-y-4">
-          <p className="text-gray-600">
+        <div className="space-y-3 sm:space-y-4">
+          <p className="text-sm sm:text-base text-gray-600">
             Notre équipe va examiner votre demande et vous contactera très
             prochainement pour confirmer votre rendez-vous.
           </p>
 
-          <p className="text-gray-600">
+          <p className="text-sm sm:text-base text-gray-600">
             Vous recevrez un email de confirmation à l&apos;adresse que vous
             avez indiquée.
           </p>
         </div>
 
         {/* Actions */}
-        <div className="mt-8 space-y-3">
+        <div className="mt-6 sm:mt-8 space-y-3">
           <Button fullWidth onClick={() => router.push("/demande/soins")}>
             Faire une nouvelle demande
           </Button>
@@ -88,12 +88,12 @@ export default function ConfirmationPage() {
   return (
     <Suspense
       fallback={
-        <div className="max-w-3xl mx-auto">
-          <Card className="p-12 text-center">
+        <div className="max-w-3xl mx-auto px-4">
+          <Card className="p-6 sm:p-8 md:p-12 text-center">
             <div className="animate-pulse">
               <div className="w-20 h-20 bg-gray-200 rounded-full mx-auto mb-6"></div>
-              <div className="h-8 bg-gray-200 rounded w-3/4 mx-auto mb-4"></div>
-              <div className="h-6 bg-gray-200 rounded w-1/2 mx-auto"></div>
+              <div className="h-6 sm:h-8 bg-gray-200 rounded w-3/4 mx-auto mb-4"></div>
+              <div className="h-4 sm:h-6 bg-gray-200 rounded w-1/2 mx-auto"></div>
             </div>
           </Card>
         </div>

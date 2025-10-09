@@ -77,31 +77,31 @@ export default function RecapitulatifPage() {
   return (
     <div className="w-full">
       {/* Header */}
-      <div className="mb-8 text-center">
-        <h1 className="text-4xl font-bold text-gray-900 mb-3">
+      <div className="mb-6 sm:mb-8 text-center">
+        <h1 className="text-2xl sm:text-4xl font-bold text-gray-900 mb-2 sm:mb-3">
           Récapitulatif de votre demande
         </h1>
-        <p className="text-lg text-gray-600">
+        <p className="text-sm sm:text-lg text-gray-600">
           Vérifiez vos informations avant de valider
         </p>
       </div>
 
       {/* Progress - All completed */}
-      <div className="mb-12">
-        <div className="flex items-center justify-center space-x-2">
+      <div className="mb-6 sm:mb-12 overflow-x-auto pb-2">
+        <div className="flex items-center justify-center space-x-1 sm:space-x-2 min-w-max mx-auto px-2">
           {["Soins", "Ordonnance", "Disponibilités", "Patient"].map(
             (step, index) => (
               <div key={step} className="flex items-center">
                 <div className="flex items-center">
-                  <div className="w-10 h-10 rounded-full bg-green-600 text-white flex items-center justify-center">
+                  <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-green-600 text-white flex items-center justify-center text-sm sm:text-base">
                     ✓
                   </div>
-                  <span className="ml-2 text-sm font-medium text-green-600">
+                  <span className="ml-1 sm:ml-2 text-xs sm:text-sm font-medium text-green-600">
                     {step}
                   </span>
                 </div>
                 {index < 3 && (
-                  <div className="w-16 h-1 bg-green-600 mx-2"></div>
+                  <div className="w-8 sm:w-16 h-1 bg-green-600 mx-1 sm:mx-2"></div>
                 )}
               </div>
             )
@@ -110,28 +110,31 @@ export default function RecapitulatifPage() {
       </div>
 
       {error && (
-        <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg text-red-700">
+        <div className="mb-4 sm:mb-6 p-3 sm:p-4 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm sm:text-base">
           {error}
         </div>
       )}
 
-      <div className="space-y-6">
+      <div className="space-y-4 sm:space-y-6">
         {/* Type de soin */}
-        <Card className="p-6">
-          <div className="flex items-start justify-between mb-4">
-            <h3 className="text-lg font-semibold text-gray-900">
+        <Card className="p-4 sm:p-6">
+          <div className="flex items-start justify-between mb-3 sm:mb-4 gap-2">
+            <h3 className="text-base sm:text-lg font-semibold text-gray-900 truncate">
               🩺 Type de soin
             </h3>
             <Button
               variant="ghost"
               size="md"
               onClick={() => router.push("/demande/soins")}
+              className="flex-shrink-0"
             >
               Modifier
             </Button>
           </div>
-          <p className="text-gray-700 font-medium mb-2 text-base">{soin.details.titre}</p>
-          <div className="text-base text-gray-600 space-y-1">
+          <p className="text-gray-700 font-medium mb-2 text-sm sm:text-base">
+            {soin.details.titre}
+          </p>
+          <div className="text-sm sm:text-base text-gray-600 space-y-1">
             {Object.entries(soin.details)
               .filter(([key]) => key !== "titre")
               .map(([key, value]) => (
@@ -144,21 +147,22 @@ export default function RecapitulatifPage() {
         </Card>
 
         {/* Ordonnance */}
-        <Card className="p-6">
-          <div className="flex items-start justify-between mb-4">
-            <h3 className="text-lg font-semibold text-gray-900">
+        <Card className="p-4 sm:p-6">
+          <div className="flex items-start justify-between mb-3 sm:mb-4 gap-2">
+            <h3 className="text-base sm:text-lg font-semibold text-gray-900 truncate">
               📄 Ordonnance
             </h3>
             <Button
               variant="ghost"
               size="md"
               onClick={() => router.push("/demande/ordonnance")}
+              className="flex-shrink-0"
             >
               Modifier
             </Button>
           </div>
           {ordonnance.aOrdonnance ? (
-            <div className="text-base text-gray-600 space-y-1">
+            <div className="text-sm sm:text-base text-gray-600 space-y-1">
               <p>
                 <span className="font-medium">Statut:</span> Ordonnance présente
               </p>
@@ -184,25 +188,28 @@ export default function RecapitulatifPage() {
               )}
             </div>
           ) : (
-            <p className="text-gray-600">Pas d&apos;ordonnance</p>
+            <p className="text-sm sm:text-base text-gray-600">
+              Pas d&apos;ordonnance
+            </p>
           )}
         </Card>
 
         {/* Disponibilités */}
-        <Card className="p-6">
-          <div className="flex items-start justify-between mb-4">
-            <h3 className="text-lg font-semibold text-gray-900">
+        <Card className="p-4 sm:p-6">
+          <div className="flex items-start justify-between mb-3 sm:mb-4 gap-2">
+            <h3 className="text-base sm:text-lg font-semibold text-gray-900 truncate">
               📅 Disponibilités
             </h3>
             <Button
               variant="ghost"
               size="md"
               onClick={() => router.push("/demande/disponibilites")}
+              className="flex-shrink-0"
             >
               Modifier
             </Button>
           </div>
-          <div className="text-base text-gray-600 space-y-1">
+          <div className="text-sm sm:text-base text-gray-600 space-y-1">
             {disponibilite.datePreferee && (
               <p>
                 <span className="font-medium">Date souhaitée:</span>{" "}
@@ -232,27 +239,30 @@ export default function RecapitulatifPage() {
         </Card>
 
         {/* Patient */}
-        <Card className="p-6">
-          <div className="flex items-start justify-between mb-4">
-            <h3 className="text-lg font-semibold text-gray-900">
+        <Card className="p-4 sm:p-6">
+          <div className="flex items-start justify-between mb-3 sm:mb-4 gap-2">
+            <h3 className="text-base sm:text-lg font-semibold text-gray-900 truncate">
               👤 Informations patient
             </h3>
             <Button
               variant="ghost"
               size="md"
               onClick={() => router.push("/demande/patient")}
+              className="flex-shrink-0"
             >
               Modifier
             </Button>
           </div>
-          <div className="text-base text-gray-600 space-y-1">
+          <div className="text-sm sm:text-base text-gray-600 space-y-1">
             <p>
               <span className="font-medium">Nom:</span> {patient.nom}{" "}
               {patient.prenom}
             </p>
-            <p>
-              <span className="font-medium">Email:</span> {patient.email}
-            </p>
+            {patient.email && (
+              <p>
+                <span className="font-medium">Email:</span> {patient.email}
+              </p>
+            )}
             <p>
               <span className="font-medium">Téléphone:</span>{" "}
               {patient.telephone}
@@ -283,18 +293,19 @@ export default function RecapitulatifPage() {
       </div>
 
       {/* Actions */}
-      <div className="flex justify-between mt-8">
+      <div className="flex flex-col sm:flex-row justify-between gap-3 mt-6 sm:mt-8">
         <Button
           variant="secondary"
           onClick={() => router.back()}
           disabled={isSubmitting}
+          className="w-full sm:w-auto"
         >
           Retour
         </Button>
         <Button
           onClick={handleSubmit}
           disabled={isSubmitting}
-          className="min-w-[200px]"
+          className="w-full sm:w-auto sm:min-w-[200px]"
         >
           {isSubmitting ? "Envoi en cours..." : "Valider ma demande"}
         </Button>
