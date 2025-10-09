@@ -1,0 +1,71 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Patient {
+  id            String    @id @default(cuid())
+  nom           String
+  prenom        String
+  email         String    @unique
+  telephone     String
+  dateNaissance DateTime
+  adresse       String?
+  ville         String?
+  codePostal    String?
+  numeroSecu    String?
+  demandes      Demande[]
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+}
+
+model Demande {
+  id        String  @id @default(cuid())
+  patientId String
+  patient   Patient @relation(fields: [patientId], references: [id], onDelete: Cascade)
+
+  // Type de soin
+  typeSoin    String // Ex: "Pansement", "Injection", "Prélèvement", etc.
+  detailsSoin Json? // Détails spécifiques du soin (stockés en JSON)
+
+  // Ordonnance
+  aOrdonnance       Boolean @default(false)
+  ordonnanceDetails Json? // Détails de l'ordonnance
+
+  // Disponibilités
+  datePreferee  DateTime?
+  heurePreferee String? // Ex: "Matin", "Après-midi", "Soir"
+  urgence       Urgence   @default(NORMALE)
+
+  // Lieu
+  lieu String? // Adresse du rendez-vous
+
+  // Statut et gestion
+  statut Statut  @default(EN_ATTENTE)
+  notes  String? @db.Text
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+enum Urgence {
+  FAIBLE
+  NORMALE
+  ELEVEE
+  URGENTE
+}
+
+enum Statut {
+  EN_ATTENTE
+  CONFIRMEE
+  EN_COURS
+  TERMINEE
+  ANNULEE
+}
