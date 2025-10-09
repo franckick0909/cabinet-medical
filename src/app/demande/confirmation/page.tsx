@@ -1,21 +1,32 @@
-'use client'
+"use client";
 
-import { useRouter, useSearchParams } from 'next/navigation'
-import { Button } from '../../../components/ui/Button'
-import { Card } from '../../../components/ui/Card'
+import { useRouter, useSearchParams } from "next/navigation";
+import { Suspense } from "react";
+import { Button } from "../../../components/ui/Button";
+import { Card } from "../../../components/ui/Card";
 
-export default function ConfirmationPage() {
-  const searchParams = useSearchParams()
-  const router = useRouter()
-  const demandeId = searchParams.get('id')
+function ConfirmationContent() {
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  const demandeId = searchParams.get("id");
 
   return (
     <div className="max-w-3xl mx-auto">
       <Card className="p-12 text-center">
         {/* Icône de succès */}
         <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
-          <svg className="w-12 h-12 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+          <svg
+            className="w-12 h-12 text-green-600"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M5 13l4 4L19 7"
+            />
           </svg>
         </div>
 
@@ -23,7 +34,7 @@ export default function ConfirmationPage() {
         <h1 className="text-3xl font-bold text-gray-900 mb-4">
           Demande envoyée avec succès ! 🎉
         </h1>
-        
+
         <p className="text-lg text-gray-600 mb-6">
           Votre demande de soins a bien été enregistrée.
         </p>
@@ -39,27 +50,22 @@ export default function ConfirmationPage() {
 
         <div className="space-y-4">
           <p className="text-gray-600">
-            Notre équipe va examiner votre demande et vous contactera très prochainement pour confirmer votre rendez-vous.
+            Notre équipe va examiner votre demande et vous contactera très
+            prochainement pour confirmer votre rendez-vous.
           </p>
-          
+
           <p className="text-gray-600">
-            Vous recevrez un email de confirmation à l&apos;adresse que vous avez indiquée.
+            Vous recevrez un email de confirmation à l&apos;adresse que vous
+            avez indiquée.
           </p>
         </div>
 
         {/* Actions */}
         <div className="mt-8 space-y-3">
-          <Button
-            fullWidth
-            onClick={() => router.push('/demande/soins')}
-          >
+          <Button fullWidth onClick={() => router.push("/demande/soins")}>
             Faire une nouvelle demande
           </Button>
-          <Button
-            fullWidth
-            variant="outline"
-            onClick={() => router.push('/')}
-          >
+          <Button fullWidth variant="outline" onClick={() => router.push("/")}>
             Retour à l&apos;accueil
           </Button>
         </div>
@@ -67,7 +73,7 @@ export default function ConfirmationPage() {
         {/* Contact */}
         <div className="mt-8 pt-8 border-t border-gray-200">
           <p className="text-sm text-gray-600">
-            Des questions ? Contactez-nous au{' '}
+            Des questions ? Contactez-nous au{" "}
             <a href="tel:0123456789" className="text-blue-600 hover:underline">
               01 23 45 67 89
             </a>
@@ -75,5 +81,25 @@ export default function ConfirmationPage() {
         </div>
       </Card>
     </div>
-  )
+  );
+}
+
+export default function ConfirmationPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="max-w-3xl mx-auto">
+          <Card className="p-12 text-center">
+            <div className="animate-pulse">
+              <div className="w-20 h-20 bg-gray-200 rounded-full mx-auto mb-6"></div>
+              <div className="h-8 bg-gray-200 rounded w-3/4 mx-auto mb-4"></div>
+              <div className="h-6 bg-gray-200 rounded w-1/2 mx-auto"></div>
+            </div>
+          </Card>
+        </div>
+      }
+    >
+      <ConfirmationContent />
+    </Suspense>
+  );
 }
