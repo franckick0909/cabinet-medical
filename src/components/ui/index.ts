@@ -37,18 +37,9 @@ export {
   FormMessage,
 } from "./form";
 export { HoverCard, HoverCardContent, HoverCardTrigger } from "./hover-card";
-export { Input } from "./input";
 export { Label } from "./label";
 export { Modal } from "./modal";
 export { Progress } from "./progress";
 export { RadioGroup, RadioGroupItem } from "./radio-group";
-export {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "./select";
 export { Separator } from "./separator";
 export { Skeleton } from "./skeleton";
-export { Textarea } from "./textarea";

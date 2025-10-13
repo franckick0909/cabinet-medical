@@ -4,7 +4,7 @@ import { FormNavigation } from "@/components/demande/FormNavigation";
 import { PageHeader } from "@/components/demande/PageHeader";
 import { AddressAutocomplete } from "@/components/ui/AddressAutocomplete";
 import { Checkbox } from "@/components/custom/Checkbox";
-import { Input } from "@/components/ui/input";
+import { Input } from "@/components/custom/Input";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { useDemandeStore } from "@/store/demandeStore";
