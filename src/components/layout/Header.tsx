@@ -1,9 +1,10 @@
 "use client";
 
+import { Button } from "@/components/custom/Button";
+import { ModeToggle } from "@/components/mode-toggle";
+import { Plus } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { ModeToggle } from "@/components/mode-toggle";
-import { Button } from "@/components/custom/Button";
 
 export function Header() {
   const pathname = usePathname();
@@ -45,7 +46,13 @@ export function Header() {
                 size="sm"
                 asChild
               >
-                <Link href="/demande/soins">➕ Nouvelle demande</Link>
+                <Link
+                  href="/demande/soins"
+                  className="inline-flex items-center gap-1"
+                >
+                  <Plus size={18} />
+                  <span>Nouvelle demande</span>
+                </Link>
               </Button>
             </nav>
           </div>

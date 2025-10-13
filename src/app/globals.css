@@ -2,14 +2,15 @@
 
 @layer base {
   :root {
-    --gradient: linear-gradient(to top left, #ff057c, #7c64d5, #4cc3ff);
+    --gradient: linear-gradient(to top left, rgb(255, 5, 124), #7c64d5, #4cc3ff);
     --background: rgb(248 243 250);
     --foreground: rgb(54 64 80);
     --card: rgb(255 255 255);
     --card-foreground: rgb(54 64 80);
     --popover: rgb(255 255 255);
     --popover-foreground: rgb(54 64 80);
-    --primary: rgb(167 139 251);
+  /*  --primary: rgb(167 139 251); */
+    --primary: rgb(124, 56, 238);
     --primary-foreground: rgb(255 255 255);
     --secondary: rgb(233 217 252);
     --secondary-foreground: rgb(75 86 102);

@@ -391,7 +391,7 @@ export default function SoinsPage() {
           {typesSoins.map((soin) => (
             <div
               key={soin.id}
-              className="flex items-start p-3 sm:p-4 rounded-lg border-2 border-border hover:border-primary hover:bg-primary/10 cursor-pointer transition-all group bg-card"
+              className="flex items-end justify-start p-3 sm:p-4 rounded-sm border-2 border-border hover:border-primary hover:bg-primary/10 cursor-pointer transition-all group bg-card"
               onClick={() => handleCheckboxChange(soin.id)}
             >
               <Checkbox
@@ -503,7 +503,7 @@ export default function SoinsPage() {
                       {question.options?.map((option) => (
                         <div
                           key={option}
-                          className="flex items-start p-2 sm:p-3 rounded-lg border-2 border-border hover:border-primary hover:bg-primary/10 cursor-pointer transition-all"
+                          className="flex items-end justify-start p-2 sm:p-3 rounded-lg border-2 border-border hover:border-primary hover:bg-primary/10 cursor-pointer transition-all"
                         >
                           <Checkbox
                             id={`${question.id}-${option}`}
@@ -566,7 +566,7 @@ export default function SoinsPage() {
                       {question.options?.map((option) => (
                         <div
                           key={option}
-                          className="flex items-start p-2 sm:p-3 rounded-lg border-2 border-border hover:border-primary hover:bg-primary/10 cursor-pointer transition-all"
+                          className="flex items-end justify-start p-2 sm:p-3 rounded-lg border-2 border-border hover:border-primary hover:bg-primary/10 cursor-pointer transition-all"
                         >
                           <Checkbox
                             id={`${question.id}-${option}`}
@@ -629,7 +629,7 @@ export default function SoinsPage() {
                       {question.options?.map((option) => (
                         <div
                           key={option}
-                          className="flex items-start p-2 sm:p-3 rounded-lg border-2 border-border hover:border-primary hover:bg-primary/10 cursor-pointer transition-all"
+                          className="flex items-end justify-start p-2 sm:p-3 rounded-lg border-2 border-border hover:border-primary hover:bg-primary/10 cursor-pointer transition-all"
                         >
                           <Checkbox
                             id={`${question.id}-${option}`}

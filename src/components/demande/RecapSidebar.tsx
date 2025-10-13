@@ -1,6 +1,17 @@
 "use client";
 
 import { Button } from "@/components/custom/Button";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 import { Badge } from "@/components/ui/badge";
 import { useDemandeStore } from "@/store/demandeStore";
 import { ArrowLeft, Check, RotateCcw } from "lucide-react";
@@ -41,14 +52,8 @@ export function RecapSidebar() {
   };
 
   const handleRestart = () => {
-    if (
-      confirm(
-        "Êtes-vous sûr de vouloir recommencer ? Toutes vos données seront perdues."
-      )
-    ) {
-      reset();
-      router.push("/demande/soins");
-    }
+    reset();
+    router.push("/demande/soins");
   };
 
   return (
@@ -73,16 +78,37 @@ export function RecapSidebar() {
           )}
 
           {/* Bouton Recommencer */}
-          <Button
-            type="button"
-            variant="outline"
-            onClick={handleRestart}
-            className="w-full sm:flex-1 lg:w-full h-auto px-3 sm:px-4 py-2 sm:py-3 border border-red-500 text-red-500 hover:bg-red-500 hover:text-white text-sm sm:text-base font-medium transition-all"
-          >
-            <RotateCcw className="w-4 h-4 sm:w-5 sm:h-5 mr-2" />
-            <span className="hidden sm:inline">Recommencer la demande</span>
-            <span className="sm:hidden">Recommencer</span>
-          </Button>
+          <AlertDialog>
+            <AlertDialogTrigger asChild>
+              <Button
+                type="button"
+                variant="outline"
+                className="w-full sm:flex-1 lg:w-full h-auto px-3 sm:px-4 py-2 sm:py-3 border border-red-500 text-red-500 hover:bg-red-500 hover:text-white text-sm sm:text-base font-medium transition-all"
+              >
+                <RotateCcw className="w-4 h-4 sm:w-5 sm:h-5 mr-2" />
+                <span className="hidden sm:inline">Recommencer la demande</span>
+                <span className="sm:hidden">Recommencer</span>
+              </Button>
+            </AlertDialogTrigger>
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle className="text-base sm:text-lg lg:text-xl font-semibold text-foreground mb-4 sm:mb-6">Recommencer la demande ?</AlertDialogTitle>
+                <AlertDialogDescription className="text-sm sm:text-base">
+                  Êtes-vous sûr de vouloir recommencer ? Toutes vos données
+                  seront perdues et vous devrez remplir à nouveau le formulaire.
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter >
+                <AlertDialogCancel className="text-sm sm:text-base">Annuler</AlertDialogCancel>
+                <AlertDialogAction
+                  onClick={handleRestart}
+                  className="bg-red-500 hover:bg-red-600 text-white px-2 py-1"
+                >
+                  Oui, recommencer
+                </AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
         </div>
 
         <div className="bg-card rounded-lg border border-border p-4 sm:p-6 shadow-sm">

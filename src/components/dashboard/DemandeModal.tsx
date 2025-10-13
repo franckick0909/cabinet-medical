@@ -160,7 +160,7 @@ export function DemandeModal({
             variant="ghost"
             size="icon"
             onClick={onClose}
-            className="absolute sm:right-2 sm:top-2 right-4 top-4 sm:h-14 sm:w-14 h-10 w-10 rounded-full hover:bg-accent z-50 group border-0 shadow-none"
+            className="absolute sm:right-2 sm:top-2 right-4 top-4 sm:h-12 sm:w-12 h-10 w-10 rounded-full hover:bg-accent z-50 group border-0 shadow-none"
           >
             <X
               className="sm:!h-8 !h-6 sm:!w-8 !w-6 group-hover:rotate-180 transition-all duration-400"
