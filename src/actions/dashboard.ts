@@ -1,6 +1,6 @@
 "use server";
 
-import { Prisma } from "@prisma/client";
+// import { Prisma } from "@prisma/client";
 import { prisma } from "../lib/prisma";
 
 type Statut = "EN_ATTENTE" | "CONFIRMEE" | "EN_COURS" | "TERMINEE" | "ANNULEE";
@@ -13,7 +13,8 @@ export async function getDemandes(filters?: {
   urgence?: Urgence;
 }) {
   try {
-    const where: Prisma.DemandeWhereInput = {};
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const where: Record<string, any> = {};
 
     if (filters?.dateDebut || filters?.dateFin) {
       where.dateRdv = {};

@@ -177,3 +177,19 @@ body {
 .bg-gradient {
   background: var(--gradient);
 }
+
+/* Forcer les checkboxes à être carrées */
+@layer components {
+  [data-state="checked"] {
+    border-radius: 0.375rem !important;
+  }
+
+  [role="checkbox"] {
+    border-radius: 0.375rem !important;
+  }
+
+  /* Styles pour les checkboxes shadcn/ui */
+  .peer[data-state="checked"] {
+    border-radius: 0.375rem !important;
+  }
+}
