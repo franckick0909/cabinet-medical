@@ -1,5 +1,23 @@
 import * as React from "react";
-import { cn } from "@/lib/utils";
+
+// Fonction utilitaire simple pour combiner les classes
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function cn(...inputs: any[]): string {
+  return inputs
+    .filter(Boolean)
+    .map(input => {
+      if (typeof input === 'string') return input;
+      if (typeof input === 'object' && input !== null) {
+        return Object.entries(input)
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
+          .filter(([_, value]) => Boolean(value))
+          .map(([key]) => key)
+          .join(' ');
+      }
+      return '';
+    })
+    .join(' ');
+}
 
 export interface ButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement> {

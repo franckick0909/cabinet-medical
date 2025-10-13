@@ -2,7 +2,7 @@
 
 import { FormNavigation } from "@/components/demande/FormNavigation";
 import { PageHeader } from "@/components/demande/PageHeader";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/ui/Button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
