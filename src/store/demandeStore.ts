@@ -22,12 +22,14 @@ export interface DisponibiliteData {
 }
 
 export interface PatientData {
+  civilite: "Madame" | "Monsieur";
   nom: string;
   prenom: string;
   email?: string;
   telephone: string;
   dateNaissance: string;
   adresse?: string;
+  complementAdresse?: string;
   ville?: string;
   codePostal?: string;
   numeroSecu?: string;

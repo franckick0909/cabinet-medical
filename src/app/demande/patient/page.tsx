@@ -2,13 +2,16 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+import { FormNavigation } from "../../../components/demande/FormNavigation";
 import { PageHeader } from "../../../components/demande/PageHeader";
 import { AddressAutocomplete } from "../../../components/ui/AddressAutocomplete";
-import { Button } from "../../../components/ui/Button";
-import { Input } from "../../../components/ui/Input";
+import { Checkbox } from "../../../components/ui/checkbox";
+import { Input } from "../../../components/ui/input";
+import { Label } from "../../../components/ui/label";
+import { RadioGroup, RadioGroupItem } from "../../../components/ui/radio-group";
 import { useDemandeStore } from "../../../store/demandeStore";
 
 const patientSchema = z.object({
@@ -31,7 +34,7 @@ type PatientFormData = z.infer<typeof patientSchema>;
 
 export default function PatientPage() {
   const router = useRouter();
-  const { setPatient } = useDemandeStore();
+  const { setPatient, setEtapeActuelle } = useDemandeStore();
   const [civilite, setCivilite] = useState<"Madame" | "Monsieur" | "">("");
   const [pasEmail, setPasEmail] = useState(false);
   const [adresseInput, setAdresseInput] = useState("");
@@ -40,10 +43,16 @@ export default function PatientPage() {
     register,
     handleSubmit,
     setValue,
-    formState: { errors },
+    formState: { errors, isValid },
   } = useForm<PatientFormData>({
     resolver: zodResolver(patientSchema),
+    mode: "onChange",
   });
+
+  // Mettre à jour l'étape actuelle quand la page se charge
+  useEffect(() => {
+    setEtapeActuelle(4);
+  }, [setEtapeActuelle]);
 
   const handleCiviliteChange = (value: "Madame" | "Monsieur") => {
     setCivilite(value);
@@ -60,12 +69,18 @@ export default function PatientPage() {
       <PageHeader
         step="Étape 4 sur 4"
         title="Qui est le patient ?"
-        subtitle="* champs obligatoires"
         currentStep={4}
       />
 
-      <div className="bg-gray-50 rounded-lg border border-gray-200 p-4 mb-6">
-        <p className="text-sm text-gray-700">
+      {/* Navigation en haut */}
+      <FormNavigation
+        onContinue={handleSubmit(onSubmit)}
+        continueDisabled={!isValid}
+        continueText="Voir le récapitulatif"
+      />
+
+      <div className="bg-muted rounded-lg border border-border p-4 mb-6">
+        <p className="text-sm text-muted-foreground">
           Saisissez vos coordonnées afin qu&apos;un professionnel de santé
           qualifié et disponible prenne contact avec vous pour convenir
           d&apos;un rendez-vous.
@@ -74,47 +89,49 @@ export default function PatientPage() {
 
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="space-y-4 sm:space-y-6 bg-white rounded-lg border-2 border-gray-200 p-4 sm:p-6"
+        className="space-y-4 sm:space-y-6 bg-card rounded-lg border border-border p-4 sm:p-6 shadow-sm"
       >
         {/* Civilité */}
         <div className="">
-          <label className="block text-base sm:text-xl font-semibold text-gray-900 mb-3 sm:mb-4">
+          <Label className="block text-base sm:text-xl font-semibold text-foreground mb-3 sm:mb-4">
             Civilité
-          </label>
+          </Label>
 
-          <div className="flex gap-2 sm:gap-4">
-            <label className="flex-1 flex items-center justify-center p-3 sm:p-4 rounded-lg border-2 border-gray-200 hover:border-blue-300 hover:bg-blue-50/30 cursor-pointer transition-all">
-              <input
-                type="radio"
+          <RadioGroup
+            value={civilite}
+            onValueChange={handleCiviliteChange}
+            className="flex gap-2 sm:gap-4"
+          >
+            <div className="flex-1 flex items-center justify-center p-3 sm:p-4 rounded-lg border-2 border-border hover:border-primary hover:bg-primary/10 cursor-pointer transition-all">
+              <RadioGroupItem
                 value="Madame"
-                checked={civilite === "Madame"}
-                onChange={(e) =>
-                  handleCiviliteChange(e.target.value as "Madame" | "Monsieur")
-                }
-                className="w-5 h-5 border-2 border-gray-300 text-blue-600 focus:ring-2 focus:ring-blue-500 cursor-pointer mr-2 sm:mr-3 flex-shrink-0"
+                id="civilite-madame"
+                className="mr-2 sm:mr-3 flex-shrink-0"
               />
-              <span className="text-sm sm:text-base font-medium text-gray-900">
+              <Label
+                htmlFor="civilite-madame"
+                className="text-sm sm:text-base font-medium text-foreground cursor-pointer"
+              >
                 Madame
-              </span>
-            </label>
+              </Label>
+            </div>
 
-            <label className="flex-1 flex items-center justify-center p-3 sm:p-4 rounded-lg border-2 border-gray-200 hover:border-blue-300 hover:bg-blue-50/30 cursor-pointer transition-all">
-              <input
-                type="radio"
+            <div className="flex-1 flex items-center justify-center p-3 sm:p-4 rounded-lg border-2 border-border hover:border-primary hover:bg-primary/10 cursor-pointer transition-all">
+              <RadioGroupItem
                 value="Monsieur"
-                checked={civilite === "Monsieur"}
-                onChange={(e) =>
-                  handleCiviliteChange(e.target.value as "Madame" | "Monsieur")
-                }
-                className="w-5 h-5 border-2 border-gray-300 text-blue-600 focus:ring-2 focus:ring-blue-500 cursor-pointer mr-2 sm:mr-3 flex-shrink-0"
+                id="civilite-monsieur"
+                className="mr-2 sm:mr-3 flex-shrink-0"
               />
-              <span className="text-sm sm:text-base font-medium text-gray-900">
+              <Label
+                htmlFor="civilite-monsieur"
+                className="text-sm sm:text-base font-medium text-foreground cursor-pointer"
+              >
                 Monsieur
-              </span>
-            </label>
-          </div>
+              </Label>
+            </div>
+          </RadioGroup>
           {errors.civilite && (
-            <p className="mt-2 text-sm text-red-500">
+            <p className="mt-2 text-sm text-destructive">
               {errors.civilite.message}
             </p>
           )}
@@ -122,101 +139,124 @@ export default function PatientPage() {
 
         {/* Nom et Prénom */}
         <div className="">
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
-            <Input
-              label="Prénom"
-              {...register("prenom")}
-              error={errors.prenom?.message}
-              required
-              fullWidth
-            />
-            <Input
-              label="Nom"
-              {...register("nom")}
-              error={errors.nom?.message}
-              required
-              fullWidth
-            />
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 capitalize">
+            <div className="space-y-2">
+              <Label htmlFor="prenom">Prénom</Label>
+              <Input id="prenom" {...register("prenom")} required />
+              {errors.prenom && (
+                <p className="text-sm text-destructive">
+                  {errors.prenom.message}
+                </p>
+              )}
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="nom">Nom</Label>
+              <Input id="nom" {...register("nom")} required />
+              {errors.nom && (
+                <p className="text-sm text-destructive">{errors.nom.message}</p>
+              )}
+            </div>
           </div>
         </div>
 
         {/* Date de naissance */}
-        <div className="">
+        <div className="space-y-2">
+          <Label htmlFor="dateNaissance">Date de naissance</Label>
           <Input
-            label="Date de naissance"
+            id="dateNaissance"
             type="date"
             {...register("dateNaissance")}
-            error={errors.dateNaissance?.message}
             required
-            fullWidth
+            className="w-full"
           />
+          {errors.dateNaissance && (
+            <p className="text-sm text-destructive">
+              {errors.dateNaissance.message}
+            </p>
+          )}
         </div>
 
         {/* Contact */}
         <div className="">
-          <h3 className="text-base sm:text-xl font-semibold text-gray-900 mb-3 sm:mb-4">
+          <h3 className="text-base sm:text-xl font-semibold text-foreground mb-3 sm:mb-4">
             Contact
           </h3>
           <div className="space-y-3 sm:space-y-4">
-            <Input
-              label="Numéro de téléphone"
-              type="tel"
-              {...register("telephone")}
-              error={errors.telephone?.message}
-              placeholder="06 12 34 56 78"
-              required
-              fullWidth
-            />
-            <p className="text-xs sm:text-sm text-gray-600">
+            <div className="space-y-2">
+              <Label htmlFor="telephone">Numéro de téléphone</Label>
+              <Input
+                id="telephone"
+                type="tel"
+                {...register("telephone")}
+                placeholder="06 12 34 56 78"
+                required
+              />
+              {errors.telephone && (
+                <p className="text-sm text-destructive">
+                  {errors.telephone.message}
+                </p>
+              )}
+            </div>
+            <p className="text-xs sm:text-sm text-muted-foreground">
               Le professionnel vous contactera sur ce numéro pour convenir
               d&apos;un rendez-vous
             </p>
 
-            <Input
-              label="Confirmer le téléphone"
-              type="tel"
-              placeholder="06 12 34 56 78"
-              required
-              fullWidth
-            />
+            <div className="space-y-2">
+              <Label htmlFor="telephone-confirm">Confirmer le téléphone</Label>
+              <Input
+                id="telephone-confirm"
+                type="tel"
+                placeholder="06 12 34 56 78"
+                required
+              />
+            </div>
 
             {/* Checkbox "Je n'ai pas d'email" */}
-            <label className="flex items-center p-3 sm:p-4 rounded-lg border-2 border-gray-200 hover:border-blue-300 hover:bg-blue-50/30 cursor-pointer transition-all">
-              <input
-                type="checkbox"
+            <div className="flex items-center p-3 sm:p-4 rounded-lg border-2 border-border hover:border-primary hover:bg-primary/10 cursor-pointer transition-all">
+              <Checkbox
+                id="pas-email"
                 checked={pasEmail}
-                onChange={(e) => {
-                  setPasEmail(e.target.checked);
-                  if (e.target.checked) {
+                onCheckedChange={(checked) => {
+                  setPasEmail(checked as boolean);
+                  if (checked) {
                     setValue("email", "");
                   }
                 }}
-                className="w-5 h-5 rounded border-2 border-gray-300 text-blue-600 focus:ring-2 focus:ring-blue-500 cursor-pointer flex-shrink-0"
               />
-              <span className="ml-2 sm:ml-3 text-sm sm:text-base font-medium text-gray-900">
+              <Label
+                htmlFor="pas-email"
+                className="ml-2 sm:ml-3 text-sm sm:text-base font-medium text-foreground cursor-pointer"
+              >
                 Je n&apos;ai pas d&apos;email
-              </span>
-            </label>
+              </Label>
+            </div>
 
             {!pasEmail && (
-              <Input
-                label="Email (facultatif)"
-                type="email"
-                {...register("email")}
-                error={errors.email?.message}
-                placeholder="exemple@email.com"
-                fullWidth
-              />
+              <div className="space-y-2">
+                <Label htmlFor="email">Email (facultatif)</Label>
+                <Input
+                  id="email"
+                  type="email"
+                  {...register("email")}
+                  placeholder="exemple@email.com"
+                />
+                {errors.email && (
+                  <p className="text-sm text-destructive">
+                    {errors.email.message}
+                  </p>
+                )}
+              </div>
             )}
           </div>
         </div>
 
         {/* Adresse */}
-        <div className="bg-white rounded-lg border-2 border-gray-200 p-4 sm:p-6">
-          <h3 className="text-base sm:text-xl font-semibold text-gray-900 mb-3 sm:mb-4">
+        <div className="bg-card rounded-lg border border-border p-4 sm:p-6 shadow-sm">
+          <h3 className="text-base sm:text-xl font-semibold text-foreground mb-3 sm:mb-4">
             Adresse{" "}
           </h3>
-          <p className="text-xs sm:text-sm text-gray-600 mb-3 sm:mb-4">
+          <p className="text-xs sm:text-sm text-muted-foreground mb-3 sm:mb-4">
             Lieu où les soins &quot;à domicile&quot; seront réalisés
           </p>
 
@@ -232,11 +272,10 @@ export default function PatientPage() {
               }}
               error={errors.adresse?.message}
               placeholder="Ex: 75002 15 rue de la Paix ou 15 rue de la Paix"
-              fullWidth
             />
 
-            <div className="bg-blue-50 rounded-lg border-2 border-blue-200 p-3 sm:p-4">
-              <p className="text-xs sm:text-sm text-gray-700">
+            <div className="bg-primary/10 rounded-lg border-2 border-primary/30 p-3 sm:p-4">
+              <p className="text-xs sm:text-sm text-foreground">
                 💡 <strong>Astuce :</strong> Tapez au moins 3 caractères. Vous
                 pouvez commencer par votre code postal (ex: 75002 rue de la
                 Paix) ou directement par votre numéro et rue (ex: 15 rue de la
@@ -244,35 +283,47 @@ export default function PatientPage() {
               </p>
             </div>
 
-            <Input
-              label="Complément d'adresse (facultatif)"
-              {...register("complementAdresse")}
-              placeholder="Bâtiment, codes, étage..."
-              fullWidth
-            />
-            <p className="text-xs sm:text-sm text-gray-600">
+            <div className="space-y-2">
+              <Label htmlFor="complementAdresse">
+                Complément d&apos;adresse (facultatif)
+              </Label>
+              <Input
+                id="complementAdresse"
+                {...register("complementAdresse")}
+                placeholder="Bâtiment, codes, étage..."
+              />
+            </div>
+            <p className="text-xs sm:text-sm text-muted-foreground">
               Indiquez les informations pour simplifier l&apos;accès au lieu de
               rendez-vous (bâtiment, codes, étage, etc...)
             </p>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
-              <Input
-                label="Code postal"
-                {...register("codePostal")}
-                error={errors.codePostal?.message}
-                placeholder="75001"
-                fullWidth
-              />
-              <Input
-                label="Ville"
-                {...register("ville")}
-                error={errors.ville?.message}
-                placeholder="Paris"
-                fullWidth
-              />
+              <div className="space-y-2">
+                <Label htmlFor="codePostal">Code postal</Label>
+                <Input
+                  id="codePostal"
+                  {...register("codePostal")}
+                  placeholder="75001"
+                />
+                {errors.codePostal && (
+                  <p className="text-sm text-destructive">
+                    {errors.codePostal.message}
+                  </p>
+                )}
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="ville">Ville</Label>
+                <Input id="ville" {...register("ville")} placeholder="Paris" />
+                {errors.ville && (
+                  <p className="text-sm text-destructive">
+                    {errors.ville.message}
+                  </p>
+                )}
+              </div>
             </div>
 
-            <p className="text-xs text-gray-500 italic">
+            <p className="text-xs text-muted-foreground italic">
               Les champs Code postal et Ville sont remplis automatiquement lors
               de la sélection de l&apos;adresse
             </p>
@@ -280,29 +331,21 @@ export default function PatientPage() {
         </div>
 
         {/* Numéro de sécurité sociale */}
-        <div className="">
+        <div className="space-y-2">
+          <Label htmlFor="numeroSecu">
+            Numéro de sécurité sociale (facultatif)
+          </Label>
           <Input
-            label="Numéro de sécurité sociale (facultatif)"
+            id="numeroSecu"
             {...register("numeroSecu")}
-            error={errors.numeroSecu?.message}
             placeholder="1 23 45 67 890 123 45"
-            fullWidth
+            className="w-full"
           />
-        </div>
-
-        {/* Navigation */}
-        <div className="flex flex-col sm:flex-row justify-between gap-3 pt-4 sm:pt-6 border-t border-gray-200">
-          <Button
-            type="button"
-            variant="secondary"
-            onClick={() => router.back()}
-            className="w-full sm:w-auto"
-          >
-            Retour
-          </Button>
-          <Button type="submit" size="lg" className="w-full sm:w-auto">
-            Continuer
-          </Button>
+          {errors.numeroSecu && (
+            <p className="text-sm text-destructive">
+              {errors.numeroSecu.message}
+            </p>
+          )}
         </div>
       </form>
     </div>

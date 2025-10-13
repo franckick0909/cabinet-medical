@@ -2,8 +2,8 @@
 
 import { useRouter, useSearchParams } from "next/navigation";
 import { Suspense } from "react";
-import { Button } from "../../../components/ui/Button";
-import { Card } from "../../../components/ui/Card";
+import { Button } from "../../../components/ui/button";
+import { Card } from "../../../components/ui/card";
 
 function ConfirmationContent() {
   const searchParams = useSearchParams();
@@ -31,30 +31,32 @@ function ConfirmationContent() {
         </div>
 
         {/* Message de confirmation */}
-        <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-4">
+        <h1 className="text-2xl sm:text-3xl font-bold text-foreground mb-4">
           Demande envoyée avec succès ! 🎉
         </h1>
 
-        <p className="text-base sm:text-lg text-gray-600 mb-6">
+        <p className="text-base sm:text-lg text-muted-foreground mb-6">
           Votre demande de soins a bien été enregistrée.
         </p>
 
         {demandeId && (
-          <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
-            <p className="text-sm text-gray-600 mb-1">Numéro de demande</p>
-            <p className="text-xl font-mono font-semibold text-blue-600">
+          <div className="bg-primary/10 border border-primary/20 rounded-lg p-4 mb-6">
+            <p className="text-sm text-muted-foreground mb-1">
+              Numéro de demande
+            </p>
+            <p className="text-xl font-mono font-semibold text-primary">
               {demandeId}
             </p>
           </div>
         )}
 
         <div className="space-y-3 sm:space-y-4">
-          <p className="text-sm sm:text-base text-gray-600">
+          <p className="text-sm sm:text-base text-muted-foreground">
             Notre équipe va examiner votre demande et vous contactera très
             prochainement pour confirmer votre rendez-vous.
           </p>
 
-          <p className="text-sm sm:text-base text-gray-600">
+          <p className="text-sm sm:text-base text-muted-foreground">
             Vous recevrez un email de confirmation à l&apos;adresse que vous
             avez indiquée.
           </p>
@@ -62,19 +64,26 @@ function ConfirmationContent() {
 
         {/* Actions */}
         <div className="mt-6 sm:mt-8 space-y-3">
-          <Button fullWidth onClick={() => router.push("/demande/soins")}>
+          <Button
+            className="w-full"
+            onClick={() => router.push("/demande/soins")}
+          >
             Faire une nouvelle demande
           </Button>
-          <Button fullWidth variant="outline" onClick={() => router.push("/")}>
+          <Button
+            className="w-full"
+            variant="outline"
+            onClick={() => router.push("/")}
+          >
             Retour à l&apos;accueil
           </Button>
         </div>
 
         {/* Contact */}
-        <div className="mt-8 pt-8 border-t border-gray-200">
-          <p className="text-sm text-gray-600">
+        <div className="mt-8 pt-8 border-t border-border">
+          <p className="text-sm text-muted-foreground">
             Des questions ? Contactez-nous au{" "}
-            <a href="tel:0123456789" className="text-blue-600 hover:underline">
+            <a href="tel:0123456789" className="text-primary hover:underline">
               01 23 45 67 89
             </a>
           </p>

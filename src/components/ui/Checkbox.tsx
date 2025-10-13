@@ -1,40 +1,30 @@
-import { InputHTMLAttributes, forwardRef } from "react";
+"use client";
 
-interface CheckboxProps extends InputHTMLAttributes<HTMLInputElement> {
-  label: string;
-  description?: string;
-}
+import * as CheckboxPrimitive from "@radix-ui/react-checkbox";
+import { Check } from "lucide-react";
+import * as React from "react";
 
-export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
-  ({ label, description, className = "", ...props }, ref) => {
-    return (
-      <label className="flex items-start cursor-pointer group">
-        <input
-          ref={ref}
-          type="checkbox"
-          className={`
-            w-4 h-4 sm:w-5 sm:h-5 mt-0.5 rounded border-2 border-gray-300
-            text-blue-600 
-            focus:ring-2 focus:ring-blue-500 focus:ring-offset-0
-            transition-all duration-200
-            cursor-pointer flex-shrink-0
-            ${className}
-          `}
-          {...props}
-        />
-        <div className="ml-2 sm:ml-3 flex-1">
-          <span className="text-sm sm:text-base font-medium text-gray-900 group-hover:text-blue-600 transition-colors">
-            {label}
-          </span>
-          {description && (
-            <p className="text-xs sm:text-sm text-gray-500 mt-0.5">
-              {description}
-            </p>
-          )}
-        </div>
-      </label>
-    );
-  }
-);
+import { cn } from "@/lib/utils";
 
-Checkbox.displayName = "Checkbox";
+const Checkbox = React.forwardRef<
+  React.ElementRef<typeof CheckboxPrimitive.Root>,
+  React.ComponentPropsWithoutRef<typeof CheckboxPrimitive.Root>
+>(({ className, ...props }, ref) => (
+  <CheckboxPrimitive.Root
+    ref={ref}
+    className={cn(
+      "peer h-4 w-4 shrink-0 rounded-none border border-primary ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground",
+      className
+    )}
+    {...props}
+  >
+    <CheckboxPrimitive.Indicator
+      className={cn("flex items-center justify-center text-current")}
+    >
+      <Check className="h-4 w-4" />
+    </CheckboxPrimitive.Indicator>
+  </CheckboxPrimitive.Root>
+));
+Checkbox.displayName = CheckboxPrimitive.Root.displayName;
+
+export { Checkbox };

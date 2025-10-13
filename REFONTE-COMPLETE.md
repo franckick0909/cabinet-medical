@@ -291,4 +291,3 @@ Un formulaire **professionnel, accessible et fonctionnel** inspiré de Medicalib
 - ✅ Sidebar récapitulative pratique
 - ✅ Code propre et maintenable
 
-**Prêt pour la production après les tests ! 🚀**

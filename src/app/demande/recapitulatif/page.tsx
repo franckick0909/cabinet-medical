@@ -1,21 +1,42 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useState } from "react";
-import { Button } from "../../../components/ui/Button";
-import { Card } from "../../../components/ui/Card";
+import { useEffect, useState } from "react";
+import { submitDemande } from "../../../actions/demandes";
+import { PageHeader } from "../../../components/demande/PageHeader";
+import { Button } from "../../../components/ui/button";
+import { Card } from "../../../components/ui/card";
 import { useDemandeStore } from "../../../store/demandeStore";
 
 export default function RecapitulatifPage() {
   const router = useRouter();
-  const { soin, ordonnance, disponibilite, patient, reset } = useDemandeStore();
+  const { soin, ordonnance, disponibilite, patient, reset, setEtapeActuelle } =
+    useDemandeStore();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  // Mettre à jour l'étape actuelle quand la page se charge
+  useEffect(() => {
+    setEtapeActuelle(5);
+  }, [setEtapeActuelle]);
+
   // Vérifier que toutes les données sont présentes
+  useEffect(() => {
+    if (!soin || !ordonnance || !disponibilite || !patient) {
+      router.push("/demande/soins");
+    }
+  }, [soin, ordonnance, disponibilite, patient, router]);
+
+  // Afficher un loader pendant la vérification
   if (!soin || !ordonnance || !disponibilite || !patient) {
-    router.push("/demande/soins");
-    return null;
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <p className="text-gray-600">Vérification des données...</p>
+        </div>
+      </div>
+    );
   }
 
   const handleSubmit = async () => {
@@ -23,43 +44,23 @@ export default function RecapitulatifPage() {
     setError(null);
 
     try {
-      const response = await fetch("/api/demandes", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          patient: {
-            ...patient,
-            dateNaissance: new Date(patient.dateNaissance),
-          },
-          demande: {
-            typeSoin: soin.type,
-            detailsSoin: soin.details,
-            aOrdonnance: ordonnance.aOrdonnance,
-            ordonnanceDetails: ordonnance.aOrdonnance ? ordonnance : null,
-            datePreferee: disponibilite.datePreferee
-              ? new Date(disponibilite.datePreferee)
-              : null,
-            heurePreferee: disponibilite.heurePreferee,
-            urgence: disponibilite.urgence,
-            lieu: disponibilite.lieu,
-            statut: "EN_ATTENTE",
-          },
-        }),
+      // Appel de la Server Action
+      const result = await submitDemande({
+        soin,
+        ordonnance,
+        disponibilite,
+        patient,
       });
 
-      if (!response.ok) {
-        throw new Error("Erreur lors de l'envoi de la demande");
+      if (!result.success) {
+        throw new Error(result.error || "Erreur lors de l'envoi de la demande");
       }
-
-      const data = await response.json();
 
       // Réinitialiser le store
       reset();
 
       // Rediriger vers la page de confirmation
-      router.push(`/demande/confirmation?id=${data.id}`);
+      router.push(`/demande/confirmation?id=${result.id}`);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Une erreur est survenue");
     } finally {
@@ -76,41 +77,16 @@ export default function RecapitulatifPage() {
 
   return (
     <div className="w-full">
-      {/* Header */}
-      <div className="mb-6 sm:mb-8 text-center">
-        <h1 className="text-2xl sm:text-4xl font-bold text-gray-900 mb-2 sm:mb-3">
-          Récapitulatif de votre demande
-        </h1>
-        <p className="text-sm sm:text-lg text-gray-600">
-          Vérifiez vos informations avant de valider
-        </p>
-      </div>
-
-      {/* Progress - All completed */}
-      <div className="mb-6 sm:mb-12 overflow-x-auto pb-2">
-        <div className="flex items-center justify-center space-x-1 sm:space-x-2 min-w-max mx-auto px-2">
-          {["Soins", "Ordonnance", "Disponibilités", "Patient"].map(
-            (step, index) => (
-              <div key={step} className="flex items-center">
-                <div className="flex items-center">
-                  <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-green-600 text-white flex items-center justify-center text-sm sm:text-base">
-                    ✓
-                  </div>
-                  <span className="ml-1 sm:ml-2 text-xs sm:text-sm font-medium text-green-600">
-                    {step}
-                  </span>
-                </div>
-                {index < 3 && (
-                  <div className="w-8 sm:w-16 h-1 bg-green-600 mx-1 sm:mx-2"></div>
-                )}
-              </div>
-            )
-          )}
-        </div>
-      </div>
+      {/* Header avec progress bar améliorée */}
+      <PageHeader
+        step="Étape 5 sur 5"
+        title="Récapitulatif de votre demande"
+        subtitle="Vérifiez vos informations avant de valider"
+        showProgressSteps={true}
+      />
 
       {error && (
-        <div className="mb-4 sm:mb-6 p-3 sm:p-4 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm sm:text-base">
+        <div className="mb-4 sm:mb-6 p-3 sm:p-4 bg-destructive/10 border border-destructive/20 rounded-lg text-destructive text-sm sm:text-base">
           {error}
         </div>
       )}
@@ -119,22 +95,22 @@ export default function RecapitulatifPage() {
         {/* Type de soin */}
         <Card className="p-4 sm:p-6">
           <div className="flex items-start justify-between mb-3 sm:mb-4 gap-2">
-            <h3 className="text-base sm:text-lg font-semibold text-gray-900 truncate">
+            <h3 className="text-base sm:text-lg font-semibold text-foreground truncate">
               🩺 Type de soin
             </h3>
             <Button
               variant="ghost"
-              size="md"
+              size="default"
               onClick={() => router.push("/demande/soins")}
               className="flex-shrink-0"
             >
               Modifier
             </Button>
           </div>
-          <p className="text-gray-700 font-medium mb-2 text-sm sm:text-base">
+          <p className="text-foreground font-medium mb-2 text-sm sm:text-base">
             {soin.details.titre}
           </p>
-          <div className="text-sm sm:text-base text-gray-600 space-y-1">
+          <div className="text-sm sm:text-base text-muted-foreground space-y-1">
             {Object.entries(soin.details)
               .filter(([key]) => key !== "titre")
               .map(([key, value]) => (
@@ -149,12 +125,12 @@ export default function RecapitulatifPage() {
         {/* Ordonnance */}
         <Card className="p-4 sm:p-6">
           <div className="flex items-start justify-between mb-3 sm:mb-4 gap-2">
-            <h3 className="text-base sm:text-lg font-semibold text-gray-900 truncate">
+            <h3 className="text-base sm:text-lg font-semibold text-foreground truncate">
               📄 Ordonnance
             </h3>
             <Button
               variant="ghost"
-              size="md"
+              size="default"
               onClick={() => router.push("/demande/ordonnance")}
               className="flex-shrink-0"
             >
@@ -162,7 +138,7 @@ export default function RecapitulatifPage() {
             </Button>
           </div>
           {ordonnance.aOrdonnance ? (
-            <div className="text-sm sm:text-base text-gray-600 space-y-1">
+            <div className="text-sm sm:text-base text-muted-foreground space-y-1">
               <p>
                 <span className="font-medium">Statut:</span> Ordonnance présente
               </p>
@@ -188,7 +164,7 @@ export default function RecapitulatifPage() {
               )}
             </div>
           ) : (
-            <p className="text-sm sm:text-base text-gray-600">
+            <p className="text-sm sm:text-base text-muted-foreground">
               Pas d&apos;ordonnance
             </p>
           )}
@@ -197,19 +173,19 @@ export default function RecapitulatifPage() {
         {/* Disponibilités */}
         <Card className="p-4 sm:p-6">
           <div className="flex items-start justify-between mb-3 sm:mb-4 gap-2">
-            <h3 className="text-base sm:text-lg font-semibold text-gray-900 truncate">
+            <h3 className="text-base sm:text-lg font-semibold text-foreground truncate">
               📅 Disponibilités
             </h3>
             <Button
               variant="ghost"
-              size="md"
+              size="default"
               onClick={() => router.push("/demande/disponibilites")}
               className="flex-shrink-0"
             >
               Modifier
             </Button>
           </div>
-          <div className="text-sm sm:text-base text-gray-600 space-y-1">
+          <div className="text-sm sm:text-base text-muted-foreground space-y-1">
             {disponibilite.datePreferee && (
               <p>
                 <span className="font-medium">Date souhaitée:</span>{" "}
@@ -241,19 +217,19 @@ export default function RecapitulatifPage() {
         {/* Patient */}
         <Card className="p-4 sm:p-6">
           <div className="flex items-start justify-between mb-3 sm:mb-4 gap-2">
-            <h3 className="text-base sm:text-lg font-semibold text-gray-900 truncate">
+            <h3 className="text-base sm:text-lg font-semibold text-foreground truncate">
               👤 Informations patient
             </h3>
             <Button
               variant="ghost"
-              size="md"
+              size="default"
               onClick={() => router.push("/demande/patient")}
               className="flex-shrink-0"
             >
               Modifier
             </Button>
           </div>
-          <div className="text-sm sm:text-base text-gray-600 space-y-1">
+          <div className="text-sm sm:text-base text-muted-foreground space-y-1">
             <p>
               <span className="font-medium">Nom:</span> {patient.nom}{" "}
               {patient.prenom}

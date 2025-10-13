@@ -1,6 +1,9 @@
 "use client";
 
+import { cn } from "@/lib/utils";
 import { useEffect, useRef, useState } from "react";
+import { Input } from "./input";
+import { Label } from "./label";
 
 interface AddressFeature {
   properties: {
@@ -129,16 +132,16 @@ export function AddressAutocomplete({
   };
 
   return (
-    <div className={fullWidth ? "w-full" : ""} ref={wrapperRef}>
+    <div className={cn("space-y-2", fullWidth && "w-full")} ref={wrapperRef}>
       {label && (
-        <label className="block text-base font-medium text-gray-900 mb-2">
+        <Label>
           {label}
           {required && <span className="text-red-500 ml-1">*</span>}
-        </label>
+        </Label>
       )}
 
       <div className="relative">
-        <input
+        <Input
           type="text"
           value={value}
           onChange={(e) => handleInputChange(e.target.value)}
@@ -148,16 +151,9 @@ export function AddressAutocomplete({
             }
           }}
           placeholder={placeholder}
-          className={`
-            px-4 py-3 rounded-lg border-2 border-gray-300
-            bg-white text-gray-900 text-base
-            placeholder:text-gray-400
-            focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500
-            disabled:bg-gray-100 disabled:cursor-not-allowed
-            transition-all duration-200
-            ${error ? "border-red-500 focus:ring-red-500" : ""}
-            ${fullWidth ? "w-full" : ""}
-          `}
+          className={cn(
+            error && "border-destructive focus-visible:ring-destructive"
+          )}
         />
 
         {isLoading && (
@@ -168,18 +164,18 @@ export function AddressAutocomplete({
 
         {/* Liste des suggestions */}
         {isOpen && suggestions.length > 0 && (
-          <div className="absolute z-50 w-full mt-1 bg-white border-2 border-gray-200 rounded-lg shadow-lg max-h-60 overflow-auto">
+          <div className="absolute z-50 w-full mt-1 bg-popover border border-border rounded-md shadow-md max-h-60 overflow-auto">
             {suggestions.map((feature, index) => (
               <button
                 key={index}
                 type="button"
                 onClick={() => handleSelectSuggestion(feature)}
-                className="w-full text-left px-4 py-3 hover:bg-blue-50 transition-colors border-b border-gray-100 last:border-b-0"
+                className="w-full text-left px-4 py-3 hover:bg-accent hover:text-accent-foreground transition-colors border-b border-border last:border-b-0"
               >
-                <div className="text-base font-medium text-gray-900">
+                <div className="text-base font-medium text-foreground">
                   {feature.properties.name}
                 </div>
-                <div className="text-sm text-gray-600">
+                <div className="text-sm text-muted-foreground">
                   {feature.properties.postcode} {feature.properties.city}
                 </div>
               </button>
@@ -192,15 +188,15 @@ export function AddressAutocomplete({
           suggestions.length === 0 &&
           value.length >= 3 &&
           !isLoading && (
-            <div className="absolute z-50 w-full mt-1 bg-white border-2 border-gray-200 rounded-lg shadow-lg p-4">
-              <p className="text-sm text-gray-600">
+            <div className="absolute z-50 w-full mt-1 bg-popover border border-border rounded-md shadow-md p-4">
+              <p className="text-sm text-muted-foreground">
                 Aucune adresse trouvée. Vérifiez votre saisie.
               </p>
             </div>
           )}
       </div>
 
-      {error && <p className="mt-1 text-sm text-red-500">{error}</p>}
+      {error && <p className="text-sm text-destructive">{error}</p>}
     </div>
   );
 }

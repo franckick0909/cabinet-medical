@@ -1,24 +1,40 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { FormNavigation } from "../../../components/demande/FormNavigation";
 import { PageHeader } from "../../../components/demande/PageHeader";
-import { Button } from "../../../components/ui/Button";
-import { Input } from "../../../components/ui/Input";
+import { Button } from "../../../components/ui/button";
+import { Checkbox } from "../../../components/ui/checkbox";
+import { Input } from "../../../components/ui/input";
+import { Label } from "../../../components/ui/label";
+import { RadioGroup, RadioGroupItem } from "../../../components/ui/radio-group";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../../../components/ui/select";
 import { useDemandeStore } from "../../../store/demandeStore";
 
 export default function DisponibilitesPage() {
   const router = useRouter();
-  const { setDisponibilite } = useDemandeStore();
+  const { setDisponibilite, setEtapeActuelle } = useDemandeStore();
   const [lieuSoins, setLieuSoins] = useState("");
   const [dateDebut, setDateDebut] = useState("");
   const [duree, setDuree] = useState("");
   const [dureePersonnalisee, setDureePersonnalisee] = useState("");
-  const [lieu, setLieu] = useState("");
+
   const [touteLaJournee, setTouteLaJournee] = useState(false);
   const [creneaux, setCreneaux] = useState<
     Array<{ debut: string; fin: string }>
-  >([{ debut: "7", fin: "21" }]);
+  >([{ debut: "", fin: "" }]);
+
+  // Mettre à jour l'étape actuelle quand la page se charge
+  useEffect(() => {
+    setEtapeActuelle(3);
+  }, [setEtapeActuelle]);
 
   const urgenceMapping = {
     "1": "URGENTE" as const,
@@ -34,7 +50,6 @@ export default function DisponibilitesPage() {
 
     // Vérifier si "autre" est sélectionné et qu'une durée ou lieu personnalisé est fourni
     if (duree === "autre" && !dureePersonnalisee) return;
-    if (lieuSoins === "Autre" && !lieu) return;
 
     const urgence =
       urgenceMapping[duree as keyof typeof urgenceMapping] || "NORMALE";
@@ -48,7 +63,7 @@ export default function DisponibilitesPage() {
       datePreferee: dateDebut,
       heurePreferee,
       urgence,
-      lieu: lieu || lieuSoins,
+      lieu: lieuSoins,
     });
 
     router.push("/demande/patient");
@@ -59,79 +74,86 @@ export default function DisponibilitesPage() {
       <PageHeader
         step="Étape 3 sur 4"
         title="Où et quand souhaitez-vous faire vos soins ?"
-        subtitle="* champs obligatoires"
         currentStep={3}
+      />
+
+      {/* Navigation en haut */}
+      <FormNavigation
+        onContinue={handleContinue}
+        continueDisabled={
+          !lieuSoins ||
+          !dateDebut ||
+          !duree ||
+          (duree === "autre" && !dureePersonnalisee) ||
+          (!touteLaJournee && creneaux.some((c) => !c.debut || !c.fin))
+        }
       />
 
       <div className="space-y-4 sm:space-y-6">
         {/* Lieu des soins */}
-        <div className="bg-white rounded-lg border-2 border-gray-200 p-4 sm:p-6">
-          <label className="block text-sm sm:text-base font-medium text-gray-900 mb-3 sm:mb-4">
+        <div className="bg-card rounded-lg border border-border p-4 sm:p-6 shadow-sm">
+          <Label className="block text-sm sm:text-base font-medium text-foreground mb-3 sm:mb-4">
             Lieu des soins *
-          </label>
+          </Label>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3">
+          <RadioGroup
+            value={lieuSoins}
+            onValueChange={setLieuSoins}
+            className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3"
+          >
             {[
               { value: "À domicile", label: "À domicile" },
               { value: "En cabinet", label: "En cabinet" },
-              { value: "En EHPAD", label: "En EHPAD" },
-              { value: "Autre", label: "Autre lieu" },
             ].map((option) => (
-              <label
+              <div
                 key={option.value}
-                className="flex items-start p-3 sm:p-4 rounded-lg border-2 border-gray-200 hover:border-blue-300 hover:bg-blue-50/30 cursor-pointer transition-all"
+                className="flex items-start p-3 sm:p-4 rounded-lg border-2 border-border hover:border-primary hover:bg-primary/10 cursor-pointer transition-all"
               >
-                <input
-                  type="radio"
-                  name="lieuSoins"
+                <RadioGroupItem
                   value={option.value}
-                  checked={lieuSoins === option.value}
-                  onChange={(e) => setLieuSoins(e.target.value)}
-                  className="w-5 h-5 mt-0.5 border-2 border-gray-300 text-blue-600 focus:ring-2 focus:ring-blue-500 cursor-pointer flex-shrink-0"
+                  id={`lieu-${option.value}`}
+                  className="mt-0.5"
                 />
-                <span className="ml-2 sm:ml-3 text-sm sm:text-base font-medium text-gray-900 leading-tight">
+                <Label
+                  htmlFor={`lieu-${option.value}`}
+                  className="ml-2 sm:ml-3 text-sm sm:text-base font-medium text-foreground leading-tight cursor-pointer"
+                >
                   {option.label}
-                </span>
-              </label>
+                </Label>
+              </div>
             ))}
-          </div>
-
-          {lieuSoins === "Autre" && (
-            <div className="mt-3 sm:mt-4 p-3 sm:p-4 bg-blue-50 rounded-lg border-2 border-blue-200">
-              <label className="block text-sm font-medium text-gray-900 mb-2">
-                Précisez le lieu :
-              </label>
-              <Input
-                type="text"
-                value={lieu}
-                onChange={(e) => setLieu(e.target.value)}
-                placeholder="Entrez l'adresse complète..."
-                fullWidth
-              />
-            </div>
-          )}
+          </RadioGroup>
         </div>
 
         {/* Date de début */}
-        <div className="bg-white rounded-lg border-2 border-gray-200 p-4 sm:p-6">
+        <div className="bg-card rounded-lg border border-border p-4 sm:p-6 shadow-sm space-y-2">
+          <Label
+            htmlFor="date-debut"
+            className="block text-sm sm:text-base font-medium text-foreground"
+          >
+            Date de début des soins *
+          </Label>
           <Input
-            label="Date de début des soins"
+            id="date-debut"
             type="date"
             value={dateDebut}
             onChange={(e) => setDateDebut(e.target.value)}
             min={new Date().toISOString().split("T")[0]}
             required
-            fullWidth
           />
         </div>
 
         {/* Durée des soins */}
-        <div className="bg-white rounded-lg border-2 border-gray-200 p-4 sm:p-6">
-          <label className="block text-sm sm:text-base font-medium text-gray-900 mb-3 sm:mb-4">
+        <div className="bg-card rounded-lg border border-border p-4 sm:p-6 shadow-sm">
+          <Label className="block text-sm sm:text-base font-medium text-foreground mb-3 sm:mb-4">
             Durée des soins (en jours) *
-          </label>
+          </Label>
 
-          <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 sm:gap-3">
+          <RadioGroup
+            value={duree}
+            onValueChange={setDuree}
+            className="grid grid-cols-2 sm:grid-cols-3 gap-2 sm:gap-3"
+          >
             {[
               { value: "1", label: "1 jour" },
               { value: "7", label: "7 jours" },
@@ -141,70 +163,75 @@ export default function DisponibilitesPage() {
               { value: "60", label: "Longue durée (60 jours ou +)" },
               { value: "autre", label: "Autre durée" },
             ].map((option) => (
-              <label
+              <div
                 key={option.value}
-                className="flex items-start p-2 sm:p-4 rounded-lg border-2 border-gray-200 hover:border-blue-300 hover:bg-blue-50/30 cursor-pointer transition-all"
+                className="flex items-start p-2 sm:p-4 rounded-lg border-2 border-border hover:border-primary hover:bg-primary/10 cursor-pointer transition-all"
               >
-                <input
-                  type="radio"
-                  name="duree"
+                <RadioGroupItem
                   value={option.value}
-                  checked={duree === option.value}
-                  onChange={(e) => setDuree(e.target.value)}
-                  className="w-5 h-5 mt-0.5 border-2 border-gray-300 text-blue-600 focus:ring-2 focus:ring-blue-500 cursor-pointer flex-shrink-0"
+                  id={`duree-${option.value}`}
+                  className="mt-0.5"
                 />
-                <span className="ml-2 sm:ml-3 text-xs sm:text-base font-medium text-gray-900 leading-tight">
+                <Label
+                  htmlFor={`duree-${option.value}`}
+                  className="ml-2 sm:ml-3 text-xs sm:text-base font-medium text-foreground leading-tight cursor-pointer"
+                >
                   {option.label}
-                </span>
-              </label>
+                </Label>
+              </div>
             ))}
-          </div>
+          </RadioGroup>
 
           {/* Champ conditionnel pour durée personnalisée */}
           {duree === "autre" && (
-            <div className="mt-3 sm:mt-4 p-3 sm:p-4 bg-blue-50 rounded-lg border-2 border-blue-200">
-              <label className="block text-sm font-medium text-gray-900 mb-2">
+            <div className="mt-3 sm:mt-4 p-3 sm:p-4 bg-primary/10 rounded-lg border-2 border-primary/30">
+              <Label
+                htmlFor="duree-personnalisee"
+                className="block text-sm font-medium text-foreground mb-2"
+              >
                 Précisez la durée en jours :
-              </label>
+              </Label>
               <Input
+                id="duree-personnalisee"
                 type="number"
                 min="1"
                 value={dureePersonnalisee}
                 onChange={(e) => setDureePersonnalisee(e.target.value)}
                 placeholder="Ex: 45"
-                fullWidth
               />
             </div>
           )}
         </div>
 
         {/* Disponibilités horaires */}
-        <div className="bg-white rounded-lg border-2 border-gray-200 p-4 sm:p-6">
-          <label className="block text-sm sm:text-base font-medium text-gray-900 mb-3 sm:mb-4">
+        <div className="bg-card rounded-lg border border-border p-4 sm:p-6 shadow-sm">
+          <Label className="block text-sm sm:text-base font-medium text-foreground mb-3 sm:mb-4">
             Disponibilités horaires *
-          </label>
+          </Label>
 
-          <p className="text-xs sm:text-sm text-gray-600 mb-3 sm:mb-4">
+          <p className="text-xs sm:text-sm text-muted-foreground mb-3 sm:mb-4">
             L&apos;heure de passage précise sera à définir avec le professionnel
             de santé
           </p>
 
           {/* Checkbox "Toute la journée" */}
-          <label className="flex items-center p-3 sm:p-4 rounded-lg border-2 border-gray-200 hover:border-blue-300 hover:bg-blue-50/30 cursor-pointer transition-all mb-3 sm:mb-4">
-            <input
-              type="checkbox"
+          <div className="flex items-center p-3 sm:p-4 rounded-lg border-2 border-border hover:border-primary hover:bg-primary/10 cursor-pointer transition-all mb-3 sm:mb-4">
+            <Checkbox
+              id="toute-la-journee"
               checked={touteLaJournee}
-              onChange={(e) => setTouteLaJournee(e.target.checked)}
-              className="w-5 h-5 rounded border-2 border-gray-300 text-blue-600 focus:ring-2 focus:ring-blue-500 cursor-pointer"
+              onCheckedChange={(checked) => setTouteLaJournee(checked === true)}
             />
-            <span className="ml-2 sm:ml-3 text-sm sm:text-base font-medium text-gray-900">
+            <Label
+              htmlFor="toute-la-journee"
+              className="ml-2 sm:ml-3 text-sm sm:text-base font-medium text-foreground cursor-pointer"
+            >
               Disponible toute la journée
-            </span>
-          </label>
+            </Label>
+          </div>
 
           {!touteLaJournee && (
             <>
-              <p className="text-xs sm:text-sm font-medium text-gray-900 mb-3">
+              <p className="text-xs sm:text-sm font-medium text-foreground mb-3">
                 Sélectionnez un créneau d&apos;au moins 2 heures.
               </p>
 
@@ -213,80 +240,96 @@ export default function DisponibilitesPage() {
                 {creneaux.map((creneau, index) => (
                   <div key={index} className="flex items-end gap-2 sm:gap-4">
                     <div className="flex-1">
-                      <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1 sm:mb-2">
+                      <Label
+                        htmlFor={`creneau-debut-${index}`}
+                        className="block text-xs sm:text-sm font-medium text-foreground mb-1 sm:mb-2"
+                      >
                         De
-                      </label>
-                      <select
+                      </Label>
+                      <Select
                         value={creneau.debut}
-                        onChange={(e) => {
+                        onValueChange={(value) => {
                           const newCreneaux = [...creneaux];
-                          newCreneaux[index].debut = e.target.value;
+                          newCreneaux[index].debut = value;
                           setCreneaux(newCreneaux);
                         }}
-                        className="w-full px-2 sm:px-4 py-2 sm:py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm sm:text-base bg-white text-gray-900"
-                        aria-label="Heure de début"
                       >
-                        {Array.from({ length: 15 }, (_, i) => i + 7).map(
-                          (h) => (
-                            <option key={h} value={h}>
-                              {h}h
-                            </option>
-                          )
-                        )}
-                      </select>
+                        <SelectTrigger className="w-full h-12">
+                          <SelectValue placeholder="Sélectionner l'heure" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {Array.from({ length: 17 }, (_, i) => i + 5).map(
+                            (h) => (
+                              <SelectItem key={h} value={h.toString()}>
+                                {h}h
+                              </SelectItem>
+                            )
+                          )}
+                        </SelectContent>
+                      </Select>
                     </div>
 
                     <div className="flex-1">
-                      <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1 sm:mb-2">
+                      <Label
+                        htmlFor={`creneau-fin-${index}`}
+                        className="block text-xs sm:text-sm font-medium text-foreground mb-1 sm:mb-2"
+                      >
                         À
-                      </label>
-                      <select
+                      </Label>
+                      <Select
                         value={creneau.fin}
-                        onChange={(e) => {
+                        onValueChange={(value) => {
                           const newCreneaux = [...creneaux];
-                          newCreneaux[index].fin = e.target.value;
+                          newCreneaux[index].fin = value;
                           setCreneaux(newCreneaux);
                         }}
-                        className="w-full px-2 sm:px-4 py-2 sm:py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm sm:text-base bg-white text-gray-900"
-                        aria-label="Heure de fin"
                       >
-                        {Array.from({ length: 15 }, (_, i) => i + 7).map(
-                          (h) => (
-                            <option key={h} value={h}>
-                              {h}h
-                            </option>
-                          )
-                        )}
-                      </select>
+                        <SelectTrigger className="w-full h-12">
+                          <SelectValue placeholder="Sélectionner l'heure" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {Array.from({ length: 15 }, (_, i) => i + 7).map(
+                            (h) => (
+                              <SelectItem key={h} value={h.toString()}>
+                                {h}h
+                              </SelectItem>
+                            )
+                          )}
+                        </SelectContent>
+                      </Select>
                     </div>
 
                     {creneaux.length > 1 && (
-                      <button
+                      <Button
                         type="button"
+                        variant="destructive"
+                        size="sm"
                         onClick={() => {
                           const newCreneaux = creneaux.filter(
                             (_, i) => i !== index
                           );
                           setCreneaux(newCreneaux);
                         }}
-                        className="px-2 sm:px-4 py-2 sm:py-3 text-red-600 hover:text-red-700 hover:bg-red-50 rounded-lg transition-all font-medium border-2 border-transparent hover:border-red-200 flex-shrink-0"
+                        className="px-2 sm:px-4 py-2 sm:py-3 flex-shrink-0"
                         aria-label="Supprimer ce créneau"
                       >
                         🗑️
-                      </button>
+                      </Button>
                     )}
                   </div>
                 ))}
 
-                <button
+                <Button
                   type="button"
+                  variant="outline"
+                  size="sm"
                   onClick={() => {
-                    setCreneaux([...creneaux, { debut: "7", fin: "21" }]);
+                    setCreneaux([...creneaux, { debut: "", fin: "" }]);
                   }}
-                  className="text-xs sm:text-sm text-blue-600 hover:text-blue-700 hover:underline font-medium"
+                  className="text-xs sm:text-sm"
                 >
                   + Ajouter un créneau
-                </button>
+                </Button>
               </div>
             </>
           )}
@@ -294,38 +337,13 @@ export default function DisponibilitesPage() {
 
         {/* Note informative si domicile */}
         {lieuSoins === "À domicile" && (
-          <div className="bg-blue-50 rounded-lg border-2 border-blue-200 p-4 sm:p-6">
-            <p className="text-xs sm:text-sm text-gray-800">
+          <div className="bg-primary/10 rounded-lg border-2 border-primary/30 p-4 sm:p-6">
+            <p className="text-xs sm:text-sm text-foreground">
               ℹ️ <strong>À l&apos;étape suivante</strong>, nous vous demanderons
               l&apos;adresse complète où les soins seront réalisés.
             </p>
           </div>
         )}
-      </div>
-
-      {/* Navigation */}
-      <div className="flex flex-col sm:flex-row justify-between gap-3 pt-4 sm:pt-6 mt-4 sm:mt-6 border-t border-gray-200">
-        <Button
-          variant="secondary"
-          onClick={() => router.back()}
-          className="w-full sm:w-auto"
-        >
-          Retour
-        </Button>
-        <Button
-          onClick={handleContinue}
-          disabled={
-            !lieuSoins ||
-            !dateDebut ||
-            !duree ||
-            (duree === "autre" && !dureePersonnalisee) ||
-            (lieuSoins === "Autre" && !lieu)
-          }
-          size="lg"
-          className="w-full sm:w-auto"
-        >
-          Continuer
-        </Button>
       </div>
     </div>
   );

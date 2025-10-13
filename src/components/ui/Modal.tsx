@@ -1,103 +1,67 @@
 "use client";
 
-import { useEffect, useRef } from "react";
-import { createPortal } from "react-dom";
+import { cn } from "@/lib/utils";
+import { X } from "lucide-react";
+import * as React from "react";
+import { Button } from "./button";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "./dialog";
 
 interface ModalProps {
   isOpen: boolean;
   onClose: () => void;
   title?: string;
   children: React.ReactNode;
-  size?: "sm" | "md" | "lg" | "xl";
+  size?: "sm" | "md" | "lg" | "xl" | "full";
 }
+
+const sizeClasses = {
+  sm: "max-w-[95vw] sm:max-w-md w-full max-h-[80vh] sm:max-h-[85vh]",
+  md: "max-w-[95vw] sm:max-w-lg md:max-w-xl w-full max-h-[80vh] sm:max-h-[85vh]",
+  lg: "max-w-[95vw] sm:max-w-2xl md:max-w-4xl lg:max-w-5xl w-full max-h-[85vh] sm:max-h-[90vh]",
+  xl: "max-w-[95vw] sm:max-w-4xl md:max-w-5xl lg:max-w-6xl xl:max-w-7xl w-[95%] max-h-[85vh] sm:max-h-[90vh]",
+  full: "max-w-[98vw] w-full max-h-[95vh]",
+};
 
 export function Modal({
   isOpen,
   onClose,
   title,
   children,
-  size = "md",
+  size = "lg",
 }: ModalProps) {
-  const modalRef = useRef<HTMLDivElement>(null);
-
-  const sizes = {
-    sm: "max-w-full sm:max-w-md md:max-w-lg",
-    md: "max-w-full sm:max-w-xl md:max-w-2xl",
-    lg: "max-w-full sm:max-w-2xl md:max-w-4xl lg:max-w-5xl",
-    xl: "max-w-full sm:max-w-3xl md:max-w-5xl lg:max-w-6xl",
-  };
-
-  useEffect(() => {
-    if (isOpen) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "unset";
-    }
-
-    return () => {
-      document.body.style.overflow = "unset";
-    };
-  }, [isOpen]);
-
-  useEffect(() => {
-    const handleEscape = (e: KeyboardEvent) => {
-      if (e.key === "Escape") onClose();
-    };
-
-    if (isOpen) {
-      document.addEventListener("keydown", handleEscape);
-    }
-
-    return () => document.removeEventListener("keydown", handleEscape);
-  }, [isOpen, onClose]);
-
-  if (!isOpen) return null;
-
-  return createPortal(
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4">
-      {/* Backdrop */}
-      <div
-        className="absolute inset-0 bg-black/50 backdrop-blur-sm"
-        onClick={onClose}
-      />
-
-      {/* Modal */}
-      <div
-        ref={modalRef}
-        className={`relative bg-white rounded-xl sm:rounded-2xl shadow-2xl w-full ${sizes[size]} max-h-[95vh] sm:max-h-[90vh] overflow-hidden flex flex-col`}
-      >
-        {/* Header */}
-        {title && (
-          <div className="px-4 sm:px-6 py-3 sm:py-4 border-b border-gray-200 flex items-center justify-between flex-shrink-0">
-            <h2 className="text-lg sm:text-xl font-semibold text-gray-900 truncate pr-2">
-              {title}
-            </h2>
-            <button
-              onClick={onClose}
-              className="text-gray-400 hover:text-gray-600 transition-colors flex-shrink-0"
-              aria-label="Fermer la modale"
-            >
-              <svg
-                className="w-5 h-5 sm:w-6 sm:h-6"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M6 18L18 6M6 6l12 12"
-                />
-              </svg>
-            </button>
-          </div>
+  return (
+    <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
+      <DialogContent
+        className={cn(
+          sizeClasses[size],
+          "overflow-hidden flex flex-col rounded-lg [&>button:last-of-type]:hidden"
         )}
+      >
+        {title && (
+          <DialogHeader className="flex-shrink-0 pb-4 border-b border-border overflow-y-auto pr-12">
+            <DialogTitle className="text-lg sm:text-xl font-semibold">
+              {title}
+            </DialogTitle>
+          </DialogHeader>
+        )}
+        <div className="flex-1 py-4 sm:py-6 px-2 overflow-y-auto">
+          {children}
+        </div>
 
-        {/* Content */}
-        <div className="flex-1 overflow-y-auto p-4 sm:p-6">{children}</div>
-      </div>
-    </div>,
-    document.body
+        {/* Bouton fermer custom - placé en dernier pour être visible */}
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={onClose}
+          className="absolute sm:right-2 sm:top-2 right-4 top-4 sm:h-14 sm:w-14 h-10 w-10 rounded-full hover:bg-accent z-50 group border-0 shadow-none"
+        >
+          <X
+            className="sm:!h-8 !h-6 sm:!w-8 !w-6 group-hover:rotate-180 transition-all duration-400"
+            strokeWidth={1.5}
+          />
+          <span className="sr-only">Fermer</span>
+        </Button>
+      </DialogContent>
+    </Dialog>
   );
 }

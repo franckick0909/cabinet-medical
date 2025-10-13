@@ -1,10 +1,15 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { FormNavigation } from "../../../components/demande/FormNavigation";
 import { PageHeader } from "../../../components/demande/PageHeader";
-import { Button } from "../../../components/ui/Button";
-import { Modal } from "../../../components/ui/Modal";
+import { Button } from "../../../components/ui/button";
+import { Checkbox } from "../../../components/ui/checkbox";
+import { Input } from "../../../components/ui/input";
+import { Label } from "../../../components/ui/label";
+import { Modal } from "../../../components/ui/modal";
+import { Textarea } from "../../../components/ui/textarea";
 import { useDemandeStore } from "../../../store/demandeStore";
 
 interface TypeSoin {
@@ -32,7 +37,7 @@ const typesSoins: TypeSoin[] = [
         id: "frequence",
         label: "Fréquence",
         type: "select",
-        options: ["1 fois/jour", "2 fois/jour", "3 fois/jour", "Autre"],
+        options: ["1 fois/jour", "2 fois/jour", "Autre"],
         required: true,
       },
       {
@@ -84,6 +89,7 @@ const typesSoins: TypeSoin[] = [
         label: "Créneau souhaité (selon disponibilité du cabinet)",
         type: "checkbox",
         options: [
+          "5h - 6h",
           "6h - 7h",
           "7h - 8h",
           "8h - 9h",
@@ -99,31 +105,6 @@ const typesSoins: TypeSoin[] = [
         label: "Analyses prescrites",
         type: "textarea",
         required: false,
-      },
-    ],
-  },
-  {
-    id: "toilette",
-    titre: "Aide à la toilette / habillage",
-    questions: [
-      {
-        id: "type",
-        label: "Type d'aide",
-        type: "select",
-        options: [
-          "Toilette complète",
-          "Toilette partielle",
-          "Aide à la douche",
-          "Habillage",
-        ],
-        required: true,
-      },
-      {
-        id: "frequence",
-        label: "Fréquence",
-        type: "select",
-        options: ["Quotidienne", "2-3x/semaine", "Autre"],
-        required: true,
       },
     ],
   },
@@ -152,19 +133,30 @@ const typesSoins: TypeSoin[] = [
         options: ["Sous-cutanée", "Intramusculaire", "Intraveineuse"],
         required: true,
       },
-      { id: "medicament", label: "Médicament", type: "text", required: true },
-      { id: "frequence", label: "Fréquence", type: "text", required: true },
+      {
+        id: "medicament",
+        label: "Médicament (optionnel)",
+        type: "text",
+        required: false,
+      },
     ],
   },
   {
     id: "agrafes",
     titre: "Ablation points de suture / agrafes",
     questions: [
-      { id: "zone", label: "Zone concernée", type: "text", required: true },
       {
-        id: "dateIntervention",
-        label: "Date de l'intervention",
-        type: "text",
+        id: "typeSoin",
+        label: "Sélectionnez un ou plusieurs soins",
+        type: "checkbox",
+        options: ["Points de suture", "Agrafes"],
+        required: true,
+      },
+      {
+        id: "nombrePlus10",
+        label: "Y a-t-il plus de 10 points ou agrafes à retirer ?",
+        type: "select",
+        options: ["Oui", "Non", "Je ne sais pas"],
         required: true,
       },
     ],
@@ -177,7 +169,12 @@ const typesSoins: TypeSoin[] = [
         id: "type",
         label: "Type de surveillance",
         type: "select",
-        options: ["Distribution", "Surveillance de prise", "Les deux"],
+        options: [
+          "Distribution",
+          "Surveillance de prise",
+          "Prise ne charge du pillulier hebdomadaire",
+          "Les deux",
+        ],
         required: true,
       },
       { id: "frequence", label: "Fréquence", type: "text", required: true },
@@ -188,13 +185,19 @@ const typesSoins: TypeSoin[] = [
     titre: "Surveillance glycémie / diabète",
     questions: [
       {
-        id: "frequence",
-        label: "Fréquence des contrôles",
-        type: "select",
-        options: ["1x/jour", "2x/jour", "3x/jour", "Autre"],
+        id: "typeSoin",
+        label: "Sélectionnez un ou plusieurs soins",
+        type: "checkbox",
+        options: ["Contrôle glycémie", "Injection d'insuline"],
         required: true,
       },
-      { id: "details", label: "Détails complémentaires", type: "textarea" },
+      {
+        id: "recurrence",
+        label: "Le professionnel doit passer",
+        type: "select",
+        options: ["Une seule fois", "Soin récurrent"],
+        required: true,
+      },
     ],
   },
   {
@@ -212,62 +215,14 @@ const typesSoins: TypeSoin[] = [
     ],
   },
   {
-    id: "perfusion",
-    titre: "Perfusion",
-    questions: [
-      { id: "duree", label: "Durée estimée", type: "text", required: true },
-      {
-        id: "produit",
-        label: "Produit à perfuser",
-        type: "text",
-        required: true,
-      },
-      { id: "frequence", label: "Fréquence", type: "text", required: true },
-    ],
-  },
-  {
-    id: "collyre",
-    titre: "Instillation de collyre",
-    questions: [
-      { id: "produit", label: "Nom du collyre", type: "text", required: true },
-      { id: "frequence", label: "Fréquence", type: "text", required: true },
-    ],
-  },
-  {
-    id: "chimiotherapie",
-    titre: "Chimiothérapie",
-    questions: [
-      {
-        id: "protocole",
-        label: "Protocole",
-        type: "text",
-        required: true,
-      },
-      { id: "frequence", label: "Fréquence", type: "text", required: true },
-    ],
-  },
-  {
-    id: "depistage",
-    titre: "Dépistage Covid-19",
-    questions: [
-      {
-        id: "type",
-        label: "Type de test",
-        type: "select",
-        options: ["PCR", "Antigénique"],
-        required: true,
-      },
-    ],
-  },
-  {
     id: "vaccination",
-    titre: "Vaccination Covid-19",
+    titre: "Vaccination",
     questions: [
       {
         id: "dose",
-        label: "Dose",
-        type: "select",
-        options: ["1ère dose", "2ème dose", "3ème dose", "Rappel"],
+        label: "Type de vaccination",
+        type: "checkbox",
+        options: ["Grippe", "Covid-19", "Autre"],
         required: true,
       },
     ],
@@ -307,7 +262,7 @@ const typesSoins: TypeSoin[] = [
 
 export default function SoinsPage() {
   const router = useRouter();
-  const { setSoin } = useDemandeStore();
+  const { setSoin, setEtapeActuelle } = useDemandeStore();
   const [selectedSoins, setSelectedSoins] = useState<string[]>([]);
   const [currentSoin, setCurrentSoin] = useState<TypeSoin | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -317,6 +272,11 @@ export default function SoinsPage() {
   const [soinsDetails, setSoinsDetails] = useState<
     Record<string, Record<string, string | string[]>>
   >({});
+
+  // Mettre à jour l'étape actuelle quand la page se charge
+  useEffect(() => {
+    setEtapeActuelle(1);
+  }, [setEtapeActuelle]);
 
   const handleCheckboxChange = (soinId: string) => {
     const soin = typesSoins.find((s) => s.id === soinId);
@@ -384,13 +344,6 @@ export default function SoinsPage() {
     }
   };
 
-  const handleRadioChange = (questionId: string, value: string) => {
-    setFormData({
-      ...formData,
-      [questionId]: value,
-    });
-  };
-
   const isAutreSelected = (questionId: string) => {
     const values = formData[questionId];
     if (Array.isArray(values)) {
@@ -425,32 +378,43 @@ export default function SoinsPage() {
         currentStep={1}
       />
 
+      {/* Navigation en haut */}
+      <FormNavigation
+        onContinue={handleContinue}
+        continueDisabled={selectedSoins.length === 0}
+        showBack={false}
+      />
+
       {/* Checkboxes Grid */}
-      <div className="bg-white rounded-lg border-2 border-gray-200 p-4 sm:p-6 mb-4 sm:mb-6">
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+      <div className="sm:bg-card rounded-lg sm:border border-border p-0 sm:p-6 mb-4 sm:mb-6 sm:shadow-sm">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-4">
           {typesSoins.map((soin) => (
-            <label
+            <div
               key={soin.id}
-              className="flex items-start p-3 sm:p-4 rounded-lg border-2 border-gray-200 hover:border-blue-300 hover:bg-blue-50/30 cursor-pointer transition-all group"
+              className="flex items-start p-3 sm:p-4 rounded-lg border-2 border-border hover:border-primary hover:bg-primary/10 cursor-pointer transition-all group bg-card"
+              onClick={() => handleCheckboxChange(soin.id)}
             >
-              <input
-                type="checkbox"
+              <Checkbox
+                id={soin.id}
                 checked={selectedSoins.includes(soin.id)}
-                onChange={() => handleCheckboxChange(soin.id)}
-                className="w-5 h-5 mt-0.5 rounded border-2 border-gray-300 text-blue-600 focus:ring-2 focus:ring-blue-500 cursor-pointer flex-shrink-0"
+                onCheckedChange={() => handleCheckboxChange(soin.id)}
+                className="mt-0.5"
               />
-              <span className="ml-2 sm:ml-3 text-sm sm:text-base font-medium text-gray-900 leading-snug">
+              <Label
+                htmlFor={soin.id}
+                className="ml-2 sm:ml-3 text-sm sm:text-base font-medium cursor-pointer leading-snug"
+              >
                 {soin.titre}
-              </span>
-            </label>
+              </Label>
+            </div>
           ))}
         </div>
       </div>
 
       {/* Section: Soins sélectionnés */}
       {selectedSoins.length > 0 && (
-        <div className="bg-blue-50 rounded-lg border-2 border-blue-200 p-4 sm:p-6 mb-4 sm:mb-6">
-          <h3 className="text-sm sm:text-base font-semibold text-gray-900 mb-3 sm:mb-4">
+        <div className="bg-primary/10 rounded-lg border-2 border-primary/30 p-4 sm:p-6 mb-4 sm:mb-6">
+          <h3 className="text-sm sm:text-base font-semibold text-foreground mb-3 sm:mb-4">
             🔵 {selectedSoins.length} soin{selectedSoins.length > 1 ? "s" : ""}{" "}
             sélectionné{selectedSoins.length > 1 ? "s" : ""}
           </h3>
@@ -463,14 +427,14 @@ export default function SoinsPage() {
               return (
                 <div
                   key={soinId}
-                  className="bg-white rounded-lg p-3 sm:p-4 border border-blue-200 flex items-center justify-between gap-2"
+                  className="bg-card rounded-lg p-3 sm:p-4 border border-border flex items-center justify-between gap-2"
                 >
                   <div className="flex-1 min-w-0">
-                    <p className="text-sm sm:text-base font-medium text-gray-900 truncate">
+                    <p className="text-sm sm:text-base font-medium text-foreground truncate">
                       {soin.titre}
                     </p>
                     {soinsDetails[soinId] && (
-                      <p className="text-xs sm:text-sm text-gray-600 mt-1">
+                      <p className="text-xs sm:text-sm text-muted-foreground mt-1">
                         Détails renseignés
                       </p>
                     )}
@@ -479,7 +443,7 @@ export default function SoinsPage() {
                     <button
                       type="button"
                       onClick={() => handleEditSoin(soinId)}
-                      className="text-xs sm:text-sm text-blue-600 hover:text-blue-700 hover:underline font-medium flex-shrink-0"
+                      className="text-xs sm:text-sm text-primary hover:text-primary/80 hover:underline font-medium flex-shrink-0"
                     >
                       Modifier
                     </button>
@@ -489,54 +453,38 @@ export default function SoinsPage() {
             })}
           </div>
 
-          <p className="text-xs sm:text-sm text-gray-600 mt-3 sm:mt-4">
+          <p className="text-xs sm:text-sm text-muted-foreground mt-3 sm:mt-4">
             💡 Vous pouvez ajouter d&apos;autres soins ci-dessus
           </p>
         </div>
       )}
-
-      {/* Navigation */}
-      <div className="flex flex-col sm:flex-row justify-between items-stretch sm:items-center gap-3 pt-4 sm:pt-6 border-t border-gray-200">
-        <Button
-          variant="secondary"
-          onClick={() => router.push("/")}
-          className="w-full sm:w-auto"
-        >
-          Retour
-        </Button>
-        <Button
-          onClick={handleContinue}
-          disabled={selectedSoins.length === 0}
-          size="lg"
-          className="w-full sm:w-auto"
-        >
-          Continuer
-        </Button>
-      </div>
 
       {/* Modal pour les détails */}
       <Modal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         title={currentSoin?.titre}
-        size="lg"
+        size="xl"
       >
         <form onSubmit={handleSubmitDetails}>
           <div className="space-y-4 sm:space-y-5">
             {currentSoin?.questions?.map((question) => (
-              <div key={question.id}>
-                <label className="block text-sm sm:text-base font-medium text-gray-900 mb-2">
+              <div key={question.id} className="space-y-2">
+                <Label
+                  htmlFor={question.id}
+                  className="text-sm sm:text-base font-medium"
+                >
                   {question.label}
                   {question.required && (
-                    <span className="text-red-500 ml-1">*</span>
+                    <span className="text-destructive ml-1">*</span>
                   )}
-                </label>
+                </Label>
 
                 {question.type === "text" && (
-                  <input
+                  <Input
+                    id={question.id}
                     type="text"
                     required={question.required}
-                    className="w-full px-3 sm:px-4 py-2 sm:py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900 text-sm sm:text-base"
                     value={(formData[question.id] as string) || ""}
                     onChange={(e) =>
                       setFormData({
@@ -550,47 +498,50 @@ export default function SoinsPage() {
 
                 {question.type === "select" && (
                   <div>
-                    {/* Convertir les select en radio buttons pour meilleure accessibilité */}
+                    {/* Convertir les select en checkboxes pour meilleure accessibilité */}
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-3">
                       {question.options?.map((option) => (
-                        <label
+                        <div
                           key={option}
-                          className="flex items-start p-2 sm:p-3 rounded-lg border-2 border-gray-200 hover:border-blue-300 hover:bg-blue-50/30 cursor-pointer transition-all"
+                          className="flex items-start p-2 sm:p-3 rounded-lg border-2 border-border hover:border-primary hover:bg-primary/10 cursor-pointer transition-all"
                         >
-                          <input
-                            type="radio"
-                            name={question.id}
-                            required={
-                              question.required && !formData[question.id]
+                          <Checkbox
+                            id={`${question.id}-${option}`}
+                            checked={(
+                              (formData[question.id] as string[]) || []
+                            ).includes(option)}
+                            onCheckedChange={(checked) =>
+                              handleCheckboxGroupChange(
+                                question.id,
+                                option,
+                                checked as boolean
+                              )
                             }
-                            checked={
-                              (formData[question.id] as string) === option
-                            }
-                            onChange={() =>
-                              setFormData({
-                                ...formData,
-                                [question.id]: option,
-                              })
-                            }
-                            className="w-5 h-5 mt-0.5 border-2 border-gray-300 text-blue-600 focus:ring-2 focus:ring-blue-500 cursor-pointer flex-shrink-0"
+                            className="mt-0.5"
                           />
-                          <span className="ml-2 sm:ml-3 text-sm sm:text-base font-medium text-gray-900 leading-tight">
+                          <Label
+                            htmlFor={`${question.id}-${option}`}
+                            className="ml-2 sm:ml-3 text-sm sm:text-base font-medium cursor-pointer leading-tight"
+                          >
                             {option}
-                          </span>
-                        </label>
+                          </Label>
+                        </div>
                       ))}
                     </div>
 
-                    {/* Champ conditionnel "Autre" pour les select/radio */}
+                    {/* Champ conditionnel "Autre" pour les select/checkboxes */}
                     {isAutreSelected(question.id) && (
-                      <div className="mt-4 p-4 bg-blue-50 rounded-lg border-2 border-blue-200">
-                        <label className="block text-sm font-medium text-gray-900 mb-2">
+                      <div className="mt-4 p-4 bg-primary/10 rounded-lg border-2 border-primary/30">
+                        <Label
+                          htmlFor={`${question.id}_autre_details`}
+                          className="block text-sm font-medium mb-2"
+                        >
                           Précisez :
-                        </label>
-                        <input
+                        </Label>
+                        <Input
+                          id={`${question.id}_autre_details`}
                           type="text"
                           placeholder="Entrez les détails..."
-                          className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900 text-base bg-white"
                           value={
                             (formData[
                               `${question.id}_autre_details`
@@ -613,41 +564,47 @@ export default function SoinsPage() {
                     {/* Grille pour les checkboxes - responsive */}
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-3">
                       {question.options?.map((option) => (
-                        <label
+                        <div
                           key={option}
-                          className="flex items-start p-2 sm:p-3 rounded-lg border-2 border-gray-200 hover:border-blue-300 hover:bg-blue-50/30 cursor-pointer transition-all"
+                          className="flex items-start p-2 sm:p-3 rounded-lg border-2 border-border hover:border-primary hover:bg-primary/10 cursor-pointer transition-all"
                         >
-                          <input
-                            type="checkbox"
+                          <Checkbox
+                            id={`${question.id}-${option}`}
                             checked={(
                               (formData[question.id] as string[]) || []
                             ).includes(option)}
-                            onChange={(e) =>
+                            onCheckedChange={(checked) =>
                               handleCheckboxGroupChange(
                                 question.id,
                                 option,
-                                e.target.checked
+                                checked as boolean
                               )
                             }
-                            className="w-5 h-5 mt-0.5 rounded border-2 border-gray-300 text-blue-600 focus:ring-2 focus:ring-blue-500 cursor-pointer flex-shrink-0"
+                            className="mt-0.5"
                           />
-                          <span className="ml-2 sm:ml-3 text-sm sm:text-base font-medium text-gray-900 leading-tight">
+                          <Label
+                            htmlFor={`${question.id}-${option}`}
+                            className="ml-2 sm:ml-3 text-sm sm:text-base font-medium cursor-pointer leading-tight"
+                          >
                             {option}
-                          </span>
-                        </label>
+                          </Label>
+                        </div>
                       ))}
                     </div>
 
                     {/* Champ conditionnel "Autre" pour les checkboxes */}
                     {isAutreSelected(question.id) && (
-                      <div className="mt-3 sm:mt-4 p-3 sm:p-4 bg-blue-50 rounded-lg border-2 border-blue-200">
-                        <label className="block text-sm font-medium text-gray-900 mb-2">
+                      <div className="mt-3 sm:mt-4 p-3 sm:p-4 bg-primary/10 rounded-lg border-2 border-primary/30">
+                        <Label
+                          htmlFor={`${question.id}_autre_details`}
+                          className="block text-sm font-medium mb-2"
+                        >
                           Précisez le type de plaie :
-                        </label>
-                        <input
+                        </Label>
+                        <Input
+                          id={`${question.id}_autre_details`}
                           type="text"
                           placeholder="Entrez les détails..."
-                          className="w-full px-3 sm:px-4 py-2 sm:py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900 text-sm sm:text-base bg-white"
                           value={
                             (formData[
                               `${question.id}_autre_details`
@@ -667,41 +624,50 @@ export default function SoinsPage() {
 
                 {question.type === "radio" && (
                   <div>
-                    {/* Grille pour les radio buttons - responsive */}
+                    {/* Grille pour les checkboxes - responsive */}
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-3">
                       {question.options?.map((option) => (
-                        <label
+                        <div
                           key={option}
-                          className="flex items-start p-2 sm:p-3 rounded-lg border-2 border-gray-200 hover:border-blue-300 hover:bg-blue-50/30 cursor-pointer transition-all"
+                          className="flex items-start p-2 sm:p-3 rounded-lg border-2 border-border hover:border-primary hover:bg-primary/10 cursor-pointer transition-all"
                         >
-                          <input
-                            type="radio"
-                            name={question.id}
-                            checked={
-                              (formData[question.id] as string) === option
+                          <Checkbox
+                            id={`${question.id}-${option}`}
+                            checked={(
+                              (formData[question.id] as string[]) || []
+                            ).includes(option)}
+                            onCheckedChange={(checked) =>
+                              handleCheckboxGroupChange(
+                                question.id,
+                                option,
+                                checked as boolean
+                              )
                             }
-                            onChange={() =>
-                              handleRadioChange(question.id, option)
-                            }
-                            className="w-5 h-5 mt-0.5 border-2 border-gray-300 text-blue-600 focus:ring-2 focus:ring-blue-500 cursor-pointer flex-shrink-0"
+                            className="mt-0.5"
                           />
-                          <span className="ml-2 sm:ml-3 text-sm sm:text-base font-medium text-gray-900 leading-tight">
+                          <Label
+                            htmlFor={`${question.id}-${option}`}
+                            className="ml-2 sm:ml-3 text-sm sm:text-base font-medium cursor-pointer leading-tight"
+                          >
                             {option}
-                          </span>
-                        </label>
+                          </Label>
+                        </div>
                       ))}
                     </div>
 
-                    {/* Champ conditionnel "Autre" pour les radio */}
+                    {/* Champ conditionnel "Autre" pour les checkboxes */}
                     {isAutreSelected(question.id) && (
-                      <div className="mt-3 sm:mt-4 p-3 sm:p-4 bg-blue-50 rounded-lg border-2 border-blue-200">
-                        <label className="block text-sm font-medium text-gray-900 mb-2">
+                      <div className="mt-3 sm:mt-4 p-3 sm:p-4 bg-primary/10 rounded-lg border-2 border-primary/30">
+                        <Label
+                          htmlFor={`${question.id}_autre_details`}
+                          className="block text-sm font-medium mb-2"
+                        >
                           Précisez :
-                        </label>
-                        <input
+                        </Label>
+                        <Input
+                          id={`${question.id}_autre_details`}
                           type="text"
                           placeholder="Entrez les détails..."
-                          className="w-full px-3 sm:px-4 py-2 sm:py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900 text-sm sm:text-base bg-white"
                           value={
                             (formData[
                               `${question.id}_autre_details`
@@ -720,10 +686,10 @@ export default function SoinsPage() {
                 )}
 
                 {question.type === "textarea" && (
-                  <textarea
+                  <Textarea
+                    id={question.id}
                     required={question.required}
                     rows={3}
-                    className="w-full px-3 sm:px-4 py-2 sm:py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900 text-sm sm:text-base"
                     value={(formData[question.id] as string) || ""}
                     onChange={(e) =>
                       setFormData({

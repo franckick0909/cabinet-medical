@@ -6,24 +6,26 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DATABASE_URL_UNPOOLED")
 }
 
 model Patient {
-  id            String    @id @default(cuid())
-  nom           String
-  prenom        String
-  email         String    @unique
-  telephone     String
-  dateNaissance DateTime
-  adresse       String?
-  ville         String?
-  codePostal    String?
-  numeroSecu    String?
-  demandes      Demande[]
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+  id                String    @id @default(cuid())
+  nom               String
+  prenom            String
+  email             String    @unique
+  telephone         String
+  dateNaissance     DateTime
+  adresse           String?
+  complementAdresse String?
+  ville             String?
+  codePostal        String?
+  numeroSecu        String?
+  demandes          Demande[]
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
 }
 
 model Demande {
@@ -33,23 +35,19 @@ model Demande {
 
   // Type de soin
   typeSoin    String // Ex: "Pansement", "Injection", "Prélèvement", etc.
-  detailsSoin Json? // Détails spécifiques du soin (stockés en JSON)
+  description String? @db.Text // Description complète (JSON) avec tous les détails
 
-  // Ordonnance
-  aOrdonnance       Boolean @default(false)
-  ordonnanceDetails Json? // Détails de l'ordonnance
+  // Rendez-vous
+  dateRdv  DateTime?
+  heureRdv String? // Ex: "9h00", "14h30"
+  lieu     String? // Adresse du rendez-vous
 
-  // Disponibilités
-  datePreferee  DateTime?
-  heurePreferee String? // Ex: "Matin", "Après-midi", "Soir"
-  urgence       Urgence   @default(NORMALE)
+  // Urgence et statut
+  urgence Urgence @default(NORMALE)
+  statut  Statut  @default(EN_ATTENTE)
 
-  // Lieu
-  lieu String? // Adresse du rendez-vous
-
-  // Statut et gestion
-  statut Statut  @default(EN_ATTENTE)
-  notes  String? @db.Text
+  // Notes supplémentaires
+  notes String? @db.Text
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
