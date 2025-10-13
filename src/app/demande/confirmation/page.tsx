@@ -1,7 +1,7 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
+import { Button } from "@/components/custom/Button";
+import { Card } from "@/components/custom/Card";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Suspense } from "react";
 

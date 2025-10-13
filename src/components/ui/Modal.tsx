@@ -3,7 +3,7 @@
 import { cn } from "@/lib/utils";
 import { X } from "lucide-react";
 import * as React from "react";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/custom/Button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 
 interface ModalProps {

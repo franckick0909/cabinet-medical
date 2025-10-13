@@ -1,6 +1,6 @@
 "use client";
 
-import { Checkbox } from "@/components/ui/checkbox";
+import { Checkbox } from "@/components/custom/Checkbox";
 
 interface FilterSidebarProps {
   onFilterChange: (filters: { urgence: string[]; statut: string[] }) => void;

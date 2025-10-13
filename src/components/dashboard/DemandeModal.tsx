@@ -1,6 +1,8 @@
 "use client";
 
 import { deleteDemande, updateDemandeStatut } from "@/actions/dashboard";
+import { Button } from "@/components/custom/Button";
+import { Card } from "@/components/custom/Card";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -12,8 +14,6 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
 import {
   Dialog,
   DialogContent,

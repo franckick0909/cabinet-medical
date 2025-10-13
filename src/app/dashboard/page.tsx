@@ -1,9 +1,9 @@
 "use client";
 
 import { getDemandes } from "@/actions/dashboard";
+import { Button } from "@/components/custom/Button";
 import { DemandeModal } from "@/components/dashboard/DemandeModal";
 import { WeekView } from "@/components/dashboard/WeekView";
-import { Button } from "@/components/ui/button";
 import type { Demande } from "@/types/demande";
 import { useCallback, useEffect, useState } from "react";
 

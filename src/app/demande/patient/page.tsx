@@ -3,7 +3,7 @@
 import { FormNavigation } from "@/components/demande/FormNavigation";
 import { PageHeader } from "@/components/demande/PageHeader";
 import { AddressAutocomplete } from "@/components/ui/AddressAutocomplete";
-import { Checkbox } from "@/components/ui/checkbox";
+import { Checkbox } from "@/components/custom/Checkbox";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
