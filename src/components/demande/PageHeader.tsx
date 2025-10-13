@@ -1,7 +1,7 @@
 "use client";
 
+import { useDemandeStore } from "@/store/demandeStore";
 import { Check } from "lucide-react";
-import { useDemandeStore } from "../../store/demandeStore";
 import { Badge } from "../ui/badge";
 import { Progress } from "../ui/progress";
 

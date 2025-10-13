@@ -1,12 +1,12 @@
 "use client";
 
+import { submitDemande } from "@/actions/demandes";
+import { PageHeader } from "@/components/demande/PageHeader";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import { useDemandeStore } from "@/store/demandeStore";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { submitDemande } from "../../../actions/demandes";
-import { PageHeader } from "../../../components/demande/PageHeader";
-import { Button } from "../../../components/ui/button";
-import { Card } from "../../../components/ui/card";
-import { useDemandeStore } from "../../../store/demandeStore";
 
 export default function RecapitulatifPage() {
   const router = useRouter();

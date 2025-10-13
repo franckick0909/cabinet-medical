@@ -1,8 +1,8 @@
 "use client";
 
+import { useDemandeStore } from "@/store/demandeStore";
 import { ArrowLeft, Check, RotateCcw } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
-import { useDemandeStore } from "../../store/demandeStore";
 import { Badge } from "../ui/badge";
 import { Button } from "../ui/button";
 

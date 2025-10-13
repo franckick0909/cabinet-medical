@@ -1,18 +1,18 @@
 "use client";
 
+import { FormNavigation } from "@/components/demande/FormNavigation";
+import { PageHeader } from "@/components/demande/PageHeader";
+import { AddressAutocomplete } from "@/components/ui/AddressAutocomplete";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { useDemandeStore } from "@/store/demandeStore";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { FormNavigation } from "../../../components/demande/FormNavigation";
-import { PageHeader } from "../../../components/demande/PageHeader";
-import { AddressAutocomplete } from "../../../components/ui/AddressAutocomplete";
-import { Checkbox } from "../../../components/ui/checkbox";
-import { Input } from "../../../components/ui/input";
-import { Label } from "../../../components/ui/label";
-import { RadioGroup, RadioGroupItem } from "../../../components/ui/radio-group";
-import { useDemandeStore } from "../../../store/demandeStore";
 
 const patientSchema = z.object({
   civilite: z.enum(["Madame", "Monsieur"]).refine((val) => val !== undefined, {

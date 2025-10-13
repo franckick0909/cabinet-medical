@@ -1,16 +1,16 @@
 "use client";
 
+import { FormNavigation } from "@/components/demande/FormNavigation";
+import { PageHeader } from "@/components/demande/PageHeader";
+import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Modal } from "@/components/ui/modal";
+import { Textarea } from "@/components/ui/textarea";
+import { useDemandeStore } from "@/store/demandeStore";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { FormNavigation } from "../../../components/demande/FormNavigation";
-import { PageHeader } from "../../../components/demande/PageHeader";
-import { Button } from "../../../components/ui/button";
-import { Checkbox } from "../../../components/ui/checkbox";
-import { Input } from "../../../components/ui/input";
-import { Label } from "../../../components/ui/label";
-import { Modal } from "../../../components/ui/modal";
-import { Textarea } from "../../../components/ui/textarea";
-import { useDemandeStore } from "../../../store/demandeStore";
 
 interface TypeSoin {
   id: string;

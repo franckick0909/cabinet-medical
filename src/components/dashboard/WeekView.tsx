@@ -1,8 +1,8 @@
 "use client";
 
+import { updateDemandeDate } from "@/actions/dashboard";
+import type { Demande } from "@/types/demande";
 import { useState } from "react";
-import { updateDemandeDate } from "../../actions/dashboard";
-import type { Demande } from "../../types/demande";
 import { DemandeCard } from "./DemandeCard";
 
 interface WeekViewProps {

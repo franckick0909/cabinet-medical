@@ -1,8 +1,8 @@
 "use client";
 
+import { Button } from "@/components/ui/button";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { Button } from "../ui/button";
 
 interface FormNavigationProps {
   onContinue?: () => void;

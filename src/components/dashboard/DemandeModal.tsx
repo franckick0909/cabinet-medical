@@ -1,5 +1,7 @@
 "use client";
 
+import { deleteDemande, updateDemandeStatut } from "@/actions/dashboard";
+import type { Demande } from "@/types/demande";
 import {
   Calendar,
   Clock,
@@ -11,8 +13,6 @@ import {
   X,
 } from "lucide-react";
 import { useState } from "react";
-import { deleteDemande, updateDemandeStatut } from "../../actions/dashboard";
-import type { Demande } from "../../types/demande";
 import {
   AlertDialog,
   AlertDialogAction,

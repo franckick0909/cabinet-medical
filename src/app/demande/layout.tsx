@@ -1,4 +1,4 @@
-import { RecapSidebar } from "../../components/demande/RecapSidebar";
+import { RecapSidebar } from "@/components/demande/RecapSidebar";
 
 export default function DemandeLayout({
   children,

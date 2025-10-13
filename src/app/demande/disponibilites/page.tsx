@@ -1,22 +1,22 @@
 "use client";
 
-import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
-import { FormNavigation } from "../../../components/demande/FormNavigation";
-import { PageHeader } from "../../../components/demande/PageHeader";
-import { Button } from "../../../components/ui/button";
-import { Checkbox } from "../../../components/ui/checkbox";
-import { Input } from "../../../components/ui/input";
-import { Label } from "../../../components/ui/label";
-import { RadioGroup, RadioGroupItem } from "../../../components/ui/radio-group";
+import { FormNavigation } from "@/components/demande/FormNavigation";
+import { PageHeader } from "@/components/demande/PageHeader";
+import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "../../../components/ui/select";
-import { useDemandeStore } from "../../../store/demandeStore";
+} from "@/components/ui/select";
+import { useDemandeStore } from "@/store/demandeStore";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 
 export default function DisponibilitesPage() {
   const router = useRouter();

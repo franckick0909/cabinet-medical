@@ -2,8 +2,8 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { ModeToggle } from "../mode-toggle";
-import { Button } from "../ui/button";
+import { ModeToggle } from "@/components/mode-toggle";
+import { Button } from "@/components/ui/button";
 
 export function Header() {
   const pathname = usePathname();

@@ -1,14 +1,14 @@
 "use client";
 
+import { FormNavigation } from "@/components/demande/FormNavigation";
+import { PageHeader } from "@/components/demande/PageHeader";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Textarea } from "@/components/ui/textarea";
+import { useDemandeStore } from "@/store/demandeStore";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { FormNavigation } from "../../../components/demande/FormNavigation";
-import { PageHeader } from "../../../components/demande/PageHeader";
-import { Input } from "../../../components/ui/input";
-import { Label } from "../../../components/ui/label";
-import { RadioGroup, RadioGroupItem } from "../../../components/ui/radio-group";
-import { Textarea } from "../../../components/ui/textarea";
-import { useDemandeStore } from "../../../store/demandeStore";
 
 export default function OrdonnancePage() {
   const router = useRouter();

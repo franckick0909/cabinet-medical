@@ -1,11 +1,11 @@
 "use client";
 
+import { getDemandes } from "@/actions/dashboard";
+import { DemandeModal } from "@/components/dashboard/DemandeModal";
+import { WeekView } from "@/components/dashboard/WeekView";
+import { Button } from "@/components/ui/button";
+import type { Demande } from "@/types/demande";
 import { useCallback, useEffect, useState } from "react";
-import { getDemandes } from "../../actions/dashboard";
-import { DemandeModal } from "../../components/dashboard/DemandeModal";
-import { WeekView } from "../../components/dashboard/WeekView";
-import { Button } from "../../components/ui/button";
-import type { Demande } from "../../types/demande";
 
 export default function DashboardPage() {
   const [demandes, setDemandes] = useState<Demande[]>([]);

@@ -1,9 +1,9 @@
 "use client";
 
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Suspense } from "react";
-import { Button } from "../../../components/ui/button";
-import { Card } from "../../../components/ui/card";
 
 function ConfirmationContent() {
   const searchParams = useSearchParams();

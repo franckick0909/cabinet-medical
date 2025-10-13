@@ -1,6 +1,6 @@
 "use client";
 
-import type { Demande } from "../../types/demande";
+import type { Demande } from "@/types/demande";
 import { Badge } from "../ui/badge";
 import {
   HoverCard,
