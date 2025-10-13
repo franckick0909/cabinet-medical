@@ -38,7 +38,6 @@ export {
 } from "./form";
 export { HoverCard, HoverCardContent, HoverCardTrigger } from "./hover-card";
 export { Label } from "./label";
-export { Modal } from "./modal";
 export { Progress } from "./progress";
 export { RadioGroup, RadioGroupItem } from "./radio-group";
 export { Separator } from "./separator";

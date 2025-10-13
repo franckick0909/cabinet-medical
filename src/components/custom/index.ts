@@ -11,6 +11,18 @@ export {
 export { Checkbox } from "./Checkbox";
 export { Input } from "./Input";
 export {
+  Modal,
+  ModalClose,
+  ModalContent,
+  ModalDescription,
+  ModalFooter,
+  ModalHeader,
+  ModalOverlay,
+  ModalPortal,
+  ModalTitle,
+  ModalTrigger,
+} from "./Modal";
+export {
   Select,
   SelectContent,
   SelectGroup,
