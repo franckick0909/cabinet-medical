@@ -1,9 +1,9 @@
 "use client";
 
+import { Badge } from "@/components/ui/badge";
+import { Progress } from "@/components/ui/progress";
 import { useDemandeStore } from "@/store/demandeStore";
 import { Check } from "lucide-react";
-import { Badge } from "../ui/badge";
-import { Progress } from "../ui/progress";
 
 interface PageHeaderProps {
   step: string;

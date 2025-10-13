@@ -1,12 +1,12 @@
 "use client";
 
-import type { Demande } from "@/types/demande";
-import { Badge } from "../ui/badge";
+import { Badge } from "@/components/ui/badge";
 import {
   HoverCard,
   HoverCardContent,
   HoverCardTrigger,
-} from "../ui/hover-card";
+} from "@/components/ui/hover-card";
+import type { Demande } from "@/types/demande";
 
 interface DemandeCardProps {
   demande: Demande;

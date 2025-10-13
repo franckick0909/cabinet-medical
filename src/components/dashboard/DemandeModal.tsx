@@ -1,6 +1,27 @@
 "use client";
 
 import { deleteDemande, updateDemandeStatut } from "@/actions/dashboard";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { Separator } from "@/components/ui/separator";
 import type { Demande } from "@/types/demande";
 import {
   Calendar,
@@ -13,27 +34,6 @@ import {
   X,
 } from "lucide-react";
 import { useState } from "react";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from "../ui/alert-dialog";
-import { Badge } from "../ui/badge";
-import { Button } from "../ui/button";
-import { Card } from "../ui/card";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-} from "../ui/dialog";
-import { Separator } from "../ui/separator";
 
 interface DemandeModalProps {
   demande: Demande | null;

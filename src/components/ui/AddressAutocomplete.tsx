@@ -1,9 +1,9 @@
 "use client";
 
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
 import { useEffect, useRef, useState } from "react";
-import { Input } from "./input";
-import { Label } from "./label";
 
 interface AddressFeature {
   properties: {
