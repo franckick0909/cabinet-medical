@@ -40,7 +40,7 @@ export async function getDemandes(filters?: {
         patient: true,
       },
       orderBy: {
-        dateRdv: "asc",
+        createdAt: "asc",
       },
     });
 
