@@ -24,10 +24,10 @@ export function Header() {
               </div>
               <div className="flex flex-col">
                 <span className="text-lg font-bold text-foreground">
-                  Cabinet Médical
+                  Cabinet Harmonie
                 </span>
                 <span className="text-xs text-muted-foreground">
-                  Soins à domicile
+                  Soins à domicile et au cabinet
                 </span>
               </div>
             </Link>

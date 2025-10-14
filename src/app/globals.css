@@ -2,7 +2,8 @@
 
 @layer base {
   :root {
-    --gradient: linear-gradient(to top left, rgb(255, 5, 124), #7c64d5, #4cc3ff);
+    --gradient: linear-gradient(to top, rgb(255, 5, 201), rgb(1, 195, 255));
+    --third: rgb(255, 5, 124);
     --background: rgb(248 243 250);
     --foreground: rgb(54 64 80);
     --card: rgb(255 255 255);
@@ -177,6 +178,10 @@ body {
 
 .bg-gradient {
   background: var(--gradient);
+}
+
+.font-kaushan-script {
+  font-family: var(--font-kaushan-script);
 }
 
 /* Forcer les checkboxes à être carrées */
