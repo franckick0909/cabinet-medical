@@ -3,7 +3,7 @@
 import { Button } from "@/components/custom/Button";
 import { Checkbox } from "@/components/custom/Checkbox";
 import { Input } from "@/components/custom/Input";
-import { Modal } from "@/components/custom/Modal";
+import { Modal, ModalBody, ModalFooter } from "@/components/custom/Modal";
 import { Textarea } from "@/components/custom/Textarea";
 import { FormNavigation } from "@/components/demande/FormNavigation";
 import { PageHeader } from "@/components/demande/PageHeader";
@@ -464,259 +464,267 @@ export default function SoinsPage() {
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         title={currentSoin?.titre}
-        size="xl"
+        size="full"
       >
-        <form onSubmit={handleSubmitDetails}>
-          <div className="space-y-4 sm:space-y-5">
-            {currentSoin?.questions?.map((question) => (
-              <div key={question.id} className="space-y-2">
-                <Label
-                  htmlFor={question.id}
-                  className="text-sm sm:text-base font-medium"
-                >
-                  {question.label}
-                  {question.required && (
-                    <span className="text-destructive ml-1">*</span>
+        <form
+          onSubmit={handleSubmitDetails}
+          className="flex flex-col flex-1 overflow-hidden"
+        >
+          <ModalBody>
+            <div className="space-y-4 sm:space-y-5">
+              {currentSoin?.questions?.map((question) => (
+                <div key={question.id} className="space-y-2">
+                  <Label
+                    htmlFor={question.id}
+                    className="text-sm sm:text-base font-medium"
+                  >
+                    {question.label}
+                    {question.required && (
+                      <span className="text-destructive ml-1">*</span>
+                    )}
+                  </Label>
+
+                  {question.type === "text" && (
+                    <Input
+                      id={question.id}
+                      type="text"
+                      required={question.required}
+                      value={(formData[question.id] as string) || ""}
+                      onChange={(e) =>
+                        setFormData({
+                          ...formData,
+                          [question.id]: e.target.value,
+                        })
+                      }
+                      aria-label={question.label}
+                    />
                   )}
-                </Label>
 
-                {question.type === "text" && (
-                  <Input
-                    id={question.id}
-                    type="text"
-                    required={question.required}
-                    value={(formData[question.id] as string) || ""}
-                    onChange={(e) =>
-                      setFormData({
-                        ...formData,
-                        [question.id]: e.target.value,
-                      })
-                    }
-                    aria-label={question.label}
-                  />
-                )}
-
-                {question.type === "select" && (
-                  <div>
-                    {/* Convertir les select en checkboxes pour meilleure accessibilité */}
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-3">
-                      {question.options?.map((option) => (
-                        <div
-                          key={option}
-                          className="flex items-end justify-start p-2 sm:p-3 rounded-lg border-2 border-border hover:border-primary hover:bg-primary/10 cursor-pointer transition-all"
-                        >
-                          <Checkbox
-                            id={`${question.id}-${option}`}
-                            checked={(
-                              (formData[question.id] as string[]) || []
-                            ).includes(option)}
-                            onCheckedChange={(checked) =>
-                              handleCheckboxGroupChange(
-                                question.id,
-                                option,
-                                checked as boolean
-                              )
-                            }
-                            className="mt-0.5"
-                          />
-                          <Label
-                            htmlFor={`${question.id}-${option}`}
-                            className="ml-2 sm:ml-3 text-sm sm:text-base font-medium cursor-pointer leading-tight"
+                  {question.type === "select" && (
+                    <div>
+                      {/* Convertir les select en checkboxes pour meilleure accessibilité */}
+                      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-3">
+                        {question.options?.map((option) => (
+                          <div
+                            key={option}
+                            className="flex items-end justify-start p-2 sm:p-3 rounded-lg border-2 border-border hover:border-primary hover:bg-primary/10 cursor-pointer transition-all"
                           >
-                            {option}
-                          </Label>
-                        </div>
-                      ))}
-                    </div>
-
-                    {/* Champ conditionnel "Autre" pour les select/checkboxes */}
-                    {isAutreSelected(question.id) && (
-                      <div className="mt-4 p-4 bg-primary/10 rounded-lg border-2 border-primary/30">
-                        <Label
-                          htmlFor={`${question.id}_autre_details`}
-                          className="block text-sm font-medium mb-2"
-                        >
-                          Précisez :
-                        </Label>
-                        <Input
-                          id={`${question.id}_autre_details`}
-                          type="text"
-                          placeholder="Entrez les détails..."
-                          value={
-                            (formData[
-                              `${question.id}_autre_details`
-                            ] as string) || ""
-                          }
-                          onChange={(e) =>
-                            setFormData({
-                              ...formData,
-                              [`${question.id}_autre_details`]: e.target.value,
-                            })
-                          }
-                        />
+                            <Checkbox
+                              id={`${question.id}-${option}`}
+                              checked={(
+                                (formData[question.id] as string[]) || []
+                              ).includes(option)}
+                              onCheckedChange={(checked) =>
+                                handleCheckboxGroupChange(
+                                  question.id,
+                                  option,
+                                  checked as boolean
+                                )
+                              }
+                              className="mt-0.5"
+                            />
+                            <Label
+                              htmlFor={`${question.id}-${option}`}
+                              className="ml-2 sm:ml-3 text-sm sm:text-base font-medium cursor-pointer leading-tight"
+                            >
+                              {option}
+                            </Label>
+                          </div>
+                        ))}
                       </div>
-                    )}
-                  </div>
-                )}
 
-                {question.type === "checkbox" && (
-                  <div>
-                    {/* Grille pour les checkboxes - responsive */}
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-3">
-                      {question.options?.map((option) => (
-                        <div
-                          key={option}
-                          className="flex items-end justify-start p-2 sm:p-3 rounded-lg border-2 border-border hover:border-primary hover:bg-primary/10 cursor-pointer transition-all"
-                        >
-                          <Checkbox
-                            id={`${question.id}-${option}`}
-                            checked={(
-                              (formData[question.id] as string[]) || []
-                            ).includes(option)}
-                            onCheckedChange={(checked) =>
-                              handleCheckboxGroupChange(
-                                question.id,
-                                option,
-                                checked as boolean
-                              )
-                            }
-                            className="mt-0.5"
-                          />
+                      {/* Champ conditionnel "Autre" pour les select/checkboxes */}
+                      {isAutreSelected(question.id) && (
+                        <div className="mt-4 p-4 bg-primary/10 rounded-lg border-2 border-primary/30">
                           <Label
-                            htmlFor={`${question.id}-${option}`}
-                            className="ml-2 sm:ml-3 text-sm sm:text-base font-medium cursor-pointer leading-tight"
+                            htmlFor={`${question.id}_autre_details`}
+                            className="block text-sm font-medium mb-2"
                           >
-                            {option}
+                            Précisez :
                           </Label>
-                        </div>
-                      ))}
-                    </div>
-
-                    {/* Champ conditionnel "Autre" pour les checkboxes */}
-                    {isAutreSelected(question.id) && (
-                      <div className="mt-3 sm:mt-4 p-3 sm:p-4 bg-primary/10 rounded-lg border-2 border-primary/30">
-                        <Label
-                          htmlFor={`${question.id}_autre_details`}
-                          className="block text-sm font-medium mb-2"
-                        >
-                          Précisez le type de plaie :
-                        </Label>
-                        <Input
-                          id={`${question.id}_autre_details`}
-                          type="text"
-                          placeholder="Entrez les détails..."
-                          value={
-                            (formData[
-                              `${question.id}_autre_details`
-                            ] as string) || ""
-                          }
-                          onChange={(e) =>
-                            setFormData({
-                              ...formData,
-                              [`${question.id}_autre_details`]: e.target.value,
-                            })
-                          }
-                        />
-                      </div>
-                    )}
-                  </div>
-                )}
-
-                {question.type === "radio" && (
-                  <div>
-                    {/* Grille pour les checkboxes - responsive */}
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-3">
-                      {question.options?.map((option) => (
-                        <div
-                          key={option}
-                          className="flex items-end justify-start p-2 sm:p-3 rounded-lg border-2 border-border hover:border-primary hover:bg-primary/10 cursor-pointer transition-all"
-                        >
-                          <Checkbox
-                            id={`${question.id}-${option}`}
-                            checked={(
-                              (formData[question.id] as string[]) || []
-                            ).includes(option)}
-                            onCheckedChange={(checked) =>
-                              handleCheckboxGroupChange(
-                                question.id,
-                                option,
-                                checked as boolean
-                              )
+                          <Input
+                            id={`${question.id}_autre_details`}
+                            type="text"
+                            placeholder="Entrez les détails..."
+                            value={
+                              (formData[
+                                `${question.id}_autre_details`
+                              ] as string) || ""
                             }
-                            className="mt-0.5"
+                            onChange={(e) =>
+                              setFormData({
+                                ...formData,
+                                [`${question.id}_autre_details`]:
+                                  e.target.value,
+                              })
+                            }
                           />
-                          <Label
-                            htmlFor={`${question.id}-${option}`}
-                            className="ml-2 sm:ml-3 text-sm sm:text-base font-medium cursor-pointer leading-tight"
-                          >
-                            {option}
-                          </Label>
                         </div>
-                      ))}
+                      )}
                     </div>
+                  )}
 
-                    {/* Champ conditionnel "Autre" pour les checkboxes */}
-                    {isAutreSelected(question.id) && (
-                      <div className="mt-3 sm:mt-4 p-3 sm:p-4 bg-primary/10 rounded-lg border-2 border-primary/30">
-                        <Label
-                          htmlFor={`${question.id}_autre_details`}
-                          className="block text-sm font-medium mb-2"
-                        >
-                          Précisez :
-                        </Label>
-                        <Input
-                          id={`${question.id}_autre_details`}
-                          type="text"
-                          placeholder="Entrez les détails..."
-                          value={
-                            (formData[
-                              `${question.id}_autre_details`
-                            ] as string) || ""
-                          }
-                          onChange={(e) =>
-                            setFormData({
-                              ...formData,
-                              [`${question.id}_autre_details`]: e.target.value,
-                            })
-                          }
-                        />
+                  {question.type === "checkbox" && (
+                    <div>
+                      {/* Grille pour les checkboxes - responsive */}
+                      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-3">
+                        {question.options?.map((option) => (
+                          <div
+                            key={option}
+                            className="flex items-end justify-start p-2 sm:p-3 rounded-lg border-2 border-border hover:border-primary hover:bg-primary/10 cursor-pointer transition-all"
+                          >
+                            <Checkbox
+                              id={`${question.id}-${option}`}
+                              checked={(
+                                (formData[question.id] as string[]) || []
+                              ).includes(option)}
+                              onCheckedChange={(checked) =>
+                                handleCheckboxGroupChange(
+                                  question.id,
+                                  option,
+                                  checked as boolean
+                                )
+                              }
+                              className="mt-0.5"
+                            />
+                            <Label
+                              htmlFor={`${question.id}-${option}`}
+                              className="ml-2 sm:ml-3 text-sm sm:text-base font-medium cursor-pointer leading-tight"
+                            >
+                              {option}
+                            </Label>
+                          </div>
+                        ))}
                       </div>
-                    )}
-                  </div>
-                )}
 
-                {question.type === "textarea" && (
-                  <Textarea
-                    id={question.id}
-                    required={question.required}
-                    rows={3}
-                    value={(formData[question.id] as string) || ""}
-                    onChange={(e) =>
-                      setFormData({
-                        ...formData,
-                        [question.id]: e.target.value,
-                      })
-                    }
-                    aria-label={question.label}
-                  />
-                )}
-              </div>
-            ))}
-          </div>
+                      {/* Champ conditionnel "Autre" pour les checkboxes */}
+                      {isAutreSelected(question.id) && (
+                        <div className="mt-3 sm:mt-4 p-3 sm:p-4 bg-primary/10 rounded-lg border-2 border-primary/30">
+                          <Label
+                            htmlFor={`${question.id}_autre_details`}
+                            className="block text-sm font-medium mb-2"
+                          >
+                            Précisez le type de plaie :
+                          </Label>
+                          <Input
+                            id={`${question.id}_autre_details`}
+                            type="text"
+                            placeholder="Entrez les détails..."
+                            value={
+                              (formData[
+                                `${question.id}_autre_details`
+                              ] as string) || ""
+                            }
+                            onChange={(e) =>
+                              setFormData({
+                                ...formData,
+                                [`${question.id}_autre_details`]:
+                                  e.target.value,
+                              })
+                            }
+                          />
+                        </div>
+                      )}
+                    </div>
+                  )}
 
-          <div className="mt-4 sm:mt-6 flex flex-col-reverse sm:flex-row justify-end gap-2 sm:gap-3">
+                  {question.type === "radio" && (
+                    <div>
+                      {/* Grille pour les checkboxes - responsive */}
+                      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-3">
+                        {question.options?.map((option) => (
+                          <div
+                            key={option}
+                            className="flex items-end justify-start p-2 sm:p-3 rounded-lg border-2 border-border hover:border-primary hover:bg-primary/10 cursor-pointer transition-all"
+                          >
+                            <Checkbox
+                              id={`${question.id}-${option}`}
+                              checked={(
+                                (formData[question.id] as string[]) || []
+                              ).includes(option)}
+                              onCheckedChange={(checked) =>
+                                handleCheckboxGroupChange(
+                                  question.id,
+                                  option,
+                                  checked as boolean
+                                )
+                              }
+                              className="mt-0.5"
+                            />
+                            <Label
+                              htmlFor={`${question.id}-${option}`}
+                              className="ml-2 sm:ml-3 text-sm sm:text-base font-medium cursor-pointer leading-tight"
+                            >
+                              {option}
+                            </Label>
+                          </div>
+                        ))}
+                      </div>
+
+                      {/* Champ conditionnel "Autre" pour les checkboxes */}
+                      {isAutreSelected(question.id) && (
+                        <div className="mt-3 sm:mt-4 p-3 sm:p-4 bg-primary/10 rounded-lg border-2 border-primary/30">
+                          <Label
+                            htmlFor={`${question.id}_autre_details`}
+                            className="block text-sm font-medium mb-2"
+                          >
+                            Précisez :
+                          </Label>
+                          <Input
+                            id={`${question.id}_autre_details`}
+                            type="text"
+                            placeholder="Entrez les détails..."
+                            value={
+                              (formData[
+                                `${question.id}_autre_details`
+                              ] as string) || ""
+                            }
+                            onChange={(e) =>
+                              setFormData({
+                                ...formData,
+                                [`${question.id}_autre_details`]:
+                                  e.target.value,
+                              })
+                            }
+                          />
+                        </div>
+                      )}
+                    </div>
+                  )}
+
+                  {question.type === "textarea" && (
+                    <Textarea
+                      id={question.id}
+                      required={question.required}
+                      rows={3}
+                      value={(formData[question.id] as string) || ""}
+                      onChange={(e) =>
+                        setFormData({
+                          ...formData,
+                          [question.id]: e.target.value,
+                        })
+                      }
+                      aria-label={question.label}
+                    />
+                  )}
+                </div>
+              ))}
+            </div>
+          </ModalBody>
+
+          <ModalFooter className="flex flex-row justify-end sm:space-x-2 gap-2 sm:gap-0 items-center w-full sm:w-auto">
             <Button
               type="button"
               variant="secondary"
               onClick={() => setIsModalOpen(false)}
-              className="w-full sm:w-auto"
+              className="w-auto"
             >
               Fermer
             </Button>
-            <Button type="submit" className="w-full sm:w-auto">
+            <Button type="submit" className="w-auto">
               Valider
             </Button>
-          </div>
+          </ModalFooter>
         </form>
       </Modal>
     </div>
