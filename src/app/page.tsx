@@ -292,13 +292,13 @@ export default function Home() {
                   <Card className="p-8 shadow-lg border-0 bg-background flex-1 min-h-0 hover:-translate-y-2 hover:shadow-2xl transition-all duration-500 relative overflow-hidden">
                     {/* Image de fond pour coordination médecin */}
                     <div className="absolute top-4 right-4 w-28 h-28 aspect-square opacity-90 rounded-xl overflow-hidden">
-                      <Image
+        <Image
                         src="/medecin.jpeg"
                         alt="Coordination médecin"
                         fill
                         className="object-cover object-center"
-                        priority
-                      />
+          priority
+        />
                     </div>
                     <div className="w-16 h-16 bg-primary rounded-2xl flex items-center justify-center mb-6 relative z-10">
                       <Users className="w-8 h-8 text-primary-foreground" />
@@ -318,11 +318,11 @@ export default function Home() {
                       <li className="flex items-center gap-3 text-foreground">
                         <CheckCircle className="w-5 h-5 text-primary flex-shrink-0" />
                         <span>Coordination avec votre médecin</span>
-                      </li>
+          </li>
                       <li className="flex items-center gap-3 text-foreground">
                         <CheckCircle className="w-5 h-5 text-primary flex-shrink-0" />
                         <span>Éducation thérapeutique</span>
-                      </li>
+          </li>
                     </ul>
                   </Card>
                 </div>
@@ -371,11 +371,11 @@ export default function Home() {
                           backgroundSize: "contain",
                         }}
                       ></div>
-                    </div>
+        </div>
 
                     <div className="relative">
                       <div className="aspect-square relative overflow-hidden">
-                        <Image
+          <Image
                           src={infirmiere.image}
                           alt={infirmiere.name}
                           fill
@@ -650,7 +650,7 @@ export default function Home() {
         >
           {/* Fond wave.png */}
           <div className="absolute inset-0 opacity-20">
-            <Image
+          <Image
               src="/wave.png"
               alt="Fond ondulé"
               fill
@@ -709,7 +709,7 @@ export default function Home() {
             </div>
           </div>
         </section>
-      </div>
+    </div>
     </>
   );
 }

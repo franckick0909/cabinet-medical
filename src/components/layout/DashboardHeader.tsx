@@ -103,11 +103,12 @@ export function DashboardHeader({
     <>
       {/* Header simplifié - uniquement le bouton Menu */}
       <header
-        className={`fixed top-0 right-0 w-full z-20 h-18 px-4 ${getHeaderMargins()} flex items-center justify-end`}
+        className={`fixed top-0 right-0 w-full z-20 h-18 px-0 sm:px-2 ${getHeaderMargins()} flex items-center justify-end`}
       >
         <button
           type="button"
-          className="transition-all duration-300 font-kaushan-script text-2xl font-normal text-foreground  tracking-wider cursor-pointer"
+          className="relative transition-all duration-300 font-kaushan-script text-2xl font-normal text-foreground  tracking-wider cursor-pointer after:content-[''] after:absolute after:bottom-0 after:right-0 after:w-full after:h-[2px] after:bg-primary after:scale-x-100 after:origin-bottom-right after:transition-all after:duration-300 hover:after:scale-x-0 
+          before:content-[''] before:absolute before:w-full before:h-[2px] before:bottom-0 before:left-0 before:bg-primary before:origin-right before:scale-x-0 hover:before:origin-left hover:before:scale-x-100 before:transition-transform before:duration-500 before:ease-in-out hover:before:delay-200"
           onClick={toggleMobileMenu}
         >
           {isMobileMenuOpen ? "Fermer" : "Menu"}

@@ -180,12 +180,12 @@ export function PatientTableOptimized({
   };
 
   return (
-    <div className="h-full flex flex-col">
+    <div className="h-full flex flex-col gap-4">
       {/* Header compact */}
-      <div className="flex-shrink-0 p-6 border-b border-border bg-background/95 backdrop-blur">
-        <div className="flex items-center justify-between">
+      <div className="flex-shrink-0 border-b border-border bg-background/95 backdrop-blur px-2 sm:p-4">
+        <div className="flex items-center justify-between flex-wrap gap-2 sm:gap-4">
           <div>
-            <h1 className="text-2xl font-bold text-foreground">
+            <h1 className="text-2xl font-bold text-foreground mb-2 sm:mb-0">
               Gestion des Patients
             </h1>
             <p className="text-muted-foreground">
@@ -203,15 +203,25 @@ export function PatientTableOptimized({
               onClick={() =>
                 setFilters((prev) => ({ ...prev, urgences: !prev.urgences }))
               }
+              className={
+                filters.urgences
+                  ? "bg-red-500 text-white hover:bg-red-400"
+                  : "bg-white text-red-600 border border-red-200 hover:bg-red-50"
+              }
             >
               <AlertTriangle className="w-4 h-4 mr-1" />
               Urgents ({stats.patientsUrgents})
             </Button>
             <Button
-              variant={filters.actifs ? "default" : "outline"}
+              variant={filters.actifs ? "ghost" : "outline"}
               size="sm"
               onClick={() =>
                 setFilters((prev) => ({ ...prev, actifs: !prev.actifs }))
+              }
+              className={
+                filters.actifs
+                  ? "bg-green-500 text-white hover:bg-green-400"
+                  : "bg-white text-green-600 border border-green-200 hover:bg-green-50"
               }
             >
               <Activity className="w-4 h-4 mr-1" />
@@ -221,9 +231,9 @@ export function PatientTableOptimized({
         </div>
 
         {/* Barre de recherche */}
-        <div className="flex gap-4 mt-4">
+        <div className="flex flex-wrap flex-col sm:flex-row gap-4 mt-4">
           <div className="flex-1 relative">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4" />
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-5 h-5" />
             <Input
               placeholder="Rechercher par nom, téléphone, adresse, pathologie..."
               value={searchTerm}
@@ -231,19 +241,20 @@ export function PatientTableOptimized({
               className="pl-10"
             />
           </div>
+          <div className="flex gap-2">
+            <Button
+              variant={showFilters ? "default" : "outline"}
+              onClick={() => setShowFilters(!showFilters)}
+            >
+              <Filter className="w-4 h-4 mr-2" />
+              Filtres
+            </Button>
 
-          <Button
-            variant={showFilters ? "default" : "outline"}
-            onClick={() => setShowFilters(!showFilters)}
-          >
-            <Filter className="w-4 h-4 mr-2" />
-            Filtres
-          </Button>
-
-          <Button variant="outline" onClick={clearAllFilters}>
-            <X className="w-4 h-4 mr-2" />
-            Effacer
-          </Button>
+            <Button variant="outline" onClick={clearAllFilters}>
+              <X className="w-4 h-4 mr-2" />
+              Effacer
+            </Button>
+          </div>
         </div>
 
         {/* Tri */}
@@ -399,7 +410,7 @@ export function PatientTableOptimized({
                             <Badge
                               key={pathologie}
                               variant="outline"
-                              className="text-xs"
+                              className="text-[11px] sm:text-xs shrink-0 bg-secondary text-secondary-foreground border-secondary-foreground/20"
                             >
                               {pathologie}
                             </Badge>
@@ -513,7 +524,7 @@ export function PatientTableOptimized({
                 </div>
                 <div className="flex justify-between">
                   <span className="text-muted-foreground">Statut:</span>
-                  <Badge className={getStatutColor(selectedPatient)} >
+                  <Badge className={getStatutColor(selectedPatient)}>
                     {getStatutLabel(selectedPatient)}
                   </Badge>
                 </div>

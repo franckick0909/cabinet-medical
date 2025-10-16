@@ -254,8 +254,8 @@ export function PlanningView({
   return (
     <div className="h-full flex flex-col">
       {/* Header avec navigation et contrôles */}
-      <div className="flex-shrink-0 p-6 border-b border-border bg-background/95 backdrop-blur">
-        <div className="flex items-center justify-between mb-4">
+      <div className="flex-shrink-0 px-2 sm:p-4 border-b border-border bg-background/95 backdrop-blur">
+        <div className="flex items-center flex-wrap gap-2 justify-between mb-4">
           <div>
             <h1 className="text-2xl font-bold text-foreground">Planning</h1>
             <p className="text-muted-foreground">{title}</p>
@@ -283,23 +283,27 @@ export function PlanningView({
         </div>
 
         {/* Navigation et statistiques */}
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2">
+        <div className="flex flex-wrap gap-2 items-center justify-between">
+          <div className="flex items-center justify-between w-full sm:w-auto gap-2">
             <Button variant="outline" size="sm" onClick={goToPrevious}>
               <ChevronLeft className="w-4 h-4" />
-              {viewType === "week" ? "Semaine précédente" : "Mois précédent"}
+              <span className="hidden sm:inline ml-1">
+                {viewType === "week" ? "Semaine précédente" : "Mois précédent"}
+              </span>
             </Button>
             <Button variant="outline" size="sm" onClick={goToToday}>
               Aujourd&apos;hui
             </Button>
             <Button variant="outline" size="sm" onClick={goToNext}>
-              {viewType === "week" ? "Semaine suivante" : "Mois suivant"}
+              <span className="hidden sm:inline mr-1">
+                {viewType === "week" ? "Semaine suivante" : "Mois suivant"}
+              </span>
               <ChevronRight className="w-4 h-4" />
             </Button>
           </div>
 
           {/* Statistiques rapides */}
-          <div className="flex items-center gap-4 text-sm">
+          <div className="flex flex-wrap items-center gap-4 text-sm">
             <div className="flex items-center gap-1">
               <div className="w-3 h-3 bg-blue-500 rounded"></div>
               <span>{periodStats.confirmees} Confirmés</span>
@@ -322,7 +326,7 @@ export function PlanningView({
 
       {/* Calendrier */}
       <div className="flex-1 overflow-auto">
-        <div className="p-6">
+        <div className="px-1 sm:px-4 py-2 sm:py-4">
           {viewType === "week" ? (
             // Vue semaine - Utilisation de l'ancien WeekView
             <WeekView

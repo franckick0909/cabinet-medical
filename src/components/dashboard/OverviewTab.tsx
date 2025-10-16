@@ -53,7 +53,7 @@ export function OverviewTab({ demandes }: OverviewTabProps) {
   }, [patients]);
 
   return (
-    <div className="p-4 space-y-4">
+    <div className="px-2 py-4 sm:p-4 space-y-2 sm:space-y-4">
       {/* En-tête */}
       <div>
         <h1 className="text-3xl font-bold text-foreground mb-2">
@@ -65,12 +65,12 @@ export function OverviewTab({ demandes }: OverviewTabProps) {
       </div>
 
        {/* Statistiques principales */}
-       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-3">
-         <Card className="p-4 ">
+       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-2 sm:gap-3">
+         <Card className="p-2 sm:p-4 ">
            <div className="flex items-center gap-3">
-             <Users className="w-8 h-8 text-blue-500 " />
+             <Users className="w-6 h-6 sm:w-8 sm:h-8 text-blue-500 " />
              <div>
-               <p className="text-2xl font-bold text-blue-600">
+               <p className="text-xl sm:text-2xl font-bold text-blue-600">
                  {stats.totalPatients}
                </p>
                <p className="text-sm text-blue-600">Total patients</p>
@@ -78,9 +78,9 @@ export function OverviewTab({ demandes }: OverviewTabProps) {
            </div>
          </Card>
 
-         <Card className="p-4">
+         <Card className="p-2 sm:p-4">
            <div className="flex items-center gap-3">
-             <Activity className="w-8 h-8 text-green-500" />
+             <Activity className="w-6 h-6 sm:w-8 sm:h-8 text-green-500" />
              <div>
                <p className="text-2xl font-bold text-green-600">
                  {stats.patientsActifs}
@@ -90,11 +90,11 @@ export function OverviewTab({ demandes }: OverviewTabProps) {
            </div>
          </Card>
 
-         <Card className="p-4">
+         <Card className="p-2 sm:p-4">
            <div className="flex items-center gap-3">
-             <TrendingUp className="w-8 h-8 text-purple-500" />
+             <TrendingUp className="w-6 h-6 sm:w-8 sm:h-8 text-purple-500" />
              <div>
-               <p className="text-2xl font-bold text-purple-600">
+               <p className="text-xl sm:text-2xl font-bold text-purple-600">
                  {stats.nouveauxPatients}
                </p>
                <p className="text-sm text-purple-600">Nouveaux ce mois</p>
@@ -102,11 +102,11 @@ export function OverviewTab({ demandes }: OverviewTabProps) {
            </div>
          </Card>
 
-         <Card className="p-4">
+         <Card className="p-2 sm:p-4">
            <div className="flex items-center gap-3">
-             <AlertTriangle className="w-8 h-8 text-red-500" />
+             <AlertTriangle className="w-6 h-6 sm:w-8 sm:h-8 text-red-500" />
              <div>
-               <p className="text-2xl font-bold text-red-600">
+               <p className="text-xl sm:text-2xl font-bold text-red-600">
                  {stats.patientsUrgents}
                </p>
                <p className="text-sm text-red-600">Urgents</p>
@@ -114,11 +114,11 @@ export function OverviewTab({ demandes }: OverviewTabProps) {
            </div>
          </Card>
 
-         <Card className="p-4">
+         <Card className="p-2 sm:p-4">
            <div className="flex items-center gap-3">
-             <Calendar className="w-8 h-8 text-orange-500" />
+             <Calendar className="w-6 h-6 sm:w-8 sm:h-8 text-orange-500" />
              <div>
-               <p className="text-2xl font-bold text-orange-600">
+               <p className="text-xl sm:text-2xl font-bold text-orange-600">
                  {stats.rdvAujourdhui}
                </p>
                <p className="text-sm text-orange-600">RDV aujourd&apos;hui</p>
@@ -126,11 +126,11 @@ export function OverviewTab({ demandes }: OverviewTabProps) {
            </div>
          </Card>
 
-         <Card className="p-4">
+         <Card className="p-2 sm:p-4">
            <div className="flex items-center gap-3">
-             <CheckCircle className="w-8 h-8 text-teal-500" />
+             <CheckCircle className="w-6 h-6 sm:w-8 sm:h-8 text-teal-500" />
              <div>
-               <p className="text-2xl font-bold text-teal-600">
+               <p className="text-xl sm:text-2xl font-bold text-teal-600">
                  {stats.rdvSemaine}
                </p>
                <p className="text-sm text-teal-600">RDV semaine</p>
@@ -142,12 +142,12 @@ export function OverviewTab({ demandes }: OverviewTabProps) {
        {/* Statistiques détaillées */}
        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
          {/* Soins */}
-         <Card className="p-6">
-           <div className="flex items-center gap-2 mb-4">
+         <Card className="p-3 sm:p-4">
+           <div className="flex items-center gap-2 mb-2 sm:mb-4">
              <CheckCircle className="w-5 h-5 text-blue-500" />
              <h3 className="text-lg font-semibold text-foreground">Soins</h3>
            </div>
-           <div className="space-y-3">
+           <div className="space-y-1 sm:space-y-3">
              <div className="flex justify-between items-center">
                <span className="text-sm text-muted-foreground">Terminés</span>
                <span className="font-semibold text-green-600">{stats.soinsTermines}</span>
@@ -164,12 +164,12 @@ export function OverviewTab({ demandes }: OverviewTabProps) {
          </Card>
 
          {/* Urgences */}
-         <Card className="p-6">
+         <Card className="p-3 sm:p-4">
            <div className="flex items-center gap-2 mb-4">
              <AlertTriangle className="w-5 h-5 text-red-500" />
              <h3 className="text-lg font-semibold text-foreground">Urgences</h3>
            </div>
-           <div className="space-y-3">
+           <div className="space-y-1 sm:space-y-3">
              <div className="flex justify-between items-center">
                <span className="text-sm text-muted-foreground">Urgente</span>
                <span className="font-semibold text-red-600">{stats.urgenceUrgente}</span>
@@ -190,12 +190,12 @@ export function OverviewTab({ demandes }: OverviewTabProps) {
          </Card>
 
          {/* Performance */}
-         <Card className="p-6">
-           <div className="flex items-center gap-2 mb-4">
+         <Card className="p-3 sm:p-4">
+           <div className="flex items-center gap-2 mb-2 sm:mb-4">
              <TrendingUp className="w-5 h-5 text-purple-500" />
              <h3 className="text-lg font-semibold text-foreground">Performance</h3>
            </div>
-           <div className="space-y-3">
+           <div className="space-y-1 sm:space-y-3">
              <div className="flex justify-between items-center">
                <span className="text-sm text-muted-foreground">Satisfaction</span>
                <span className="font-semibold text-green-600">{stats.tauxSatisfaction}%</span>
@@ -212,12 +212,12 @@ export function OverviewTab({ demandes }: OverviewTabProps) {
          </Card>
 
          {/* Démographie */}
-         <Card className="p-6">
-           <div className="flex items-center gap-2 mb-4">
+         <Card className="p-3 sm:p-4">
+           <div className="flex items-center gap-2 mb-2 sm:mb-4">
              <Users className="w-5 h-5 text-indigo-500" />
              <h3 className="text-lg font-semibold text-foreground">Démographie</h3>
            </div>
-           <div className="space-y-3">
+           <div className="space-y-1 sm:space-y-3">
              <div className="flex justify-between items-center">
                <span className="text-sm text-muted-foreground">Âge moyen</span>
                <span className="font-semibold text-indigo-600">{stats.patientsMoyenneAge} ans</span>
@@ -237,8 +237,8 @@ export function OverviewTab({ demandes }: OverviewTabProps) {
       {/* Grille de contenu */}
       <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-3">
         {/* Patients urgents */}
-        <Card className="p-6">
-          <div className="flex items-center gap-2 mb-4">
+        <Card className="p-3 sm:p-4">
+          <div className="flex items-center gap-2 mb-2 sm:mb-4">
             <AlertTriangle className="w-5 h-5 text-red-500" />
             <h3 className="text-lg font-semibold text-foreground">
               Patients urgents
@@ -250,7 +250,7 @@ export function OverviewTab({ demandes }: OverviewTabProps) {
               Aucun patient urgent
             </p>
           ) : (
-            <div className="space-y-3">
+            <div className="space-y-1 sm:space-y-3">
               {urgentPatients.map((patient) => (
                 <div
                   key={patient.id}
@@ -274,8 +274,8 @@ export function OverviewTab({ demandes }: OverviewTabProps) {
         </Card>
 
         {/* Prochains RDV */}
-        <Card className="p-6">
-          <div className="flex items-center gap-2 mb-4">
+        <Card className="p-3 sm:p-4">
+          <div className="flex items-center gap-2 mb-2 sm:mb-4">
             <Calendar className="w-5 h-5 text-blue-500" />
             <h3 className="text-lg font-semibold text-foreground">
               Prochains RDV
@@ -285,7 +285,7 @@ export function OverviewTab({ demandes }: OverviewTabProps) {
           {upcomingAppointments.length === 0 ? (
             <p className="text-muted-foreground text-sm">Aucun RDV programmé</p>
           ) : (
-            <div className="space-y-3">
+            <div className="space-y-1 sm:space-y-3">
               {upcomingAppointments.map((patient) => (
                 <div
                   key={patient.id}
@@ -317,8 +317,8 @@ export function OverviewTab({ demandes }: OverviewTabProps) {
         </Card>
 
         {/* Activité récente */}
-        <Card className="p-6">
-          <div className="flex items-center gap-2 mb-4">
+        <Card className="p-3 sm:p-4">
+          <div className="flex items-center gap-2 mb-2 sm:mb-4">
             <Clock className="w-5 h-5 text-green-500" />
             <h3 className="text-lg font-semibold text-foreground">
               Activité récente
@@ -330,7 +330,7 @@ export function OverviewTab({ demandes }: OverviewTabProps) {
               Aucune activité récente
             </p>
           ) : (
-            <div className="space-y-3">
+            <div className="space-y-1 sm:space-y-3">
               {recentPatients.map((patient) => (
                 <div
                   key={patient.id}

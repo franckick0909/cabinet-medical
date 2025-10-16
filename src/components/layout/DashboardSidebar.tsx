@@ -50,27 +50,27 @@ export function DashboardSidebar({
     {
       id: "overview",
       label: "Vue d'ensemble",
-      icon: <Home className="w-5 h-5" strokeWidth={1.5} />,
+      icon: <Home className="w-5 h-5" strokeWidth={1.2} />,
       description: "Tableau de bord principal",
     },
     {
       id: "patients",
       label: "Patients",
-      icon: <Users className="w-5 h-5" strokeWidth={1.5} />,
+      icon: <Users className="w-5 h-5" strokeWidth={1.2} />,
       description: "Gestion des patients",
       badge: stats?.totalPatients,
     },
     {
       id: "planning",
       label: "Planning",
-      icon: <Calendar className="w-5 h-5" strokeWidth={1.5} />,
+      icon: <Calendar className="w-5 h-5" strokeWidth={1.2} />,
       description: "Vue calendrier",
       badge: stats?.rdvSemaine,
     },
     {
       id: "notifications",
       label: "Notifications",
-      icon: <Bell className="w-5 h-5" strokeWidth={1.5} />,
+      icon: <Bell className="w-5 h-5" strokeWidth={1.2} />,
       description: "Rappels et alertes",
       badge: stats?.soinsEnAttente,
     },
@@ -80,43 +80,43 @@ export function DashboardSidebar({
     {
       label: "Actifs",
       value: stats?.patientsActifs || 0,
-      icon: <Activity className="w-4 h-4" strokeWidth={1.5} />,
+      icon: <Activity className="w-4 h-4" strokeWidth={1.2} />,
       color: "text-green-500",
     },
     {
       label: "Urgents",
       value: stats?.patientsUrgents || 0,
-      icon: <AlertTriangle className="w-4 h-4" strokeWidth={1.5} />,
+      icon: <AlertTriangle className="w-4 h-4" strokeWidth={1.2} />,
       color: "text-red-500",
     },
     {
       label: "RDV aujourd'hui",
       value: stats?.rdvAujourdhui || 0,
-      icon: <CheckCircle className="w-4 h-4" strokeWidth={1.5} />,
+      icon: <CheckCircle className="w-4 h-4" strokeWidth={1.2} />,
       color: "text-orange-400",
     },
     {
       label: "Soins terminés",
       value: stats?.soinsTermines || 0,
-      icon: <CheckCircle className="w-4 h-4" strokeWidth={1.5} />,
+      icon: <CheckCircle className="w-4 h-4" strokeWidth={1.2} />,
       color: "text-blue-500",
     },
     {
       label: "En cours",
       value: stats?.soinsEnCours || 0,
-      icon: <Activity className="w-4 h-4" strokeWidth={1.5} />,
+      icon: <Activity className="w-4 h-4" strokeWidth={1.2} />,
       color: "text-yellow-500",
     },
     {
       label: "Âge moyen",
       value: `${stats?.patientsMoyenneAge || 0} ans`,
-      icon: <Users className="w-4 h-4" strokeWidth={1.5} />,
+      icon: <Users className="w-4 h-4" strokeWidth={1.2} />,
       color: "text-purple-500",
     },
     {
       label: "Satisfaction",
       value: `${Math.round(stats?.tauxSatisfaction || 0)}%`,
-      icon: <TrendingUp className="w-4 h-4" strokeWidth={1.5} />,
+      icon: <TrendingUp className="w-4 h-4" strokeWidth={1.2} />,
       color: "text-green-500",
     },
   ];
@@ -185,18 +185,18 @@ export function DashboardSidebar({
             >
               <motion.div
                 animate={{ rotate: isCollapsed ? 0 : 180 }}
-                transition={{ duration: 0.3, ease: "easeInOut" }}
+                transition={{ duration: 0.7, ease: "easeInOut" }}
                 className="flex items-center justify-center pointer-events-none"
               >
                 {isCollapsed ? (
                   <ChevronRight
                     className="w-5 h-5 pointer-events-none text-muted-foreground"
-                    strokeWidth={1.5}
+                    strokeWidth={2}
                   />
                 ) : (
-                  <ChevronLeft
+                  <ChevronRight
                     className="w-5 h-5 pointer-events-none text-muted-foreground"
-                    strokeWidth={1.5}
+                    strokeWidth={2}
                   />
                 )}
               </motion.div>
@@ -236,9 +236,9 @@ export function DashboardSidebar({
             >
               <Button
                 variant={activeTab === item.id ? "secondary" : "outline"}
-                className={`w-full ${
+                className={`w-full h-[45px] ${
                   isCollapsed ? "justify-center px-0" : "justify-start px-3"
-                } h-12 transition-all duration-200`}
+                } transition-all duration-200`}
                 onClick={() => onTabChange(item.id)}
               >
                 <div
@@ -279,8 +279,8 @@ export function DashboardSidebar({
                         }}
                         className="flex-1 text-left"
                       >
-                        <div className="font-medium">{item.label}</div>
-                        <div className="text-xs text-muted-foreground">
+                        <div className="font-medium text-sm md:text-[15px]">{item.label}</div>
+                        <div className="text-xs md:text-[13px] text-muted-foreground">
                           {item.description}
                         </div>
                       </motion.div>
