@@ -291,3 +291,24 @@ Un formulaire **professionnel, accessible et fonctionnel** inspiré de Medicalib
 - ✅ Sidebar récapitulative pratique
 - ✅ Code propre et maintenable
 
+Fonctionnalités à ajouter :
+📧 Notifications par email/SMS pour les rendez-vous
+📊 Statistiques avancées dans le dashboard
+🔐 Authentification des utilisateurs (patients et professionnels)
+📱 PWA (Progressive Web App) pour installation sur mobile
+🗓️ Synchronisation avec Google Calendar
+💳 Système de paiement en ligne
+
+
+Améliorations techniques :
+. Tests unitaires et d'intégration
+. Optimisation des performances (lazy loading, code splitting)
+. SEO (métadonnées, sitemap)
+. Analytics (Google Analytics, Plausible)
+. Logs et monitoring (Sentry)
+
+Améliorations UX/UI :
+. Animations GSAP 1 pour les transitions
+S. keleton loaders pendant le chargement
+. Toast notifications pour les actions utilisateur
+. Tutoriel interactif pour les nouveaux utilisateurs

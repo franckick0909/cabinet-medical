@@ -37,6 +37,14 @@ const statutLabels = {
   ANNULEE: "Annulée",
 };
 
+const statutBadgeVariants = {
+  EN_ATTENTE: "warning", // 🟡 Jaune
+  CONFIRMEE: "info", // 🔵 Bleu
+  EN_COURS: "default", // 🟣 Violet (primary)
+  TERMINEE: "success", // 🟢 Vert
+  ANNULEE: "destructive", // 🔴 Rouge
+} as const;
+
 export function DemandeCard({
   demande,
   onClick,
@@ -86,7 +94,10 @@ export function DemandeCard({
             >
               {urgenceLabels[demande.urgence]}
             </Badge>
-            <Badge variant="outline" className="text-xs">
+            <Badge
+              variant={statutBadgeVariants[demande.statut]}
+              className="text-xs"
+            >
               {statutLabels[demande.statut]}
             </Badge>
           </div>

@@ -2,7 +2,7 @@
 
 @layer base {
   :root {
-    --gradient: linear-gradient(to top, rgb(255, 5, 201), rgb(1, 195, 255));
+    --gradient: linear-gradient(to top right, #6616f0, rgb(1, 195, 255), rgb(255, 5, 124));
     --third: rgb(255, 5, 124);
     --background: rgb(248 243 250);
     --foreground: rgb(54 64 80);

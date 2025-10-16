@@ -194,17 +194,17 @@ export function DemandeModal({
           {/* Actions rapides */}
           <div className="flex gap-2 mt-4">
             <Button asChild variant="default" size="sm">
-              <a href={`tel:${demande.patient.telephone}`}>
-                <Phone className="w-4 h-4 mr-2" />
-                Appeler
+              <a href={`tel:${demande.patient.telephone}`} className="flex items-center justify-center gap-2">
+                <Phone className="w-4 h-4" />
+                <span className="hidden sm:block">Appeler</span>
               </a>
-            </Button>
+            </Button>  
             {demande.patient.email &&
               !demande.patient.email.includes("@temp.local") && (
                 <Button asChild variant="secondary" size="sm">
-                  <a href={`mailto:${demande.patient.email}`}>
-                    <Mail className="w-4 h-4 mr-2" />
-                    Email
+                  <a href={`mailto:${demande.patient.email}`} className="flex items-center justify-center gap-2">
+                    <Mail className="w-5 h-5" />
+                    <span className="hidden sm:block">Email</span>
                   </a>
                 </Button>
               )}
