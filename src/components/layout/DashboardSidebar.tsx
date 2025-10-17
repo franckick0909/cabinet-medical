@@ -11,7 +11,6 @@ import {
   Bell,
   Calendar,
   CheckCircle,
-  ChevronLeft,
   ChevronRight,
   Home,
   TrendingUp,
@@ -279,7 +278,9 @@ export function DashboardSidebar({
                         }}
                         className="flex-1 text-left"
                       >
-                        <div className="font-medium text-sm md:text-[15px]">{item.label}</div>
+                        <div className="font-medium text-sm md:text-[15px]">
+                          {item.label}
+                        </div>
                         <div className="text-xs md:text-[13px] text-muted-foreground">
                           {item.description}
                         </div>

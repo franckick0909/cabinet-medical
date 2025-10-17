@@ -327,7 +327,7 @@ function DropZoneKit({
   hour,
   demandes,
   onDemandeClick,
-  _onDrop,
+  _onDrop: _onDrop,
 }: {
   day: Date;
   hour: number;

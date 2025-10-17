@@ -74,14 +74,13 @@ export function DemandeCardKit({ demande, onClick }: DemandeCardKitProps) {
       <HoverCardTrigger asChild>
         <div
           ref={setNodeRef}
-          style={style}
-          {...listeners}
-          {...attributes}
-          className="cursor-move"
           style={{
             ...style,
             touchAction: "none", // Empêche le scroll sur cet élément
           }}
+          {...listeners}
+          {...attributes}
+          className="cursor-move"
         >
           <Badge
             variant={urgenceBadgeVariants[demande.urgence]}
