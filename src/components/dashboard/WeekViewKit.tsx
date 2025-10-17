@@ -3,18 +3,12 @@
 import { DemandeCardKit } from "@/components/dashboard/DemandeCardKit";
 import type { Demande } from "@/types/demande";
 import { useDroppable } from "@dnd-kit/core";
-import { useCallback, useState } from "react";
+import { useCallback } from "react";
 
 interface WeekViewKitProps {
   demandes: Demande[];
   weekStart: Date;
   onDemandeClick: (demande: Demande) => void;
-  onUpdate: () => void;
-  onOptimisticUpdate: (
-    demandeId: string,
-    newDate: Date,
-    newHeureRdv: string
-  ) => void;
 }
 
 const HOURS = [5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20];
@@ -23,12 +17,7 @@ export function WeekViewKit({
   demandes,
   weekStart,
   onDemandeClick,
-  onUpdate,
-  onOptimisticUpdate,
 }: WeekViewKitProps) {
-  const [isUpdating, setIsUpdating] = useState(false);
-  const [pendingUpdates, setPendingUpdates] = useState<Set<string>>(new Set());
-
   // Générer les 7 jours de la semaine à partir de weekStart
   const weekDays = Array.from({ length: 7 }, (_, i) => {
     const date = new Date(weekStart);

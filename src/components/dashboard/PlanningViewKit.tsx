@@ -164,8 +164,6 @@ export function PlanningViewKit({
         demandes={demandes}
         weekStart={weekStart}
         onDemandeClick={onDemandeClick}
-        onUpdate={onUpdate}
-        onOptimisticUpdate={onOptimisticUpdate}
       />
 
       <DragOverlay>
