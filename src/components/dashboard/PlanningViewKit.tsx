@@ -48,8 +48,8 @@ export function PlanningViewKit({
     }),
     useSensor(TouchSensor, {
       activationConstraint: {
-        delay: 100,
-        tolerance: 5,
+        delay: 50,
+        tolerance: 8,
       },
     })
   );
