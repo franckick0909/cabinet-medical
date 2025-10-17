@@ -7,7 +7,7 @@ import {
   DragEndEvent,
   DragOverlay,
   DragStartEvent,
-  PointerSensor,
+  MouseSensor,
   TouchSensor,
   useSensor,
   useSensors,
@@ -41,15 +41,15 @@ export function PlanningViewKit({
   const [activeDemande, setActiveDemande] = useState<Demande | null>(null);
 
   const sensors = useSensors(
-    useSensor(PointerSensor, {
+    useSensor(MouseSensor, {
       activationConstraint: {
-        distance: 8,
+        distance: 5,
       },
     }),
     useSensor(TouchSensor, {
       activationConstraint: {
-        delay: 50,
-        tolerance: 8,
+        delay: 0,
+        tolerance: 0,
       },
     })
   );

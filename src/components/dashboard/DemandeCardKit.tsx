@@ -78,31 +78,9 @@ export function DemandeCardKit({ demande, onClick }: DemandeCardKitProps) {
           {...listeners}
           {...attributes}
           className="cursor-move"
-          onTouchStart={(e) => {
-            // Permettre le drag sur mobile sans bloquer le scroll
-            const touch = e.touches[0];
-            if (touch) {
-              // Marquer le début d'un drag potentiel
-              e.currentTarget.setAttribute(
-                "data-touch-start",
-                `${touch.clientX},${touch.clientY}`
-              );
-            }
-          }}
-          onTouchMove={(e) => {
-            // Si on bouge assez, c'est un drag
-            const touch = e.touches[0];
-            const startData = e.currentTarget.getAttribute("data-touch-start");
-            if (touch && startData) {
-              const [startX, startY] = startData.split(",").map(Number);
-              const deltaX = Math.abs(touch.clientX - startX);
-              const deltaY = Math.abs(touch.clientY - startY);
-
-              // Si mouvement > 10px, c'est un drag
-              if (deltaX > 10 || deltaY > 10) {
-                e.preventDefault();
-              }
-            }
+          style={{
+            ...style,
+            touchAction: "none", // Empêche le scroll sur cet élément
           }}
         >
           <Badge
