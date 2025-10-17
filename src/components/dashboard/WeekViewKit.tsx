@@ -156,90 +156,6 @@ export function WeekViewKit({
     [getDemandesForDayAndHour]
   );
 
-  const handleDrop = useCallback(
-    async (demandeId: string, day: Date, hour: number) => {
-      const draggedDemande = demandes.find((d) => d.id === demandeId);
-      if (
-        !draggedDemande ||
-        isUpdating ||
-        pendingUpdates.has(draggedDemande.id)
-      )
-        return;
-
-      // Vérifier si c'est le même créneau
-      const demandeDate = draggedDemande.dateRdv
-        ? new Date(draggedDemande.dateRdv)
-        : null;
-      const isAllDay =
-        !draggedDemande.heureRdv ||
-        draggedDemande.heureRdv === "Toute la journée";
-      const heureMatch = draggedDemande.heureRdv?.match(/(\d+)h/);
-      const demandeHour = isAllDay
-        ? 0
-        : heureMatch
-        ? parseInt(heureMatch[1])
-        : null;
-
-      const isSameSlot =
-        demandeDate &&
-        demandeDate.getDate() === day.getDate() &&
-        demandeDate.getMonth() === day.getMonth() &&
-        demandeDate.getFullYear() === day.getFullYear() &&
-        demandeHour === hour;
-
-      if (isSameSlot) return;
-
-      // Créer la nouvelle date/heure
-      const newDate = new Date(day);
-      const newHeureRdv = hour === 0 ? "Toute la journée" : `${hour}h00`;
-
-      // Mise à jour optimiste
-      onOptimisticUpdate(draggedDemande.id, newDate, newHeureRdv);
-
-      // Mise à jour en base
-      setIsUpdating(true);
-      setPendingUpdates((prev) => new Set(prev).add(draggedDemande.id));
-
-      try {
-        // Utiliser fetch directement au lieu de Server Action
-        const response = await fetch("/api/demandes/update-date", {
-          method: "PATCH",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            id: draggedDemande.id,
-            dateRdv: newDate.toISOString(),
-            heureRdv: newHeureRdv,
-          }),
-        });
-
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-
-        const result = await response.json();
-
-        if (!result.success) {
-          alert(`Erreur: ${result.error}`);
-          onUpdate();
-        }
-      } catch (error) {
-        console.error("Erreur:", error);
-        alert("Erreur lors du déplacement");
-        onUpdate();
-      } finally {
-        setIsUpdating(false);
-        setPendingUpdates((prev) => {
-          const newSet = new Set(prev);
-          newSet.delete(draggedDemande.id);
-          return newSet;
-        });
-      }
-    },
-    [demandes, isUpdating, pendingUpdates, onOptimisticUpdate, onUpdate]
-  );
-
   return (
     <div className="flex flex-col h-full bg-card rounded-lg border border-border shadow-sm overflow-x-auto overflow-y-auto">
       {/* Header avec les jours */}
@@ -286,7 +202,6 @@ export function WeekViewKit({
                 hour={0}
                 demandes={getDemandesAllDay(day)}
                 onDemandeClick={onDemandeClick}
-                _onDrop={handleDrop}
               />
             );
           })}
@@ -310,7 +225,6 @@ export function WeekViewKit({
                   hour={hour}
                   demandes={getDemandesForDayAndHour(day, hour)}
                   onDemandeClick={onDemandeClick}
-                  _onDrop={handleDrop}
                 />
               );
             })}
@@ -327,13 +241,11 @@ function DropZoneKit({
   hour,
   demandes,
   onDemandeClick,
-  _onDrop: _onDrop,
 }: {
   day: Date;
   hour: number;
   demandes: Demande[];
   onDemandeClick: (demande: Demande) => void;
-  _onDrop: (demandeId: string, day: Date, hour: number) => void;
 }) {
   const { isOver, setNodeRef } = useDroppable({
     id: `drop-${day.getTime()}-${hour}`,

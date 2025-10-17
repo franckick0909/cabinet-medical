@@ -28,12 +28,8 @@ interface DashboardTabsOptimizedProps {
 
 export function DashboardTabsOptimized({
   demandes,
-  selectedDemande: _selectedDemande,
-  isModalOpen: _isModalOpen,
-  isLoading: _isLoading,
   currentWeekStart,
   onDemandeSelect,
-  onModalClose: _onModalClose,
   onWeekChange,
   onDemandeUpdate,
   onOptimisticUpdate,

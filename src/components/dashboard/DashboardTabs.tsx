@@ -23,12 +23,8 @@ type TabType = "patients" | "planning";
 
 export function DashboardTabs({
   demandes,
-  selectedDemande: _selectedDemande,
-  isModalOpen: _isModalOpen,
-  isLoading: _isLoading,
   currentWeekStart,
   onDemandeSelect,
-  onModalClose: _onModalClose,
   onWeekChange,
   onDemandeUpdate,
 }: DashboardTabsProps) {
@@ -156,7 +152,7 @@ export function DashboardTabs({
             </div>
 
             {/* Vue Semaine */}
-            {_isLoading ? (
+            {false ? (
               <div className="flex items-center justify-center h-96 bg-card rounded-lg border-border shadow-sm">
                 <div className="text-center">
                   <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
