@@ -241,7 +241,7 @@ export function WeekViewKit({
   );
 
   return (
-    <div className="flex flex-col h-full bg-card rounded-lg border border-border shadow-sm overflow-x-auto">
+    <div className="flex flex-col h-full bg-card rounded-lg border border-border shadow-sm overflow-x-auto overflow-y-auto">
       {/* Header avec les jours */}
       <div className="grid grid-cols-8 border-b border-border sticky top-0 bg-card z-10 min-w-[320px] sm:min-w-0">
         {/* Colonne des heures */}
@@ -352,14 +352,10 @@ function DropZoneKit({
   return (
     <div
       ref={setNodeRef}
-      className={`p-1 border-r border-border relative min-h-[60px] sm:min-h-[80px] touch-none ${
+      className={`p-1 border-r border-border relative min-h-[60px] sm:min-h-[80px] ${
         isToday ? "bg-primary/5" : ""
       } ${isOver ? "bg-blue-100 border-blue-300" : ""}`}
       onClick={handleClick}
-      onTouchStart={(e) => {
-        // Permettre le drop sur mobile
-        e.preventDefault();
-      }}
     >
       {/* Layout responsive avec CSS Grid */}
       <div

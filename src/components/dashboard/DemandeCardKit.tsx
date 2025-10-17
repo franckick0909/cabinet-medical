@@ -77,11 +77,7 @@ export function DemandeCardKit({ demande, onClick }: DemandeCardKitProps) {
           style={style}
           {...listeners}
           {...attributes}
-          className="cursor-move touch-none"
-          onTouchStart={(e) => {
-            // Permettre le drag sur mobile
-            e.preventDefault();
-          }}
+          className="cursor-move"
         >
           <Badge
             variant={urgenceBadgeVariants[demande.urgence]}
