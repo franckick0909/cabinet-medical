@@ -53,7 +53,7 @@ export function Header() {
 
   return (
     <>
-      <header className="fixed top-0 left-0 right-0 z-50 backdrop-blur-xl mx-2 sm:mx-4 lg:mx-auto lg:max-w-7xl h-16 sm:h-18 py-2 sm:py-4 rounded-2xl sm:rounded-full bg-primary-foreground/10 mt-2 sm:mt-4 border border-border px-3 sm:px-4 lg:px-6 xl:px-8 transition-all duration-300">
+      <header className="fixed top-0 left-0 right-0 z-50 backdrop-blur-xl mx-2 sm:mx-4 lg:mx-auto lg:max-w-7xl h-16 sm:h-18 py-2 sm:py-4 rounded-none sm:rounded-full bg-primary-foreground/10 mt-2 sm:mt-4 sm:border  border-border px-3 sm:px-4 lg:px-6 xl:px-8 transition-all duration-300">
         <div className="max-w-7xl mx-auto">
           <div className="flex items-center justify-between h-full">
             {/* Logo */}
@@ -62,19 +62,19 @@ export function Header() {
               className="flex items-center gap-2 sm:gap-3 hover:opacity-80 transition-opacity flex-shrink-0"
               onClick={closeMobileMenu}
             >
-              <div className="w-6 h-6 sm:w-8 sm:h-8 bg-gradient-to-br from-blue-500 to-blue-200 rounded-lg flex items-center justify-center">
-                <span className="text-background text-xs sm:text-sm font-bold">
+              <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-blue-200 rounded-lg flex items-center justify-center">
+                <span className="text-background text-base font-semibold">
                   H
                 </span>
               </div>
-              <span className="text-foreground font-normal text-sm sm:text-lg xl:text-2xl font-kaushan-script truncate">
-                <span className="hidden sm:inline">Cabinet Harmonie</span>
-                <span className="sm:hidden">Harmonie</span>
+              <span className="text-foreground font-normal text-2xl xl:text-2xl font-kaushan-script truncate">
+                <span className="hidden sm:inline pr-4">Cabinet Harmonie</span>
+                <span className="sm:hidden pr-4">Harmonie</span>
               </span>
             </Link>
 
             {/* Navigation Desktop */}
-            <nav className="hidden lg:flex items-center gap-4 xl:gap-8 text-sm lg:text-base xl:text-lg font-kaushan-script font-normal">
+            <nav className="hidden lg:flex items-center gap-4 xl:gap-8 font-normal text-xl xl:text-2xl font-kaushan-script">
               <Link
                 href="/"
                 className={`transition-colors hover:text-primary px-3 py-1 rounded-md ${
@@ -115,7 +115,9 @@ export function Header() {
 
               {/* Menu mobile */}
               <button
-                className="lg:hidden px-4 py-2 text-foreground/80 hover:text-primary transition-colors rounded-full hover:bg-primary/5 font-kaushan-script text-sm font-medium border border-border/50 hover:border-primary/20"
+                type="button"
+                aria-label="Ouvrir le menu mobile"
+                className="lg:hidden px-4 py-2 text-foreground/80 hover:text-primary transition-colors rounded-full hover:bg-primary/5 font-kaushan-script font-normal text-xl xl:text-2xl border border-border/50 hover:border-primary/20"
                 onClick={toggleMobileMenu}
               >
                 {isMobileMenuOpen ? "Fermer" : "Menu"}

@@ -352,10 +352,14 @@ function DropZoneKit({
   return (
     <div
       ref={setNodeRef}
-      className={`p-1 border-r border-border relative min-h-[60px] sm:min-h-[80px] ${
+      className={`p-1 border-r border-border relative min-h-[60px] sm:min-h-[80px] touch-none ${
         isToday ? "bg-primary/5" : ""
       } ${isOver ? "bg-blue-100 border-blue-300" : ""}`}
       onClick={handleClick}
+      onTouchStart={(e) => {
+        // Permettre le drop sur mobile
+        e.preventDefault();
+      }}
     >
       {/* Layout responsive avec CSS Grid */}
       <div
