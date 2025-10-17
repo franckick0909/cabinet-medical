@@ -84,6 +84,25 @@ export async function updateDemandeDate(
   heureRdv: string
 ) {
   try {
+    console.log("🔧 Server: Updating demande with:", {
+      demandeId,
+      dateRdv: dateRdv.toISOString(),
+      heureRdv,
+    });
+
+    // Vérifier que la demande existe
+    const existingDemande = await prisma.demande.findUnique({
+      where: { id: demandeId },
+    });
+
+    if (!existingDemande) {
+      console.error("❌ Server: Demande not found:", demandeId);
+      return {
+        success: false,
+        error: `Demande avec l'ID ${demandeId} introuvable`,
+      };
+    }
+
     const demande = await prisma.demande.update({
       where: { id: demandeId },
       data: {
@@ -93,15 +112,29 @@ export async function updateDemandeDate(
       include: { patient: true },
     });
 
+    console.log("✅ Server: Demande updated successfully:", demande.id);
+
+    // Retourner un objet simple sans les données complètes pour éviter les problèmes de sérialisation
     return {
       success: true,
-      data: demande,
+      data: {
+        id: demande.id,
+        dateRdv: demande.dateRdv,
+        heureRdv: demande.heureRdv,
+        patientId: demande.patient?.id,
+      },
     };
   } catch (error) {
-    console.error("Erreur lors de la mise à jour de la date:", error);
+    console.error(
+      "❌ Server: Erreur lors de la mise à jour de la date:",
+      error
+    );
     return {
       success: false,
-      error: "Impossible de mettre à jour la date",
+      error:
+        error instanceof Error
+          ? error.message
+          : "Impossible de mettre à jour la date",
     };
   }
 }

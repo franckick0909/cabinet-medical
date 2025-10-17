@@ -64,6 +64,21 @@ export default function DashboardPage() {
     loadDemandes();
   };
 
+  const handleOptimisticUpdate = (
+    demandeId: string,
+    newDate: Date,
+    newHeureRdv: string
+  ) => {
+    // Mise à jour optimiste immédiate
+    setDemandes((prevDemandes) =>
+      prevDemandes.map((demande) =>
+        demande.id === demandeId
+          ? { ...demande, dateRdv: newDate, heureRdv: newHeureRdv }
+          : demande
+      )
+    );
+  };
+
   // Ces fonctions sont maintenant gérées dans DashboardTabs
 
   return (
@@ -78,6 +93,7 @@ export default function DashboardPage() {
         onModalClose={handleModalClose}
         onWeekChange={setCurrentWeekStart}
         onDemandeUpdate={handleDemandeUpdate}
+        onOptimisticUpdate={handleOptimisticUpdate}
       />
 
       <DemandeModal

@@ -5,7 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import type { Demande } from "@/types/demande";
 import { ChevronLeft, ChevronRight, Grid3X3, List } from "lucide-react";
 import { useMemo, useState } from "react";
-import { WeekView } from "./WeekView";
+import { PlanningViewKit } from "./PlanningViewKit";
 
 interface PlanningViewProps {
   demandes: Demande[];
@@ -13,6 +13,11 @@ interface PlanningViewProps {
   onDemandeUpdate: () => void;
   currentWeekStart?: Date;
   onWeekChange?: (date: Date) => void;
+  onOptimisticUpdate: (
+    demandeId: string,
+    newDate: Date,
+    newHeureRdv: string
+  ) => void;
 }
 
 type ViewType = "week" | "month";
@@ -23,6 +28,7 @@ export function PlanningView({
   onDemandeUpdate,
   currentWeekStart,
   onWeekChange,
+  onOptimisticUpdate,
 }: PlanningViewProps) {
   const [viewType, setViewType] = useState<ViewType>("week");
   const [currentDate, setCurrentDate] = useState(
@@ -328,24 +334,17 @@ export function PlanningView({
       <div className="flex-1 overflow-auto">
         <div className="px-1 sm:px-4 py-2 sm:py-4">
           {viewType === "week" ? (
-            // Vue semaine - Utilisation de l'ancien WeekView
-            <WeekView
+            // Vue semaine - Utilisation de @dnd-kit pour un drag & drop moderne
+            <PlanningViewKit
               demandes={demandes}
-              weekStart={startDate}
+              selectedDemande={null}
+              isModalOpen={false}
+              isLoading={false}
               onDemandeClick={onDemandeSelect}
+              onModalClose={() => {}}
               onUpdate={onDemandeUpdate}
-              onOptimisticUpdate={(
-                demandeId: string,
-                newDate: Date,
-                newHeureRdv: string
-              ) => {
-                console.log(
-                  "Optimistic update:",
-                  demandeId,
-                  newDate,
-                  newHeureRdv
-                );
-              }}
+              onOptimisticUpdate={onOptimisticUpdate}
+              weekStart={startDate}
             />
           ) : (
             // Vue mois - Grille calendrier

@@ -3,7 +3,8 @@
 import { updateDemandeDate } from "@/actions/dashboard";
 import { DemandeCard } from "@/components/dashboard/DemandeCard";
 import type { Demande } from "@/types/demande";
-import { useState } from "react";
+import { gsap } from "gsap";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 interface WeekViewProps {
   demandes: Demande[];
@@ -37,6 +38,8 @@ export function WeekView({
 }: WeekViewProps) {
   const [draggedDemande, setDraggedDemande] = useState<Demande | null>(null);
   const [isUpdating, setIsUpdating] = useState(false);
+  const [pendingUpdates, setPendingUpdates] = useState<Set<string>>(new Set());
+  const dropZonesRef = useRef<Map<string, HTMLElement>>(new Map());
 
   // Générer les 7 jours de la semaine à partir de weekStart
   const weekDays = Array.from({ length: 7 }, (_, i) => {
@@ -88,80 +91,136 @@ export function WeekView({
     });
   };
 
+  // GSAP Drag & Drop handlers
   const handleDragStart = (demande: Demande) => {
     setDraggedDemande(demande);
+
+    // Highlight all drop zones
+    dropZonesRef.current.forEach((zone) => {
+      gsap.to(zone, {
+        backgroundColor: "rgba(59, 130, 246, 0.1)",
+        borderColor: "rgba(59, 130, 246, 0.3)",
+        duration: 0.2,
+      });
+    });
   };
 
   const handleDragEnd = () => {
     setDraggedDemande(null);
+
+    // Reset all drop zones
+    dropZonesRef.current.forEach((zone) => {
+      gsap.to(zone, {
+        backgroundColor: "transparent",
+        borderColor: "transparent",
+        duration: 0.2,
+      });
+    });
   };
 
-  const handleDrop = async (day: Date, hour: number) => {
-    if (!draggedDemande || isUpdating) return;
+  const handleDrop = useCallback(
+    async (day: Date, hour: number, dropZone: HTMLElement) => {
+      if (
+        !draggedDemande ||
+        isUpdating ||
+        pendingUpdates.has(draggedDemande.id)
+      )
+        return;
 
-    // Empêcher le drop si c'est déjà la même case
-    const demandeDate = draggedDemande.dateRdv
-      ? new Date(draggedDemande.dateRdv)
-      : null;
+      // Vérifier si c'est le même créneau
+      const demandeDate = draggedDemande.dateRdv
+        ? new Date(draggedDemande.dateRdv)
+        : null;
+      const isAllDay =
+        !draggedDemande.heureRdv ||
+        draggedDemande.heureRdv === "Toute la journée";
+      const heureMatch = draggedDemande.heureRdv?.match(/(\d+)h/);
+      const demandeHour = isAllDay
+        ? 0
+        : heureMatch
+        ? parseInt(heureMatch[1])
+        : null;
 
-    // Déterminer l'heure actuelle de la demande
-    const isAllDay =
-      !draggedDemande.heureRdv ||
-      draggedDemande.heureRdv === "Toute la journée";
-    const heureMatch = draggedDemande.heureRdv?.match(/(\d+)h/);
-    const demandeHour = isAllDay
-      ? 0
-      : heureMatch
-      ? parseInt(heureMatch[1])
-      : null;
+      const isSameSlot =
+        demandeDate &&
+        demandeDate.getDate() === day.getDate() &&
+        demandeDate.getMonth() === day.getMonth() &&
+        demandeDate.getFullYear() === day.getFullYear() &&
+        demandeHour === hour;
 
-    const isSameSlot =
-      demandeDate &&
-      demandeDate.getDate() === day.getDate() &&
-      demandeDate.getMonth() === day.getMonth() &&
-      demandeDate.getFullYear() === day.getFullYear() &&
-      demandeHour === hour;
-
-    if (isSameSlot) {
-      setDraggedDemande(null);
-      return;
-    }
-
-    // Créer la nouvelle date/heure
-    const newDate = new Date(day);
-    const newHeureRdv = hour === 0 ? "Toute la journée" : `${hour}h00`;
-
-    // 1. Mise à jour optimiste IMMÉDIATE (pas d'attente)
-    onOptimisticUpdate(draggedDemande.id, newDate, newHeureRdv);
-    setDraggedDemande(null);
-
-    // 2. Mise à jour en arrière-plan dans la base de données
-    setIsUpdating(true);
-    try {
-      const result = await updateDemandeDate(
-        draggedDemande.id,
-        newDate,
-        newHeureRdv
-      );
-
-      if (!result.success) {
-        // En cas d'erreur, recharger pour annuler le changement visuel
-        alert("Erreur lors du déplacement du rendez-vous");
-        onUpdate();
+      if (isSameSlot) {
+        setDraggedDemande(null);
+        return;
       }
-    } catch (error) {
-      console.error("Erreur lors du drop:", error);
-      alert("Erreur lors du déplacement du rendez-vous");
-      // Recharger pour annuler le changement visuel
-      onUpdate();
-    } finally {
-      setIsUpdating(false);
-    }
-  };
 
-  const handleDragOver = (e: React.DragEvent) => {
-    e.preventDefault();
-  };
+      // Animation de drop réussie
+      gsap.to(dropZone, {
+        scale: 1.05,
+        backgroundColor: "rgba(34, 197, 94, 0.2)",
+        duration: 0.3,
+        yoyo: true,
+        repeat: 1,
+        onComplete: () => {
+          gsap.to(dropZone, {
+            backgroundColor: "transparent",
+            duration: 0.2,
+          });
+        },
+      });
+
+      // Créer la nouvelle date/heure
+      const newDate = new Date(day);
+      const newHeureRdv = hour === 0 ? "Toute la journée" : `${hour}h00`;
+
+      // Mise à jour optimiste
+      onOptimisticUpdate(draggedDemande.id, newDate, newHeureRdv);
+      setDraggedDemande(null);
+
+      // Mise à jour en base (simplifiée)
+      setIsUpdating(true);
+      setPendingUpdates((prev) => new Set(prev).add(draggedDemande.id));
+
+      try {
+        const result = await updateDemandeDate(
+          draggedDemande.id,
+          newDate,
+          newHeureRdv
+        );
+        if (!result.success) {
+          alert(`Erreur: ${result.error}`);
+          onUpdate();
+        }
+      } catch (error) {
+        console.error("Erreur:", error);
+        alert("Erreur lors du déplacement");
+        onUpdate();
+      } finally {
+        setIsUpdating(false);
+        setPendingUpdates((prev) => {
+          const newSet = new Set(prev);
+          newSet.delete(draggedDemande.id);
+          return newSet;
+        });
+      }
+    },
+    [draggedDemande, isUpdating, pendingUpdates, onOptimisticUpdate, onUpdate]
+  );
+
+  // Écouter les événements de drop depuis GSAP
+  useEffect(() => {
+    const handleGlobalDrop = (e: Event) => {
+      const customEvent = e as CustomEvent;
+      const { day, hour, dropZone } = customEvent.detail;
+      if (draggedDemande) {
+        handleDrop(day, hour, dropZone);
+      }
+    };
+
+    window.addEventListener("gsap-drop", handleGlobalDrop);
+    return () => {
+      window.removeEventListener("gsap-drop", handleGlobalDrop);
+    };
+  }, [draggedDemande, handleDrop]);
 
   return (
     <div className="flex flex-col h-full bg-card rounded-lg border border-border shadow-sm overflow-x-auto">
@@ -226,11 +285,56 @@ export function WeekView({
           return (
             <div
               key={dayIndex}
+              ref={(el) => {
+                if (el) dropZonesRef.current.set(`allday-${dayIndex}`, el);
+              }}
+              data-drop-zone="true"
+              data-day={day.toISOString()}
+              data-hour="0"
               className={`p-1 border-r border-border relative min-h-[60px] sm:min-h-[80px] ${
                 isToday ? "bg-primary/5" : ""
-              } ${draggedDemande ? "hover:bg-primary/10" : ""}`}
-              onDrop={() => handleDrop(day, 0)}
-              onDragOver={handleDragOver}
+              }`}
+              onMouseEnter={() => {
+                if (draggedDemande) {
+                  const element = dropZonesRef.current.get(
+                    `allday-${dayIndex}`
+                  );
+                  if (element) {
+                    gsap.to(element, {
+                      backgroundColor: "rgba(59, 130, 246, 0.2)",
+                      duration: 0.2,
+                    });
+                  }
+                }
+              }}
+              onMouseLeave={() => {
+                if (draggedDemande) {
+                  const element = dropZonesRef.current.get(
+                    `allday-${dayIndex}`
+                  );
+                  if (element) {
+                    gsap.to(element, {
+                      backgroundColor: "transparent",
+                      duration: 0.2,
+                    });
+                  }
+                }
+              }}
+              onClick={() => {
+                if (draggedDemande) {
+                  const dropZone = dropZonesRef.current.get(
+                    `allday-${dayIndex}`
+                  );
+                  if (dropZone) {
+                    // Déclencher l'événement global pour GSAP
+                    window.dispatchEvent(
+                      new CustomEvent("gsap-drop", {
+                        detail: { day, hour: 0, dropZone },
+                      })
+                    );
+                  }
+                }
+              }}
             >
               {demandesAllDay.length > 0 ? (
                 <div className="flex flex-wrap gap-1">
@@ -274,11 +378,57 @@ export function WeekView({
               return (
                 <div
                   key={dayIndex}
+                  ref={(el) => {
+                    if (el)
+                      dropZonesRef.current.set(`hour-${dayIndex}-${hour}`, el);
+                  }}
+                  data-drop-zone="true"
+                  data-day={day.toISOString()}
+                  data-hour={hour.toString()}
                   className={`p-1 border-r border-border relative min-h-[60px] sm:min-h-[80px] ${
                     isToday ? "bg-primary/5" : ""
-                  } ${draggedDemande ? "hover:bg-primary/10" : ""}`}
-                  onDrop={() => handleDrop(day, hour)}
-                  onDragOver={handleDragOver}
+                  }`}
+                  onMouseEnter={() => {
+                    if (draggedDemande) {
+                      const element = dropZonesRef.current.get(
+                        `hour-${dayIndex}-${hour}`
+                      );
+                      if (element) {
+                        gsap.to(element, {
+                          backgroundColor: "rgba(59, 130, 246, 0.2)",
+                          duration: 0.2,
+                        });
+                      }
+                    }
+                  }}
+                  onMouseLeave={() => {
+                    if (draggedDemande) {
+                      const element = dropZonesRef.current.get(
+                        `hour-${dayIndex}-${hour}`
+                      );
+                      if (element) {
+                        gsap.to(element, {
+                          backgroundColor: "transparent",
+                          duration: 0.2,
+                        });
+                      }
+                    }
+                  }}
+                  onClick={() => {
+                    if (draggedDemande) {
+                      const dropZone = dropZonesRef.current.get(
+                        `hour-${dayIndex}-${hour}`
+                      );
+                      if (dropZone) {
+                        // Déclencher l'événement global pour GSAP
+                        window.dispatchEvent(
+                          new CustomEvent("gsap-drop", {
+                            detail: { day, hour, dropZone },
+                          })
+                        );
+                      }
+                    }
+                  }}
                 >
                   {demandesForSlot.length > 0 ? (
                     <div className="flex flex-wrap gap-1">

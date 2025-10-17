@@ -19,6 +19,11 @@ interface DashboardTabsOptimizedProps {
   onModalClose: () => void;
   onWeekChange: (date: Date) => void;
   onDemandeUpdate: () => void;
+  onOptimisticUpdate: (
+    demandeId: string,
+    newDate: Date,
+    newHeureRdv: string
+  ) => void;
 }
 
 export function DashboardTabsOptimized({
@@ -31,6 +36,7 @@ export function DashboardTabsOptimized({
   onModalClose: _onModalClose,
   onWeekChange,
   onDemandeUpdate,
+  onOptimisticUpdate,
 }: DashboardTabsOptimizedProps) {
   const [activeTab, setActiveTab] = useState("overview");
 
@@ -73,6 +79,7 @@ export function DashboardTabsOptimized({
             onDemandeUpdate={onDemandeUpdate}
             currentWeekStart={currentWeekStart}
             onWeekChange={onWeekChange}
+            onOptimisticUpdate={onOptimisticUpdate}
           />
         );
 
