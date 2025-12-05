@@ -4,8 +4,7 @@ import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { SplitText } from "gsap/SplitText";
-import { useRouter } from "next/navigation";
-import { useRef, useState } from "react";
+import { useRef } from "react";
 import ImageParallax from "../custom/ImageParallax";
 import { Badge } from "../ui/badge";
 import { TeamSection2 } from "./TeamSection2";
@@ -14,52 +13,10 @@ gsap.registerPlugin(useGSAP, ScrollTrigger, SplitText);
 
 export function TeamSection() {
   // Référence pour l'animation du texte
-  const router = useRouter();
   const containerRef = useRef<HTMLDivElement>(null);
   const titleRef = useRef<HTMLHeadingElement>(null);
   const description1Ref = useRef<HTMLParagraphElement>(null);
   const description2Ref = useRef<HTMLParagraphElement>(null);
-  const [hoveredInfirmiere, setHoveredInfirmiere] = useState<number | null>(
-    null
-  );
-  const infirmieres = [
-    {
-      name: "Christine LEVA",
-      specialite: "Soins généraux & Coordination",
-      experience: "15 ans",
-      image: "/hero1.png",
-      description:
-        "Responsable du cabinet, spécialisée dans la coordination des soins",
-    },
-    {
-      name: "Florence BROUARD",
-      specialite: "Soins techniques & Pédiatrie",
-      experience: "12 ans",
-      image: "/hero2.png",
-      description: "Experte en soins techniques et accompagnement pédiatrique",
-    },
-    {
-      name: "Émilie CHAPLAIN",
-      specialite: "Soins palliatifs & Gériatrie",
-      experience: "18 ans",
-      image: "/hero3.png",
-      description: "Spécialisée dans l'accompagnement des personnes âgées",
-    },
-    {
-      name: "Aude LESTRADE-CARBONNEL",
-      specialite: "Diabétologie & Soins chroniques",
-      experience: "10 ans",
-      image: "/hero4.png",
-      description: "Référente pour le suivi des pathologies chroniques",
-    },
-    {
-      name: "Hélène ROPARS",
-      specialite: "Soins post-opératoires",
-      experience: "14 ans",
-      image: "/hero5.png",
-      description: "Experte en soins post-opératoires et rééducation",
-    },
-  ];
 
   // Animation SplitText au scroll
   useGSAP(() => {

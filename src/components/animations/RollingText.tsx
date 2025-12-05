@@ -28,7 +28,7 @@ interface RollingTextProps {
   className?: string;
   fontSize?: string;
   letterSpacing?: string;
-  textTransform?: string;
+  textTransform?: "none" | "capitalize" | "uppercase" | "lowercase";
   color?: string;
   finalColor?: string;
   lineHeight?: number;
@@ -40,6 +40,7 @@ interface RollingTextProps {
 export const RollingText: React.FC<RollingTextProps> = ({
   children,
   as = "h1",
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   repeatCount = 8,
   duration = 4,
   ease = "power4.inOut",
@@ -54,9 +55,9 @@ export const RollingText: React.FC<RollingTextProps> = ({
   start = "top 80%",
   end = "top 20%",
 }) => {
-  const textRef = useRef<HTMLElement>(null);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const textRef = useRef<any>(null);
   const containerRef = useRef<HTMLDivElement>(null);
-  const timelineRef = useRef<gsap.core.Timeline | null>(null);
   const scrollTriggerRef = useRef<ScrollTrigger | null>(null);
 
   useGSAP(

@@ -18,57 +18,6 @@ const pagesLinks = [
   { name: "Infos Pratiques", href: "#infos" },
 ];
 
-// Magnetic Link Component
-const MagneticLink = ({ href, children, className }: { href: string, children: React.ReactNode, className?: string }) => {
-    const linkRef = useRef<HTMLAnchorElement>(null);
-    const textRef = useRef<HTMLSpanElement>(null);
-
-    useGSAP(() => {
-        const link = linkRef.current;
-        const text = textRef.current;
-        if (!link || !text) return;
-
-        const xTo = gsap.quickTo(link, "x", { duration: 1, ease: "elastic.out(1, 0.3)" });
-        const yTo = gsap.quickTo(link, "y", { duration: 1, ease: "elastic.out(1, 0.3)" });
-        
-        const textXTo = gsap.quickTo(text, "x", { duration: 1, ease: "elastic.out(1, 0.3)" });
-        const textYTo = gsap.quickTo(text, "y", { duration: 1, ease: "elastic.out(1, 0.3)" });
-
-        const handleMouseMove = (e: MouseEvent) => {
-            const { clientX, clientY } = e;
-            const { left, top, width, height } = link.getBoundingClientRect();
-            const x = clientX - (left + width / 2);
-            const y = clientY - (top + height / 2);
-
-            xTo(x * 0.3);
-            yTo(y * 0.3);
-            textXTo(x * 0.1);
-            textYTo(y * 0.1);
-        };
-
-        const handleMouseLeave = () => {
-            xTo(0);
-            yTo(0);
-            textXTo(0);
-            textYTo(0);
-        };
-
-        link.addEventListener("mousemove", handleMouseMove);
-        link.addEventListener("mouseleave", handleMouseLeave);
-
-        return () => {
-            link.removeEventListener("mousemove", handleMouseMove);
-            link.removeEventListener("mouseleave", handleMouseLeave);
-        };
-    }, { scope: linkRef });
-
-    return (
-        <Link ref={linkRef} href={href} className={cn("relative inline-block p-4", className)}>
-            <span ref={textRef} className="relative z-10 block">{children}</span>
-        </Link>
-    );
-};
-
 export default function HarmonieHeader() {
   const headerRef = useRef<HTMLElement>(null);
   const menuRef = useRef<HTMLDivElement>(null);
@@ -326,7 +275,7 @@ export default function HarmonieHeader() {
                       Connexion
                     </Link>
                     <Link href="/register" onClick={toggleMenu} className="text-sm uppercase tracking-widest border-b border-white/30 pb-1 hover:text-[#C8D96F] hover:border-[#C8D96F] transition-colors">
-                      S'inscrire
+                      S&apos;inscrire
                     </Link>
                   </div>
                 </div>

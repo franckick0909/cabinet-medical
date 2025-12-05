@@ -41,7 +41,7 @@ export const PerformanceMonitor: React.FC<{ visible?: boolean }> = ({
       const elapsed = currentTime - lastTime;
 
       if (elapsed >= 1000) {
-        const nav = navigator as any;
+        const nav = navigator as Navigator & { deviceMemory?: number };
         const newMetrics: PerformanceMetrics = {
           fps: frameCount,
           memory: {

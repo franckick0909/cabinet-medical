@@ -35,7 +35,6 @@ export function FancyButton({
   iconPosition = "left",
   href,
   target = "_self",
-  rel = "noopener noreferrer",
 }: FancyButtonProps) {
   const handleClick = () => {
     if (disabled) return;

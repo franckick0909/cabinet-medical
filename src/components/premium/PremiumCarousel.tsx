@@ -3,6 +3,7 @@
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import Image from "next/image";
 import { useRef } from "react";
 
 gsap.registerPlugin(ScrollTrigger);
@@ -24,7 +25,6 @@ export default function PremiumCarousel() {
     if (!slider) return;
 
     // Infinite Marquee
-    const totalWidth = slider.scrollWidth;
     const duration = 20; // seconds for one full loop
 
     gsap.to(slider, {
@@ -67,10 +67,12 @@ export default function PremiumCarousel() {
               key={index}
               className="relative w-[300px] md:w-[450px] aspect-[4/3] rounded-2xl overflow-hidden shadow-lg"
             >
-              <img
+              <Image
                 src={src}
                 alt={`Gallery ${index}`}
-                className="w-full h-full object-cover hover:scale-110 transition-transform duration-700"
+                fill
+                className="object-cover hover:scale-110 transition-transform duration-700"
+                sizes="(max-width: 768px) 300px, 450px"
               />
             </div>
           ))}

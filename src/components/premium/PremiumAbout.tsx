@@ -37,7 +37,7 @@ export default function PremiumAbout() {
             </PremiumTextReveal>
             
             <h2 className="text-4xl md:text-6xl font-bold text-foreground mb-8 leading-tight">
-              <PremiumTextReveal>L'HUMAIN AU</PremiumTextReveal>
+              <PremiumTextReveal>L&apos;HUMAIN AU</PremiumTextReveal>
               <PremiumTextReveal className="italic font-serif text-primary">CŒUR DU SOIN</PremiumTextReveal>
             </h2>
 
@@ -46,7 +46,7 @@ export default function PremiumAbout() {
                 Ensemble, nous assurons des soins de qualité supérieure, tant au sein de notre cabinet que directement à votre domicile. Chacune de nos infirmières possède une spécialité qui lui permet de répondre précisément à vos besoins spécifiques.
               </p>
               <p>
-                Que ce soit pour des soins techniques, des suivis chroniques, des soins palliatifs, ou de la rééducation, notre équipe s'engage à vous offrir un service personnalisé avec empathie et professionnalisme.
+                Que ce soit pour des soins techniques, des suivis chroniques, des soins palliatifs, ou de la rééducation, notre équipe s&apos;engage à vous offrir un service personnalisé avec empathie et professionnalisme.
               </p>
             </div>
 
@@ -57,7 +57,7 @@ export default function PremiumAbout() {
               </div>
               <div>
                 <div className="text-5xl font-serif text-primary mb-2">10+</div>
-                <div className="text-sm uppercase tracking-wider text-muted-foreground">Années d'Expérience</div>
+                <div className="text-sm uppercase tracking-wider text-muted-foreground">Années d&apos;Expérience</div>
               </div>
             </div>
           </div>

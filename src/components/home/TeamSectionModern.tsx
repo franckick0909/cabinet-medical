@@ -218,7 +218,7 @@ export function TeamSectionModern() {
                 </p>
                 <div className="h-px w-16 bg-primary/30 my-6" />
                 <p className="font-medium text-foreground">
-                  "L&apos;humain au cœur du soin."
+                  &quot;L&apos;humain au cœur du soin.&quot;
                 </p>
               </div>
             </div>

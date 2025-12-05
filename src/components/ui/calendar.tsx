@@ -9,7 +9,41 @@ import {
 import { DayButton, DayPicker, getDefaultClassNames } from "react-day-picker"
 
 import { cn } from "@/lib/utils"
-import { Button, buttonVariants } from "@/components/custom/Button"
+
+// Simple button component for calendar (without framer-motion)
+const CalendarButton = React.forwardRef<
+  HTMLButtonElement,
+  React.ButtonHTMLAttributes<HTMLButtonElement> & {
+    variant?: "ghost" | "outline"
+    size?: "icon" | "sm" | "md"
+  }
+>(({ className, variant = "ghost", size = "md", ...props }, ref) => {
+  return (
+    <button
+      ref={ref}
+      className={cn(
+        "inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50",
+        variant === "ghost" && "hover:bg-accent hover:text-accent-foreground",
+        variant === "outline" && "border border-input bg-background hover:bg-accent hover:text-accent-foreground",
+        size === "icon" && "h-9 w-9",
+        size === "sm" && "h-8 px-3 text-xs",
+        size === "md" && "h-9 px-4 py-2",
+        className
+      )}
+      {...props}
+    />
+  )
+})
+CalendarButton.displayName = "CalendarButton"
+
+// Simple buttonVariants function for calendar
+const calendarButtonVariants = ({ variant = "ghost" }: { variant?: "ghost" | "outline" } = {}) => {
+  return cn(
+    "inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50",
+    variant === "ghost" && "hover:bg-accent hover:text-accent-foreground",
+    variant === "outline" && "border border-input bg-background hover:bg-accent hover:text-accent-foreground"
+  )
+}
 
 function Calendar({
   className,
@@ -21,7 +55,7 @@ function Calendar({
   components,
   ...props
 }: React.ComponentProps<typeof DayPicker> & {
-  buttonVariant?: React.ComponentProps<typeof Button>["variant"]
+  buttonVariant?: "ghost" | "outline"
 }) {
   const defaultClassNames = getDefaultClassNames()
 
@@ -52,12 +86,12 @@ function Calendar({
           defaultClassNames.nav
         ),
         button_previous: cn(
-          buttonVariants({ variant: buttonVariant }),
+          calendarButtonVariants({ variant: buttonVariant }),
           "h-[--cell-size] w-[--cell-size] select-none p-0 aria-disabled:opacity-50",
           defaultClassNames.button_previous
         ),
         button_next: cn(
-          buttonVariants({ variant: buttonVariant }),
+          calendarButtonVariants({ variant: buttonVariant }),
           "h-[--cell-size] w-[--cell-size] select-none p-0 aria-disabled:opacity-50",
           defaultClassNames.button_next
         ),
@@ -186,7 +220,7 @@ function CalendarDayButton({
   }, [modifiers.focused])
 
   return (
-    <Button
+    <CalendarButton
       ref={ref}
       variant="ghost"
       size="icon"

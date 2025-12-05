@@ -12,7 +12,7 @@ export default function PremiumFooter() {
             CABINET<span className="text-teal-500">MEDICAL</span>
           </h2>
           <p className="text-slate-400 max-w-md leading-relaxed">
-            Votre santé mérite l'excellence. Nous nous engageons à fournir des soins de qualité supérieure dans un environnement moderne et apaisant.
+            Votre santé mérite l&apos;excellence. Nous nous engageons à fournir des soins de qualité supérieure dans un environnement moderne et apaisant.
           </p>
         </div>
 

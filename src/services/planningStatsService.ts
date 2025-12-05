@@ -102,8 +102,6 @@ export async function updatePlanningStats(): Promise<PlanningStatsData> {
   });
 
   // Sauvegarder les statistiques dans la base de données
-  const dateKey = aujourdhui.toISOString().split("T")[0]; // Format YYYY-MM-DD
-
   await prisma.planningStats.upsert({
     where: { date: aujourdhui },
     update: {

@@ -20,7 +20,7 @@ export default function PremiumContact() {
             <div className="space-y-8 text-lg text-muted-foreground mb-12">
               <p>
                 Nous sommes disponibles 7j/7 pour vos soins à domicile ou au cabinet.
-                N'hésitez pas à nous contacter pour toute demande.
+                N&apos;hésitez pas à nous contacter pour toute demande.
               </p>
               
               <div className="space-y-2">

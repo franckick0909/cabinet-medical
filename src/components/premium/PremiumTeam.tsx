@@ -64,7 +64,7 @@ export default function PremiumTeam() {
       <div className="container mx-auto px-6">
         <div className="text-center mb-20">
           <PremiumTextReveal className="text-sm font-medium tracking-widest uppercase text-primary mb-6 mx-auto">
-            L'Équipe
+            L&apos;Équipe
           </PremiumTextReveal>
           <h2 className="text-4xl md:text-6xl font-bold text-foreground leading-tight mx-auto">
             <PremiumTextReveal>VOS EXPERTES</PremiumTextReveal>

@@ -78,7 +78,7 @@ export default function HarmonieLocation() {
                 </div>
                 <div>
                     <h3 className="text-3xl font-cormorant-garamond mb-2 text-black">Maison de Santé</h3>
-                    <p className="text-neutral-600 font-medium">Place des Droits de l'Homme<br/>24300 Nontron</p>
+                    <p className="text-neutral-600 font-medium">Place des Droits de l&apos;Homme<br/>24300 Nontron</p>
                 </div>
             </div>
 

@@ -657,7 +657,7 @@ export function PatientTableOptimized({
                                   : "outlined"
                               }
                               className="text-[10px] px-1.5"
-                              title={`Statut: ${getStatutLabel({ ...historyPatient, estUrgent: false, estActif: true, prochainRdv: null } as any)}`} // Approximation for tooltip
+                              title={`Statut: ${soin.statut}`}
                             >
                               {soin.statut === "TERMINEE" ? (
                                 <CheckCircle className="w-3 h-3" />

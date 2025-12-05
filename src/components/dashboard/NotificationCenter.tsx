@@ -452,7 +452,7 @@ export function NotificationCenter({
                           {rule.channels.map((channel) => (
                             <Badge
                               key={channel}
-                              variant="outline"
+                              variant="outlined"
                               className="text-xs"
                             >
                               {channel === "sms" ? "SMS" : "Email"}

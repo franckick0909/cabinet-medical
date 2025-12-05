@@ -74,8 +74,7 @@ export function DashboardSidebar({
   onTabChange,
   stats,
 }: DashboardSidebarProps) {
-  const { isCollapsed, toggleSidebar, isMobileMenuOpen, toggleMobileMenu } =
-    useSidebar();
+  const { isCollapsed, toggleSidebar } = useSidebar();
   const { isDesktop } = useBreakpoint();
 
   const menuItems = [

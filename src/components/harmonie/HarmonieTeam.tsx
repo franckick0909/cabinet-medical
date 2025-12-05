@@ -34,7 +34,7 @@ export default function HarmonieTeam() {
         
         <div className="flex flex-col md:flex-row justify-between items-end mb-24 gap-8">
             <div>
-                <TextReveal className="block text-xs font-medium uppercase tracking-[0.2em] text-[#2D5F4F] mb-6">L'Équipe</TextReveal>
+                <TextReveal className="block text-xs font-medium uppercase tracking-[0.2em] text-[#2D5F4F] mb-6">L&apos;Équipe</TextReveal>
                 <h2 className="text-5xl md:text-7xl font-cormorant-garamond font-light leading-none">
                     <TextReveal>Vos</TextReveal>
                     <TextReveal className="italic text-[#C8D96F]">Soignantes.</TextReveal>

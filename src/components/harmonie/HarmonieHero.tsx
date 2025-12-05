@@ -85,7 +85,7 @@ export default function HarmonieHero() {
           {/* Main Title - Large and centered */}
           <div className="mb-16 overflow-hidden">
             <h1 className="hero-title text-[clamp(4rem,12vw,14rem)] font-cormorant-garamond font-light leading-[0.9] tracking-tight text-[#1a1a1a]">
-              L'Harmonie
+              L&apos;Harmonie
               <br />
               <span className="italic text-[#2D5F4F]">du Soin.</span>
             </h1>
@@ -131,11 +131,11 @@ export default function HarmonieHero() {
               <div className="grid grid-cols-2 gap-8">
                 <div className="space-y-2">
                   <div className="text-5xl font-cormorant-garamond font-bold text-[#2D5F4F]">15+</div>
-                  <p className="text-sm text-neutral-600 leading-relaxed">Années d'expérience cumulée</p>
+                  <p className="text-sm text-neutral-600 leading-relaxed">Années d&apos;expérience cumulée</p>
                 </div>
                 <div className="space-y-2">
                   <div className="text-5xl font-cormorant-garamond font-bold text-[#2D5F4F]">5</div>
-                  <p className="text-sm text-neutral-600 leading-relaxed">Infirmières diplômées d'état</p>
+                  <p className="text-sm text-neutral-600 leading-relaxed">Infirmières diplômées d&apos;état</p>
                 </div>
               </div>
 

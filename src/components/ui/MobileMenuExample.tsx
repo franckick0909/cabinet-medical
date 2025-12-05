@@ -29,8 +29,6 @@ export function MobileMenuExample() {
       <SlideMobileMenu
         isOpen={isMenuOpen}
         onClose={() => setIsMenuOpen(false)}
-        showModeToggle={true}
-        hideOnDesktop={true}
       />
     </>
   );

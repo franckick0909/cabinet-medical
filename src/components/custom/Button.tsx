@@ -41,7 +41,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   ) => {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const _ = asChild;
-    const [isHovered, setIsHovered] = useState(false);
+    const [, setIsHovered] = useState(false);
 
     // Classes de base
     const baseClasses =

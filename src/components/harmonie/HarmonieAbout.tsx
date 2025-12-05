@@ -88,7 +88,7 @@ export default function HarmonieAbout() {
                     Notre Philosophie
                 </span>
                 <h2 className="reveal-text text-5xl md:text-7xl lg:text-8xl font-cormorant-garamond font-light leading-[0.9] mb-12">
-                    Plus qu'un soin,<br/> 
+                    Plus qu&apos;un soin,<br/> 
                     <span className="italic text-[#C8D96F]">une rencontre humaine.</span>
                 </h2>
                 <p className="reveal-text text-xl md:text-2xl font-light leading-relaxed text-neutral-600 max-w-3xl mx-auto">
@@ -111,7 +111,7 @@ export default function HarmonieAbout() {
                         className="object-cover"
                     />
                     <div className="absolute bottom-6 left-6 bg-white/90 backdrop-blur p-4 max-w-[200px] rounded-lg shadow-lg z-10">
-                        <p className="font-cormorant-garamond italic text-lg text-[#2D5F4F]">"L'écoute est le premier soin."</p>
+                        <p className="font-cormorant-garamond italic text-lg text-[#2D5F4F]">&quot;L&apos;écoute est le premier soin.&quot;</p>
                     </div>
                 </div>
             </div>
@@ -121,7 +121,7 @@ export default function HarmonieAbout() {
                 
                 {/* Block 1 */}
                 <div className="reveal-text">
-                    <h3 className="text-4xl font-cormorant-garamond italic mb-6 text-[#2D5F4F]">L'Expertise Technique</h3>
+                    <h3 className="text-4xl font-cormorant-garamond italic mb-6 text-[#2D5F4F]">L&apos;Expertise Technique</h3>
                     <p className="text-lg font-light leading-relaxed text-neutral-600 mb-8">
                         Nos infirmières sont formées aux techniques les plus récentes. 
                         De la gestion de la douleur aux soins palliatifs, en passant par le suivi des maladies chroniques, 
@@ -157,7 +157,7 @@ export default function HarmonieAbout() {
 
                 {/* Block 3 */}
                 <div className="reveal-text">
-                    <h3 className="text-4xl font-cormorant-garamond italic mb-6 text-[#2D5F4F]">L'Accompagnement</h3>
+                    <h3 className="text-4xl font-cormorant-garamond italic mb-6 text-[#2D5F4F]">L&apos;Accompagnement</h3>
                     <p className="text-lg font-light leading-relaxed text-neutral-600">
                         Au-delà du soin technique, nous sommes là pour rassurer, expliquer et soutenir. 
                         Nous travaillons en étroite collaboration avec votre médecin traitant et les autres professionnels de santé 

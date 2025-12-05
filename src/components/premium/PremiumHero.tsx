@@ -52,7 +52,7 @@ export default function PremiumHero() {
           </PremiumTextReveal>
           
           <h1 className="text-6xl md:text-8xl lg:text-9xl font-bold tracking-tighter text-foreground mb-8 leading-[0.9]">
-            <PremiumTextReveal delay={0.1}>L'EXCELLENCE</PremiumTextReveal>
+            <PremiumTextReveal delay={0.1}>L&apos;EXCELLENCE</PremiumTextReveal>
             <PremiumTextReveal delay={0.2} className="text-primary italic font-serif">DU SOIN</PremiumTextReveal>
             <PremiumTextReveal delay={0.3}>À DOMICILE</PremiumTextReveal>
           </h1>

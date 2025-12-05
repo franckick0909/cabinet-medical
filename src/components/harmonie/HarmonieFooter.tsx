@@ -74,7 +74,7 @@ export default function HarmonieFooter() {
                             <MagneticLink href="#hero" className="text-3xl md:text-4xl font-cormorant-garamond italic hover:text-[#C8D96F] transition-colors">Accueil</MagneticLink>
                             <MagneticLink href="#about" className="text-3xl md:text-4xl font-cormorant-garamond italic hover:text-[#C8D96F] transition-colors">Le Cabinet</MagneticLink>
                             <MagneticLink href="#services" className="text-3xl md:text-4xl font-cormorant-garamond italic hover:text-[#C8D96F] transition-colors">Expertises</MagneticLink>
-                            <MagneticLink href="#team" className="text-3xl md:text-4xl font-cormorant-garamond italic hover:text-[#C8D96F] transition-colors">L'Équipe</MagneticLink>
+                            <MagneticLink href="#team" className="text-3xl md:text-4xl font-cormorant-garamond italic hover:text-[#C8D96F] transition-colors">L&apos;Équipe</MagneticLink>
                         </div>
                     </div>
 

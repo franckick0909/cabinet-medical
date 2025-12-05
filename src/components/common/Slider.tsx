@@ -34,18 +34,6 @@ export function Slider({ slides, onSlideChange }: SliderProps) {
     onSlideChange?.(realIndex);
   };
 
-  const goToPrevious = () => {
-    if (swiperRef.current) {
-      swiperRef.current.slidePrev();
-    }
-  };
-
-  const goToNext = () => {
-    if (swiperRef.current) {
-      swiperRef.current.slideNext();
-    }
-  };
-
   return (
     <div className="w-full relative">
       {/* Slider container - Format portrait comme MyHealthPrac */}

@@ -57,7 +57,7 @@ Cabinet Médical`;
       throw new Error(`Telegram API error: ${errorData.description}`);
     }
 
-    const result = await response.json();
+    await response.json();
     console.log("✅ Notification Telegram envoyée avec succès");
     return { success: true, message: "Notification Telegram envoyée" };
   } catch (error) {
