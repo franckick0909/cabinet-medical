@@ -53,6 +53,25 @@ model Demande {
   updatedAt DateTime @updatedAt
 }
 
+// Nouveau modèle pour les statistiques de planning
+model PlanningStats {
+  id String @id @default(cuid())
+
+  // Période
+  date DateTime @unique // Date unique pour chaque jour
+  type String // "jour", "semaine", "mois"
+
+  // Compteurs
+  totalPatients        Int @default(0)
+  patientsAujourdhui   Int @default(0)
+  patientsCetteSemaine Int @default(0)
+  patientsCeMois       Int @default(0)
+
+  // Métadonnées
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
 enum Urgence {
   FAIBLE
   NORMALE

@@ -8,20 +8,10 @@ export {
   CardHeader,
   CardTitle,
 } from "./Card";
-export { Checkbox } from "./Checkbox";
+export { GroupCheckbox } from "./GroupCheckbox";
+export { GroupRadio } from "./GroupRadio";
+export { default as ImageParallax } from "./ImageParallax";
 export { Input } from "./Input";
-export {
-  Modal,
-  ModalClose,
-  ModalContent,
-  ModalDescription,
-  ModalFooter,
-  ModalHeader,
-  ModalOverlay,
-  ModalPortal,
-  ModalTitle,
-  ModalTrigger,
-} from "./Modal";
 export {
   Select,
   SelectContent,
@@ -34,4 +24,5 @@ export {
   SelectTrigger,
   SelectValue,
 } from "./Select";
+export { SimpleModal } from "./SimpleModal";
 export { Textarea } from "./Textarea";

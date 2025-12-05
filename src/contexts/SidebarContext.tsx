@@ -1,44 +1,47 @@
 "use client";
 
-import { useBreakpoint } from "@/hooks/useMediaQuery";
-import {
-  createContext,
-  ReactNode,
-  useContext,
-  useEffect,
-  useState,
-} from "react";
+import { createContext, useContext, useState } from "react";
 
 interface SidebarContextType {
+  isOpen: boolean;
+  toggle: () => void;
+  open: () => void;
+  close: () => void;
+  // Pour le Dashboard
   isCollapsed: boolean;
-  setIsCollapsed: (collapsed: boolean) => void;
   toggleSidebar: () => void;
+  isMobileMenuOpen: boolean;
+  toggleMobileMenu: () => void;
 }
 
-const SidebarContext = createContext<SidebarContextType | undefined>(undefined);
+const SidebarContext = createContext<SidebarContextType | undefined>(
+  undefined
+);
 
-export function SidebarProvider({ children }: { children: ReactNode }) {
+export function SidebarProvider({ children }: { children: React.ReactNode }) {
+  const [isOpen, setIsOpen] = useState(false);
   const [isCollapsed, setIsCollapsed] = useState(false);
-  const { isDesktop } = useBreakpoint();
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
-  // Fermer automatiquement le sidebar sur les écrans moyens et petits
-  useEffect(() => {
-    if (!isDesktop) {
-      setIsCollapsed(true);
-    }
-    // Sur desktop, laisser l'utilisateur contrôler l'état du sidebar
-  }, [isDesktop]);
+  const toggle = () => setIsOpen((prev) => !prev);
+  const open = () => setIsOpen(true);
+  const close = () => setIsOpen(false);
 
-  const toggleSidebar = () => {
-    // Permettre le toggle seulement sur desktop
-    if (isDesktop) {
-      setIsCollapsed(!isCollapsed);
-    }
-  };
+  const toggleSidebar = () => setIsCollapsed((prev) => !prev);
+  const toggleMobileMenu = () => setIsMobileMenuOpen((prev) => !prev);
 
   return (
     <SidebarContext.Provider
-      value={{ isCollapsed, setIsCollapsed, toggleSidebar }}
+      value={{
+        isOpen,
+        toggle,
+        open,
+        close,
+        isCollapsed,
+        toggleSidebar,
+        isMobileMenuOpen,
+        toggleMobileMenu,
+      }}
     >
       {children}
     </SidebarContext.Provider>
@@ -52,3 +55,4 @@ export function useSidebar() {
   }
   return context;
 }
+

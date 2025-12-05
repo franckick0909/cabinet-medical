@@ -1,6 +1,6 @@
 "use client";
 
-import { Checkbox } from "@/components/custom/Checkbox";
+import { GroupCheckbox } from "@/components/custom/GroupCheckbox";
 
 interface FilterSidebarProps {
   onFilterChange: (filters: { urgence: string[]; statut: string[] }) => void;
@@ -33,25 +33,30 @@ export function FilterSidebar({}: FilterSidebarProps) {
   };
 
   return (
-    <div className="bg-white rounded-lg border-2 border-gray-200 p-4 space-y-6">
+    <div className="material-card bg-surface text-on-surface elevation-1 rounded-xl p-6 space-y-6">
       <div>
-        <h3 className="text-lg font-semibold text-gray-900 mb-3">🔍 Filtres</h3>
+        <h3 className="title-large text-on-surface mb-4">🔍 Filtres</h3>
       </div>
 
       {/* Filtre par Urgence */}
       <div>
-        <h4 className="text-sm font-medium text-gray-700 mb-2">
+        <h4 className="label-large text-on-surface-variant mb-3">
           Niveau d&apos;urgence
         </h4>
-        <div className="space-y-2">
+        <div className="space-y-3">
           {urgenceOptions.map((option) => (
-            <div key={option.value} className="flex items-center space-x-2">
-              <Checkbox
+            <div
+              key={option.value}
+              className="flex items-center space-x-3 py-1"
+            >
+              <GroupCheckbox
                 onCheckedChange={(checked) =>
                   handleUrgenceChange(option.value, !!checked)
                 }
               />
-              <label className="text-sm">{option.label}</label>
+              <label className="body-medium text-on-surface cursor-pointer transition-colors duration-material-short2 hover:text-primary">
+                {option.label}
+              </label>
             </div>
           ))}
         </div>
@@ -59,27 +64,32 @@ export function FilterSidebar({}: FilterSidebarProps) {
 
       {/* Filtre par Statut */}
       <div>
-        <h4 className="text-sm font-medium text-gray-700 mb-2">Statut</h4>
-        <div className="space-y-2">
+        <h4 className="label-large text-on-surface-variant mb-3">Statut</h4>
+        <div className="space-y-3">
           {statutOptions.map((option) => (
-            <div key={option.value} className="flex items-center space-x-2">
-              <Checkbox
+            <div
+              key={option.value}
+              className="flex items-center space-x-3 py-1"
+            >
+              <GroupCheckbox
                 onCheckedChange={(checked) =>
                   handleStatutChange(option.value, !!checked)
                 }
               />
-              <label className="text-sm">{option.label}</label>
+              <label className="body-medium text-on-surface cursor-pointer transition-colors duration-material-short2 hover:text-primary">
+                {option.label}
+              </label>
             </div>
           ))}
         </div>
       </div>
 
       {/* Statistiques rapides */}
-      <div className="pt-4 border-t border-gray-200">
-        <h4 className="text-sm font-medium text-gray-700 mb-2">
+      <div className="pt-6 border-t border-outline-variant">
+        <h4 className="label-large text-on-surface-variant mb-3">
           📊 Statistiques
         </h4>
-        <div className="text-xs text-gray-600 space-y-1">
+        <div className="body-small text-on-surface-variant space-y-1">
           <p>Cette fonctionnalité sera disponible prochainement.</p>
         </div>
       </div>

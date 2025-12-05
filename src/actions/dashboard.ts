@@ -44,6 +44,24 @@ export async function getDemandes(filters?: {
       },
     });
 
+    console.log("🔍 getDemandes - Filtres:", filters);
+    console.log("🔍 getDemandes - Where clause:", where);
+    console.log(
+      "🔍 getDemandes - Nombre de demandes trouvées:",
+      demandes.length
+    );
+    console.log(
+      "🔍 getDemandes - Demandes:",
+      demandes.map((d) => ({
+        id: d.id,
+        typeSoin: d.typeSoin,
+        dateRdv: d.dateRdv,
+        heureRdv: d.heureRdv,
+        statut: d.statut,
+        patient: `${d.patient.prenom} ${d.patient.nom}`,
+      }))
+    );
+
     return {
       success: true,
       data: demandes,
@@ -64,6 +82,58 @@ export async function updateDemandeStatut(demandeId: string, statut: Statut) {
       data: { statut },
       include: { patient: true },
     });
+
+    // Envoyer les notifications si la demande est confirmée
+    if (statut === "CONFIRMEE" && demande.dateRdv && demande.patient.email) {
+      try {
+        console.log("🎉 Demande confirmée, envoi des notifications...");
+        console.log("📋 Détails de la demande:", {
+          patientName: `${demande.patient.prenom} ${demande.patient.nom}`,
+          patientEmail: demande.patient.email,
+          dateRdv: demande.dateRdv,
+          heureRdv: demande.heureRdv,
+          typeSoin: demande.typeSoin,
+        });
+
+        const { sendAppointmentValidationNotifications } = await import(
+          "./notifications"
+        );
+
+        const appointmentDate = demande.dateRdv.toLocaleDateString("fr-FR", {
+          weekday: "long",
+          year: "numeric",
+          month: "long",
+          day: "numeric",
+        });
+
+        const appointmentTime = demande.heureRdv || "Non spécifié";
+        const patientName = `${demande.patient.prenom} ${demande.patient.nom}`;
+
+        console.log("📤 Appel de sendAppointmentValidationNotifications...");
+        await sendAppointmentValidationNotifications(
+          patientName,
+          demande.patient.email,
+          appointmentDate,
+          appointmentTime,
+          demande.typeSoin
+        );
+
+        console.log("✅ Notifications envoyées avec succès");
+      } catch (notificationError) {
+        console.error(
+          "❌ Erreur lors de l'envoi des notifications:",
+          notificationError
+        );
+        // On ne fait pas échouer la mise à jour du statut si les notifications échouent
+      }
+    } else {
+      console.log("⚠️ Notifications non envoyées:", {
+        statut,
+        hasDateRdv: !!demande.dateRdv,
+        hasEmail: !!demande.patient.email,
+        patientEmail: demande.patient.email,
+      });
+    }
 
     return {
       success: true,

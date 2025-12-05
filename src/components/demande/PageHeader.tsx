@@ -48,7 +48,7 @@ export function PageHeader({
                 <div key={stepName} className="flex items-center">
                   <div className="flex items-center gap-2">
                     <Badge
-                      variant={isCompleted ? "default" : "outline"}
+                      variant={isCompleted ? "filled" : "outlined"}
                       className={`w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center p-0 text-sm sm:text-base transition-all duration-300 ${
                         isCompleted ? "bg-primary hover:bg-primary" : "border-2"
                       }`}

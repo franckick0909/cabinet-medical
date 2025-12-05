@@ -6,16 +6,45 @@ import { useSidebar } from "@/contexts/SidebarContext";
 import { useBreakpoint } from "@/hooks/useMediaQuery";
 import { AnimatePresence, motion } from "framer-motion";
 import {
-  Activity,
-  AlertTriangle,
-  Bell,
-  Calendar,
-  CheckCircle,
-  ChevronRight,
-  Home,
-  TrendingUp,
-  Users,
+    Bell,
+    Calendar,
+    ChevronRight,
+    Home,
+    TrendingUp,
+    Users,
 } from "lucide-react";
+import Link from "next/link";
+
+// Fonction pour obtenir le numéro de semaine
+function getWeekNumber(date: Date): number {
+  const start = new Date(date.getFullYear(), 0, 1);
+  const days = Math.floor(
+    (date.getTime() - start.getTime()) / (24 * 60 * 60 * 1000)
+  );
+  return Math.ceil((days + start.getDay() + 1) / 7);
+}
+
+// Fonction pour obtenir les dates de la semaine (lundi à dimanche)
+function getWeekDates(date: Date): string {
+  const startOfWeek = new Date(date);
+  const day = startOfWeek.getDay();
+  const diff = day === 0 ? -6 : 1 - day; // Lundi = 1, Dimanche = 0
+  startOfWeek.setDate(startOfWeek.getDate() + diff);
+
+  const endOfWeek = new Date(startOfWeek);
+  endOfWeek.setDate(startOfWeek.getDate() + 6);
+
+  const startStr = startOfWeek.toLocaleDateString("fr-FR", {
+    day: "numeric",
+    month: "short",
+  });
+  const endStr = endOfWeek.toLocaleDateString("fr-FR", {
+    day: "numeric",
+    month: "short",
+  });
+
+  return `${startStr} - ${endStr}`;
+}
 
 interface DashboardSidebarProps {
   activeTab: string;
@@ -28,6 +57,9 @@ interface DashboardSidebarProps {
     rdvAujourdhui: number;
     rdvSemaine: number;
     rdvMois: number;
+    patientsAujourdhui: number;
+    patientsCetteSemaine: number;
+    patientsCeMois: number;
     soinsTermines: number;
     soinsEnCours: number;
     soinsEnAttente: number;
@@ -42,7 +74,8 @@ export function DashboardSidebar({
   onTabChange,
   stats,
 }: DashboardSidebarProps) {
-  const { isCollapsed, toggleSidebar } = useSidebar();
+  const { isCollapsed, toggleSidebar, isMobileMenuOpen, toggleMobileMenu } =
+    useSidebar();
   const { isDesktop } = useBreakpoint();
 
   const menuItems = [
@@ -77,321 +110,314 @@ export function DashboardSidebar({
 
   const quickStats = [
     {
-      label: "Actifs",
-      value: stats?.patientsActifs || 0,
-      icon: <Activity className="w-4 h-4" strokeWidth={1.2} />,
-      color: "text-green-500",
-    },
-    {
-      label: "Urgents",
-      value: stats?.patientsUrgents || 0,
-      icon: <AlertTriangle className="w-4 h-4" strokeWidth={1.2} />,
-      color: "text-red-500",
-    },
-    {
-      label: "RDV aujourd'hui",
-      value: stats?.rdvAujourdhui || 0,
-      icon: <CheckCircle className="w-4 h-4" strokeWidth={1.2} />,
-      color: "text-orange-400",
-    },
-    {
-      label: "Soins terminés",
-      value: stats?.soinsTermines || 0,
-      icon: <CheckCircle className="w-4 h-4" strokeWidth={1.2} />,
-      color: "text-blue-500",
-    },
-    {
-      label: "En cours",
-      value: stats?.soinsEnCours || 0,
-      icon: <Activity className="w-4 h-4" strokeWidth={1.2} />,
-      color: "text-yellow-500",
-    },
-    {
-      label: "Âge moyen",
-      value: `${stats?.patientsMoyenneAge || 0} ans`,
+      label: `Aujourd'hui (${new Date().toLocaleDateString("fr-FR", {
+        day: "numeric",
+        month: "short",
+      })})`,
+      value: stats?.patientsAujourdhui || 0,
       icon: <Users className="w-4 h-4" strokeWidth={1.2} />,
-      color: "text-purple-500",
+      color: "text-blue-600",
     },
     {
-      label: "Satisfaction",
-      value: `${Math.round(stats?.tauxSatisfaction || 0)}%`,
+      label: `Semaine S.${getWeekNumber(new Date())} (${getWeekDates(
+        new Date()
+      )})`,
+      value: stats?.patientsCetteSemaine || 0,
+      icon: <Calendar className="w-4 h-4" strokeWidth={1.2} />,
+      color: "text-indigo-600",
+    },
+    {
+      label: `${new Date().toLocaleDateString("fr-FR", {
+        month: "long",
+        year: "numeric",
+      })}`,
+      value: stats?.patientsCeMois || 0,
       icon: <TrendingUp className="w-4 h-4" strokeWidth={1.2} />,
-      color: "text-green-500",
+      color: "text-purple-600",
     },
   ];
 
-  // Cacher complètement le sidebar seulement sur mobile/tablette
-  if (!isDesktop) {
-    return null;
-  }
+  // Toujours visible - collapsed sur tablette (< lg), étendu sur desktop (>= lg)
+  const effectiveCollapsed = !isDesktop || isCollapsed;
 
   return (
-    <motion.div
-      animate={{
-        width: isCollapsed ? 64 : 320, // 16 * 4 = 64px, 80 * 4 = 320px
-      }}
-      transition={{
-        duration: 0.4,
-        delay: isCollapsed ? 0.2 : 0, // Délai pour le rétrécissement après disparition du contenu
-        ease: [0.4, 0, 0.2, 1], // Courbe d'animation fluide
-      }}
-      className="bg-card border-r border-border flex flex-col h-screen sticky top-0 z-40"
-    >
-      {/* Header */}
-      <div className="p-4 border-b border-border">
-        <div className="flex items-center justify-between">
-          <div className="flex-1">
-            <AnimatePresence mode="wait">
-              {!isCollapsed && (
-                <motion.div
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{
-                    opacity: 1,
-                    x: 0,
-                    transition: {
-                      duration: 0.3,
-                      delay: 0.45, // Apparaît après l'expansion du sidebar
-                      ease: "easeOut",
-                    },
-                  }}
-                  exit={{
-                    opacity: 0,
-                    x: -20,
-                    transition: {
-                      duration: 0.15, // Sortie rapide
-                      delay: 0, // Pas de délai pour la sortie
-                      ease: "easeIn",
-                    },
-                  }}
-                >
-                  <span className="text-foreground font-normal text-2xl font-kaushan-script truncate -ml-1">
-                    <span className="hidden sm:inline">Cabinet Harmonie</span>
-                    <span className="sm:hidden">Harmonie</span>
-                  </span>
+    <>
+      <motion.div
+        animate={{
+          width: effectiveCollapsed ? 64 : 320,
+        }}
+        transition={{
+          duration: 0.4,
+          ease: [0.4, 0, 0.2, 1],
+        }}
+        className="bg-[#2D5F4F] text-white backdrop-blur-sm border-r border-white/10 flex flex-col h-screen sticky top-0 z-[40]"
+      >
+        {/* Header */}
+        <div className="p-4 border-b border-white/10 bg-[#2D5F4F]">
+          <div className="flex items-center justify-between">
+            <div className="flex-1">
+              <AnimatePresence mode="wait">
+                {!effectiveCollapsed && (
+                  <motion.div
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{
+                      opacity: 1,
+                      x: 0,
+                      transition: {
+                        duration: 0.4,
+                        delay: 0.3, // Apparaît après l'expansion du sidebar
+                        ease: [0.4, 0, 0.2, 1],
+                      },
+                    }}
+                    exit={{
+                      opacity: 0,
+                      x: -20,
+                      transition: {
+                        duration: 0.3, // Plus doux
+                        delay: 0,
+                        ease: [0.4, 0, 1, 1],
+                      },
+                    }}
+                  >
+                    <Link
+                      href="/"
+                      className="text-primary text-lg tracking-wider truncate hover:text-foreground transition-colors duration-200 uppercase"
+                    >
+                      <span className="hidden sm:inline font-cormorant-garamond font-bold text-2xl tracking-tight">Cabinet Harmonie</span>
+                      <span className="sm:hidden font-cormorant-garamond font-bold">Harmonie</span>
+                    </Link>
 
-                  <p className="text-xs text-muted-foreground">Dashboard</p>
-                </motion.div>
-              )}
-            </AnimatePresence>
-          </div>
-
-          {/* Bouton toggle séparé pour éviter les conflits */}
-          <div className="flex-shrink-0">
-            <button
-              type="button"
-              onClick={toggleSidebar}
-              className="h-10 w-10 p-0 rounded-md hover:bg-muted/80 transition-colors flex items-center justify-center border-none bg-transparent cursor-pointer"
-            >
-              <motion.div
-                animate={{ rotate: isCollapsed ? 0 : 180 }}
-                transition={{ duration: 0.7, ease: "easeInOut" }}
-                className="flex items-center justify-center pointer-events-none"
-              >
-                {isCollapsed ? (
-                  <ChevronRight
-                    className="w-5 h-5 pointer-events-none text-muted-foreground"
-                    strokeWidth={2}
-                  />
-                ) : (
-                  <ChevronRight
-                    className="w-5 h-5 pointer-events-none text-muted-foreground"
-                    strokeWidth={2}
-                  />
+                    <p className="text-sm text-white/60 font-light tracking-widest uppercase text-xs mt-1">Dashboard</p>
+                  </motion.div>
                 )}
-              </motion.div>
-            </button>
+              </AnimatePresence>
+            </div>
+
+            {/* Bouton toggle - visible uniquement sur desktop */}
+            {isDesktop && (
+              <div className="flex-shrink-0">
+                <button
+                  type="button"
+                  onClick={toggleSidebar}
+                  aria-label={
+                    effectiveCollapsed ? "Étendre le menu" : "Réduire le menu"
+                  }
+                  className="h-10 w-10 p-0 rounded-md hover:bg-muted/80 transition-colors flex items-center justify-center border-none bg-transparent cursor-pointer"
+                >
+                  <motion.div
+                    animate={{ rotate: effectiveCollapsed ? 0 : 180 }}
+                    transition={{ duration: 0.7, ease: "easeInOut" }}
+                    className="flex items-center justify-center pointer-events-none"
+                  >
+                    <ChevronRight
+                      className="w-5 h-5 pointer-events-none text-white/70"
+                      strokeWidth={2}
+                    />
+                  </motion.div>
+                </button>
+              </div>
+            )}
           </div>
         </div>
-      </div>
 
-      {/* Navigation */}
-      <nav className="flex-1 p-2">
-        <motion.div
-          className="space-y-2"
-          initial={false}
-          animate={isCollapsed ? "collapsed" : "expanded"}
-        >
-          {menuItems.map((item, index) => (
+        {/* Navigation */}
+        <nav className="flex-1 p-2">
+          <motion.div
+            className="space-y-2"
+            initial={false}
+            animate={effectiveCollapsed ? "collapsed" : "expanded"}
+          >
+            {menuItems.map((item, index) => (
+              <motion.div
+                key={item.id}
+                variants={{
+                  collapsed: {
+                    opacity: 1,
+                    transition: {
+                      duration: 0.3, // Plus doux
+                      delay: 0,
+                      ease: [0.4, 0, 1, 1],
+                    },
+                  },
+                  expanded: {
+                    opacity: 1,
+                    transition: {
+                      duration: 0.4,
+                      delay: 0.3 + index * 0.05, // Commence après l'expansion
+                      ease: [0.4, 0, 0.2, 1],
+                    },
+                  },
+                }}
+              >
+                <Button
+                  variant={activeTab === item.id ? "sidebarActive" : "sidebar"}
+                  className={`w-full h-[50px] ${
+                    effectiveCollapsed ? "justify-center px-0" : "justify-start"
+                  } rounded-xl`}
+                  onClick={() => onTabChange(item.id)}
+                >
+                  <div
+                    className={`flex items-center ${
+                      effectiveCollapsed ? "justify-center" : "gap-3"
+                    } w-full`}
+                  >
+                    <motion.div
+                      animate={{
+                        scale: effectiveCollapsed ? 1.1 : 1,
+                      }}
+                      transition={{ duration: 0.2 }}
+                      className="flex items-center justify-center flex-shrink-0"
+                    >
+                      {item.icon}
+                    </motion.div>
+                    <AnimatePresence mode="wait">
+                      {!effectiveCollapsed && (
+                        <motion.div
+                          initial={{ opacity: 0, x: -10 }}
+                          animate={{
+                            opacity: 1,
+                            x: 0,
+                            transition: {
+                              duration: 0.4,
+                              delay: 0.35 + index * 0.03,
+                              ease: [0.4, 0, 0.2, 1],
+                            },
+                          }}
+                          exit={{
+                            opacity: 0,
+                            x: -10,
+                            transition: {
+                              duration: 0.25,
+                              delay: 0,
+                              ease: [0.4, 0, 1, 1],
+                            },
+                          }}
+                          className="flex-1 text-left"
+                        >
+                          <div className="font-medium text-sm md:text-[15px]">
+                            {item.label}
+                          </div>
+                          <div className="text-xs md:text-[13px] opacity-60 font-light">
+                            {item.description}
+                          </div>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                    <AnimatePresence>
+                      {!effectiveCollapsed && item.badge && (
+                        <motion.div
+                          initial={{ opacity: 0, scale: 0.8 }}
+                          animate={{
+                            opacity: 1,
+                            scale: 1,
+                            transition: {
+                              duration: 0.3,
+                              delay: 0.4 + index * 0.03,
+                              ease: [0.4, 0, 0.2, 1],
+                            },
+                          }}
+                          exit={{
+                            opacity: 0,
+                            scale: 0.8,
+                            transition: {
+                              duration: 0.25,
+                              delay: 0,
+                              ease: [0.4, 0, 1, 1],
+                            },
+                          }}
+                        >
+                          <Badge variant="tonal" className="text-xs">
+                            {item.badge}
+                          </Badge>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </div>
+                </Button>
+              </motion.div>
+            ))}
+          </motion.div>
+        </nav>
+
+        {/* Statistiques rapides */}
+        <AnimatePresence>
+          {!effectiveCollapsed && stats && (
             <motion.div
-              key={item.id}
-              variants={{
-                collapsed: {
-                  opacity: 1,
-                  transition: {
-                    duration: 0.1, // Sortie très rapide
-                    delay: 0, // Pas de délai
-                    ease: "easeIn",
-                  },
-                },
-                expanded: {
-                  opacity: 1,
-                  transition: {
-                    duration: 0.3,
-                    delay: 0.5 + index * 0.05, // Commence après l'expansion
-                    ease: "easeOut",
-                  },
+              initial={{ opacity: 0, y: 20 }}
+              animate={{
+                opacity: 1,
+                y: 0,
+                transition: {
+                  duration: 0.4,
+                  delay: 0.5, // Apparaît après tous les items de navigation
+                  ease: [0.4, 0, 0.2, 1],
                 },
               }}
+              exit={{
+                opacity: 0,
+                y: 20,
+                transition: {
+                  duration: 0.3, // Plus doux
+                  delay: 0,
+                  ease: [0.4, 0, 1, 1],
+                },
+              }}
+              className="p-4 border-t border-white/10 bg-[#2D5F4F]"
             >
-              <Button
-                variant={activeTab === item.id ? "secondary" : "outline"}
-                className={`w-full h-[45px] ${
-                  isCollapsed ? "justify-center px-0" : "justify-start px-3"
-                } transition-all duration-200`}
-                onClick={() => onTabChange(item.id)}
+              <motion.h3
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{
+                  delay: 0.55,
+                  duration: 0.3,
+                  ease: [0.4, 0, 0.2, 1],
+                }}
+                className="text-sm font-semibold text-foreground mb-3 uppercase tracking-wide"
               >
-                <div
-                  className={`flex items-center ${
-                    isCollapsed ? "justify-center" : "gap-3"
-                  } w-full`}
-                >
+                Statistiques rapides
+              </motion.h3>
+              <div className="space-y-2">
+                {quickStats.map((stat, index) => (
                   <motion.div
-                    animate={{
-                      scale: isCollapsed ? 1.1 : 1,
+                    key={index}
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{
+                      duration: 0.4,
+                      delay: 0.6 + index * 0.05, // Après le titre des statistiques
+                      ease: [0.4, 0, 0.2, 1],
                     }}
-                    transition={{ duration: 0.2 }}
-                    className="flex items-center justify-center flex-shrink-0"
+                    className="flex items-center gap-2 text-sm p-2 rounded-lg hover:bg-white/5 transition-colors duration-200 cursor-default"
                   >
-                    {item.icon}
+                    <motion.div
+                      className={`${stat.color} flex items-center justify-center flex-shrink-0`}
+                      whileHover={{ scale: 1.1 }}
+                      transition={{ duration: 0.2 }}
+                    >
+                      {stat.icon}
+                    </motion.div>
+                    <span className="text-white/70 flex-1">
+                      {stat.label}
+                    </span>
+                    <motion.span
+                      className={`font-medium ${stat.color}`}
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{
+                        delay: 0.65 + index * 0.05,
+                        duration: 0.3,
+                        ease: [0.4, 0, 0.2, 1],
+                      }}
+                    >
+                      {stat.value}
+                    </motion.span>
                   </motion.div>
-                  <AnimatePresence mode="wait">
-                    {!isCollapsed && (
-                      <motion.div
-                        initial={{ opacity: 0, x: -10 }}
-                        animate={{
-                          opacity: 1,
-                          x: 0,
-                          transition: {
-                            duration: 0.3,
-                            delay: 0.55 + index * 0.03, // Après expansion + délai base
-                            ease: "easeOut",
-                          },
-                        }}
-                        exit={{
-                          opacity: 0,
-                          x: -10,
-                          transition: {
-                            duration: 0.1, // Sortie rapide
-                            delay: 0,
-                            ease: "easeIn",
-                          },
-                        }}
-                        className="flex-1 text-left"
-                      >
-                        <div className="font-medium text-sm md:text-[15px]">
-                          {item.label}
-                        </div>
-                        <div className="text-xs md:text-[13px] text-muted-foreground">
-                          {item.description}
-                        </div>
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-                  <AnimatePresence>
-                    {!isCollapsed && item.badge && (
-                      <motion.div
-                        initial={{ opacity: 0, scale: 0.8 }}
-                        animate={{
-                          opacity: 1,
-                          scale: 1,
-                          transition: {
-                            duration: 0.2,
-                            delay: 0.65 + index * 0.03, // Badges apparaissent en dernier
-                          },
-                        }}
-                        exit={{
-                          opacity: 0,
-                          scale: 0.8,
-                          transition: {
-                            duration: 0.1, // Sortie rapide
-                            delay: 0,
-                            ease: "easeIn",
-                          },
-                        }}
-                      >
-                        <Badge variant="secondary" className="text-xs">
-                          {item.badge}
-                        </Badge>
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-                </div>
-              </Button>
+                ))}
+              </div>
             </motion.div>
-          ))}
-        </motion.div>
-      </nav>
-
-      {/* Statistiques rapides */}
-      <AnimatePresence>
-        {!isCollapsed && stats && (
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{
-              opacity: 1,
-              y: 0,
-              transition: {
-                duration: 0.4,
-                delay: 0.7, // Apparaît après tous les items de navigation
-                ease: "easeOut",
-              },
-            }}
-            exit={{
-              opacity: 0,
-              y: 20,
-              transition: {
-                duration: 0.15, // Sortie rapide
-                delay: 0,
-                ease: "easeIn",
-              },
-            }}
-            className="p-4 border-t border-border"
-          >
-            <motion.h3
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.8, duration: 0.3 }}
-              className="text-sm font-medium text-foreground mb-3"
-            >
-              Statistiques rapides
-            </motion.h3>
-            <div className="space-y-2">
-              {quickStats.map((stat, index) => (
-                <motion.div
-                  key={index}
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{
-                    duration: 0.3,
-                    delay: 0.85 + index * 0.05, // Après le titre des statistiques
-                    ease: "easeOut",
-                  }}
-                  className="flex items-center gap-2 text-sm"
-                >
-                  <motion.div
-                    className={`${stat.color} flex items-center justify-center flex-shrink-0`}
-                    whileHover={{ scale: 1.1 }}
-                    transition={{ duration: 0.2 }}
-                  >
-                    {stat.icon}
-                  </motion.div>
-                  <span className="text-muted-foreground flex-1">
-                    {stat.label}
-                  </span>
-                  <motion.span
-                    className={`font-medium ${stat.color}`}
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ delay: 0.9 + index * 0.05 }}
-                  >
-                    {stat.value}
-                  </motion.span>
-                </motion.div>
-              ))}
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </motion.div>
+          )}
+        </AnimatePresence>
+      </motion.div>
+    </>
   );
 }

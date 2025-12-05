@@ -1,200 +1,149 @@
 "use client";
 
-import { SimpleThemeToggle } from "@/components/ui/SimpleThemeToggle";
-import { AnimatePresence, motion } from "framer-motion";
-import { X } from "lucide-react";
+import { useGSAP } from "@gsap/react";
+import gsap from "gsap";
 import Link from "next/link";
-import { useEffect } from "react";
-
-interface MenuItem {
-  id: string;
-  href: string;
-  label: string;
-  icon: string;
-  isActive?: boolean;
-  onClick?: () => void;
-}
+import { usePathname } from "next/navigation";
+import { useRef } from "react";
+import { MenuLink } from "./AnimatedLink";
 
 interface SlideMobileMenuProps {
   isOpen: boolean;
   onClose: () => void;
-  menuItems: MenuItem[];
-  showModeToggle?: boolean;
-  hideOnDesktop?: boolean; // Nouvelle prop pour contrôler la visibilité desktop
 }
 
-export function SlideMobileMenu({
-  isOpen,
-  onClose,
-  menuItems,
-  showModeToggle = true,
-  hideOnDesktop = true, // Par défaut, caché sur desktop (comportement mobile)
-}: SlideMobileMenuProps) {
-  // Fermer le menu avec la touche Escape
-  useEffect(() => {
-    const handleEscape = (e: KeyboardEvent) => {
-      if (e.key === "Escape" && isOpen) {
-        onClose();
-      }
-    };
+const navLinks = [
+  { label: "Accueil", href: "/" },
+  { label: "Soins", href: "/demande/soins" },
+  { label: "Le Cabinet", href: "/#about" },
+  { label: "Services", href: "/#services" },
+  { label: "L'Équipe", href: "/#team" },
+  { label: "Infos Pratiques", href: "/#infos" },
+  { label: "Contact", href: "/#contact" },
+];
 
+const authLinks = [
+  { label: "Connexion", href: "/login" },
+  { label: "Inscription", href: "/register" },
+];
+
+export function SlideMobileMenu({ isOpen, onClose }: SlideMobileMenuProps) {
+  const pathname = usePathname();
+  const menuRef = useRef<HTMLDivElement>(null);
+  const tl = useRef<gsap.core.Timeline | null>(null);
+
+  useGSAP(() => {
+    // Timeline d'ouverture
+    tl.current = gsap.timeline({ paused: true })
+      .to(menuRef.current, {
+        x: 0,
+        duration: 0.8,
+        ease: "power3.inOut",
+      })
+      .fromTo(
+        ".menu-link-item",
+        { y: 50, opacity: 0 },
+        {
+          y: 0,
+          opacity: 1,
+          duration: 0.5,
+          stagger: 0.1,
+          ease: "power3.out"
+        },
+        "-=0.4"
+      )
+      .fromTo(
+        ".auth-link-item",
+        { y: 20, opacity: 0 },
+        {
+          y: 0,
+          opacity: 1,
+          duration: 0.5,
+          stagger: 0.1,
+          ease: "power3.out"
+        },
+        "-=0.2"
+      )
+      .fromTo(
+        ".menu-footer",
+        { opacity: 0 },
+        { opacity: 1, duration: 0.5 },
+        "-=0.2"
+      );
+
+  }, { scope: menuRef });
+
+  // Gérer l'ouverture/fermeture
+  useGSAP(() => {
     if (isOpen) {
-      document.addEventListener("keydown", handleEscape);
-      // Empêcher le scroll du body quand le menu est ouvert
+      tl.current?.play();
       document.body.style.overflow = "hidden";
     } else {
-      document.body.style.overflow = "unset";
+      tl.current?.reverse();
+      document.body.style.overflow = "";
     }
-
-    return () => {
-      document.removeEventListener("keydown", handleEscape);
-      document.body.style.overflow = "unset";
-    };
-  }, [isOpen, onClose]);
+  }, [isOpen]);
 
   return (
-    <AnimatePresence>
-      {isOpen && (
-        <>
-          {/* Overlay pour fermer en cliquant à l'extérieur */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.3 }}
-            className={`fixed inset-0 bg-black/30 backdrop-blur-sm z-[9998] ${
-              hideOnDesktop ? "lg:hidden" : ""
-            }`}
-            onClick={onClose}
-          />
+    <>
+      {/* Overlay */}
+      <div 
+        className={`fixed inset-0 bg-black/50 backdrop-blur-sm z-[9000] transition-opacity duration-500 ${isOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"}`}
+        onClick={onClose}
+      />
 
-          {/* Sidebar du menu */}
-          <motion.div
-            initial={{ clipPath: "inset(0 0 0 100%)" }}
-            animate={{ clipPath: "inset(0 0 0 0)" }}
-            exit={{ clipPath: "inset(0 0 0 100%)" }}
-            transition={{
-              duration: 0.7,
-              ease: [0.76, 0, 0.24, 1] as const,
-            }}
-            className={`fixed right-0 top-0 bg-card/95 backdrop-blur-xl shadow-2xl flex flex-col z-[9999] border-l border-border h-screen max-w-full ${
-              hideOnDesktop
-                ? "sm:w-[400px] w-full lg:hidden"
-                : "w-full sm:w-[400px] lg:w-[350px]"
-            }`}
-          >
-            {/* Header */}
-            <div className="flex items-center justify-between p-6 border-b border-border/50 bg-gradient-to-r from-primary/10 to-primary/5">
-              <div>
-                <h2 className="text-2xl font-normal text-foreground font-kaushan-script">
-                  Menu
-                </h2>
-                <p className="text-sm text-muted-foreground">
-                  Navigation rapide
-                </p>
+      {/* Menu Sidebar */}
+      <div
+        ref={menuRef}
+        className="fixed top-0 right-0 h-screen w-full md:w-[500px] bg-[#2D5F4F] text-white z-[9500] shadow-2xl overflow-y-auto translate-x-full flex flex-col"
+      >
+        <div className="p-8 md:p-12 flex flex-col h-full">
+          
+          {/* Header */}
+          <div className="flex justify-between items-center mb-12">
+            <h2 className="text-sm font-cormorant-garamond font-thin text-[#C8D96F] uppercase tracking-widest">Navigation</h2>
+            {/* Bouton Fermer retiré car géré par DashboardLayout */}
+          </div>
+
+          {/* Navigation Links */}
+          <nav className="flex-1 flex flex-col justify-center space-y-4">
+            {navLinks.map((link) => (
+              <div key={link.href} className="menu-link-item opacity-0">
+                <MenuLink 
+                  href={link.href} 
+                  onClick={onClose}
+                  className={`text-3xl md:text-4xl font-cormorant-garamond ${pathname === link.href ? "text-[#C8D96F] italic" : "text-white"}`}
+                >
+                  {link.label}
+                </MenuLink>
               </div>
-              <button
-                type="button"
-                onClick={onClose}
-                className="p-4 rounded-full bg-background/50 hover:bg-background/80 transition-all font-kaushan-script text-sm font-medium hover:rotate-180 duration-300"
-                aria-label="Fermer le menu"
-              >
-                <X className="w-5 h-5" />
-              </button>
-            </div>
+            ))}
 
-            {/* Contenu du menu */}
-            <div className="flex-1 overflow-y-auto">
-              <div className="p-4 space-y-2">
-                {menuItems.map((item, index) => (
-                  <motion.div
-                    key={item.id}
-                    initial={{ opacity: 0, x: 50 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    exit={{ opacity: 0, x: 50 }}
-                    transition={{
-                      delay: index * 0.1,
-                      duration: 0.3,
-                      ease: "easeOut",
-                    }}
+            {/* Auth Links */}
+            <div className="pt-8 space-y-2">
+              {authLinks.map((link) => (
+                <div key={link.href} className="auth-link-item opacity-0">
+                  <Link 
+                    href={link.href}
+                    onClick={onClose}
+                    className="text-lg uppercase tracking-widest text-white/80 hover:text-[#C8D96F] transition-colors font-light"
                   >
-                    {item.onClick ? (
-                      <button
-                        type="button"
-                        onClick={item.onClick}
-                        className={`w-full flex items-center gap-4 p-4 rounded-2xl transition-all duration-200 font-kaushan-script text-xl font-normal group ${
-                          item.isActive
-                            ? "bg-primary/15 text-primary border border-primary/20"
-                            : "text-foreground/80 hover:text-primary hover:bg-primary/5 border border-transparent hover:border-primary/10"
-                        }`}
-                      >
-                        <span className="text-xl group-hover:scale-110 transition-transform duration-200">
-                          {item.icon}
-                        </span>
-                        <span className="font-medium">{item.label}</span>
-                        {item.isActive && (
-                          <motion.div
-                            initial={{ scale: 0 }}
-                            animate={{ scale: 1 }}
-                            className="ml-auto w-2 h-2 bg-primary rounded-full"
-                          />
-                        )}
-                      </button>
-                    ) : (
-                      <Link
-                        href={item.href}
-                        onClick={onClose}
-                        className={`flex items-center gap-4 p-4 rounded-2xl transition-all duration-200 font-kaushan-script text-xl font-normal group ${
-                          item.isActive
-                            ? "bg-primary/15 text-primary border border-primary/20"
-                            : "text-foreground/80 hover:text-primary hover:bg-primary/5 border border-transparent hover:border-primary/10"
-                        }`}
-                      >
-                        <span className="text-xl group-hover:scale-110 transition-transform duration-200">
-                          {item.icon}
-                        </span>
-                        <span className="font-medium">{item.label}</span>
-                        {item.isActive && (
-                          <motion.div
-                            initial={{ scale: 0 }}
-                            animate={{ scale: 1 }}
-                            className="ml-auto w-2 h-2 bg-primary rounded-full"
-                          />
-                        )}
-                      </Link>
-                    )}
-                  </motion.div>
-                ))}
-
-                {/* Mode toggle */}
-                {showModeToggle && (
-                  <motion.div
-                    initial={{ opacity: 0, x: 50 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    exit={{ opacity: 0, x: 50 }}
-                    transition={{
-                      delay: menuItems.length * 0.1 + 0.1,
-                      duration: 0.3,
-                      ease: "easeOut",
-                    }}
-                    className="border-t border-border/50 pt-4 mt-4"
-                  >
-                    <div className="flex items-center justify-between p-4 rounded-2xl bg-muted/30 transition-all duration-200 hover:bg-muted/50">
-                      <div className="flex items-center gap-4">
-                        <span className="text-xl">🎨</span>
-                        <span className="text-xl font-normal font-kaushan-script text-foreground/80">
-                          Thème
-                        </span>
-                      </div>
-                      <SimpleThemeToggle />
-                    </div>
-                  </motion.div>
-                )}
-              </div>
+                    {link.label}
+                  </Link>
+                </div>
+              ))}
             </div>
-          </motion.div>
-        </>
-      )}
-    </AnimatePresence>
+          </nav>
+
+          {/* Footer */}
+          <div className="mt-auto pt-8 border-t border-white/10 menu-footer opacity-0">
+            <p className="text-xs text-white/30 font-light">
+              © 2025 Harmonie Santé
+            </p>
+          </div>
+
+        </div>
+      </div>
+    </>
   );
 }

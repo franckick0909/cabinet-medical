@@ -37,7 +37,7 @@ export function FormNavigation({
         {showBack && (
           <Button
             type="button"
-            variant="outline"
+            variant="outlined"
             onClick={() => router.back()}
             className="w-full sm:w-auto"
           >

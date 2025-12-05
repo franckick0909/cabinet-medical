@@ -1,9 +1,9 @@
 "use client";
 
 import { submitDemande } from "@/actions/demandes";
-import { PageHeader } from "@/components/demande/PageHeader";
 import { Button } from "@/components/custom/Button";
 import { Card } from "@/components/custom/Card";
+import { PageHeader } from "@/components/demande/PageHeader";
 import { useDemandeStore } from "@/store/demandeStore";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -93,21 +93,21 @@ export default function RecapitulatifPage() {
 
       <div className="space-y-4 sm:space-y-6">
         {/* Type de soin */}
-        <Card className="p-4 sm:p-6">
+        <Card className="p-4 sm:p-6 bg-white border-none shadow-sm">
           <div className="flex items-start justify-between mb-3 sm:mb-4 gap-2">
-            <h3 className="text-base sm:text-lg font-semibold text-foreground truncate">
+            <h3 className="text-lg sm:text-xl font-cormorant-garamond font-semibold text-[#2D5F4F] truncate">
               🩺 Type de soin
             </h3>
             <Button
               variant="ghost"
-              size="default"
+              size="md"
               onClick={() => router.push("/demande/soins")}
               className="flex-shrink-0"
             >
               Modifier
             </Button>
           </div>
-          <p className="text-foreground font-medium mb-2 text-sm sm:text-base">
+          <p className="text-[#2D5F4F] font-medium mb-2 text-sm sm:text-base">
             {soin.details.titre}
           </p>
           <div className="text-sm sm:text-base text-muted-foreground space-y-1">
@@ -115,22 +115,35 @@ export default function RecapitulatifPage() {
               .filter(([key]) => key !== "titre")
               .map(([key, value]) => (
                 <div key={key}>
-                  <span className="font-medium capitalize">{key}: </span>
-                  <span>{String(value)}</span>
+                  <span className="font-medium capitalize">
+                    {key === "creneau"
+                      ? "Créneaux souhaités"
+                      : key === "type"
+                        ? "Type de prélèvement"
+                        : key === "jeun"
+                          ? "À jeun"
+                          : key === "analyses"
+                            ? "Analyses prescrites"
+                            : key}
+                    :
+                  </span>
+                  <span>
+                    {Array.isArray(value) ? value.join(", ") : String(value)}
+                  </span>
                 </div>
               ))}
           </div>
         </Card>
 
         {/* Ordonnance */}
-        <Card className="p-4 sm:p-6">
+        <Card className="p-4 sm:p-6 bg-white border-none shadow-sm">
           <div className="flex items-start justify-between mb-3 sm:mb-4 gap-2">
-            <h3 className="text-base sm:text-lg font-semibold text-foreground truncate">
+            <h3 className="text-lg sm:text-xl font-cormorant-garamond font-semibold text-[#2D5F4F] truncate">
               📄 Ordonnance
             </h3>
             <Button
               variant="ghost"
-              size="default"
+              size="md"
               onClick={() => router.push("/demande/ordonnance")}
               className="flex-shrink-0"
             >
@@ -171,14 +184,14 @@ export default function RecapitulatifPage() {
         </Card>
 
         {/* Disponibilités */}
-        <Card className="p-4 sm:p-6">
+        <Card className="p-4 sm:p-6 bg-white border-none shadow-sm">
           <div className="flex items-start justify-between mb-3 sm:mb-4 gap-2">
-            <h3 className="text-base sm:text-lg font-semibold text-foreground truncate">
+            <h3 className="text-lg sm:text-xl font-cormorant-garamond font-semibold text-[#2D5F4F] truncate">
               📅 Disponibilités
             </h3>
             <Button
               variant="ghost"
-              size="default"
+              size="md"
               onClick={() => router.push("/demande/disponibilites")}
               className="flex-shrink-0"
             >
@@ -215,14 +228,14 @@ export default function RecapitulatifPage() {
         </Card>
 
         {/* Patient */}
-        <Card className="p-4 sm:p-6">
+        <Card className="p-4 sm:p-6 bg-white border-none shadow-sm">
           <div className="flex items-start justify-between mb-3 sm:mb-4 gap-2">
-            <h3 className="text-base sm:text-lg font-semibold text-foreground truncate">
+            <h3 className="text-lg sm:text-xl font-cormorant-garamond font-semibold text-[#2D5F4F] truncate">
               👤 Informations patient
             </h3>
             <Button
               variant="ghost"
-              size="default"
+              size="md"
               onClick={() => router.push("/demande/patient")}
               className="flex-shrink-0"
             >
@@ -271,7 +284,7 @@ export default function RecapitulatifPage() {
       {/* Actions */}
       <div className="flex flex-col sm:flex-row justify-between gap-3 mt-6 sm:mt-8">
         <Button
-          variant="secondary"
+          variant="outlined"
           onClick={() => router.back()}
           disabled={isSubmitting}
           className="w-full sm:w-auto"

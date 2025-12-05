@@ -1,11 +1,12 @@
 "use client";
 
+import { GroupRadio } from "@/components/custom/GroupRadio";
+import { Input } from "@/components/custom/Input";
+import { Textarea } from "@/components/custom/Textarea";
 import { FormNavigation } from "@/components/demande/FormNavigation";
 import { PageHeader } from "@/components/demande/PageHeader";
-import { Input } from "@/components/custom/Input";
 import { Label } from "@/components/ui/label";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Textarea } from "@/components/custom/Textarea";
+// import { RadioGroup } from "@/components/ui/radio-group";
 import { useDemandeStore } from "@/store/demandeStore";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -54,58 +55,56 @@ export default function OrdonnancePage() {
       />
 
       {/* Radio buttons */}
-      <div className="bg-card rounded-lg border border-border p-4 sm:p-6 mb-4 sm:mb-6 shadow-sm">
-        <Label className="block text-sm sm:text-base font-medium text-foreground mb-3 sm:mb-4">
+      <div className="bg-white rounded-lg border-none p-4 sm:p-6 mb-4 sm:mb-6 shadow-sm">
+        <Label className="block text-lg sm:text-xl font-cormorant-garamond font-semibold text-[#2D5F4F] mb-3 sm:mb-4">
           Avez-vous une ordonnance ? *
         </Label>
 
-        <RadioGroup
-          value={aOrdonnance}
-          onValueChange={setAOrdonnance}
-          className="space-y-3 sm:space-y-4"
-        >
+        <div className="space-y-3 sm:space-y-4">
           {/* Option 1 */}
-          <div className="flex items-start p-3 sm:p-4 rounded-lg border-2 border-border hover:border-primary hover:bg-primary/10 cursor-pointer transition-all">
-            <RadioGroupItem
-              value="oui-domicile"
-              id="oui-domicile"
+          <div
+            className="flex items-start p-3 sm:p-4 rounded-lg border transition-all cursor-pointer group border-gray-200 hover:border-[#2D5F4F] hover:bg-[#2D5F4F]/5"
+            onClick={() => setAOrdonnance("oui-domicile")}
+          >
+            <GroupRadio
+              checked={aOrdonnance === "oui-domicile"}
               className="mt-0.5"
             />
-            <Label
-              htmlFor="oui-domicile"
-              className="ml-2 sm:ml-3 text-sm sm:text-base font-medium cursor-pointer"
-            >
+            <Label className="ml-2 sm:ml-3 text-sm sm:text-base font-medium cursor-pointer group-hover:text-primary">
               Oui, avec mention &quot;à domicile&quot;
             </Label>
           </div>
 
           {/* Option 2 */}
-          <div className="flex items-start p-3 sm:p-4 rounded-lg border-2 border-border hover:border-primary hover:bg-primary/10 cursor-pointer transition-all">
-            <RadioGroupItem value="oui-sans" id="oui-sans" className="mt-0.5" />
-            <Label
-              htmlFor="oui-sans"
-              className="ml-2 sm:ml-3 text-sm sm:text-base font-medium cursor-pointer"
-            >
+          <div
+            className="flex items-start p-3 sm:p-4 rounded-lg border transition-all cursor-pointer group border-gray-200 hover:border-[#2D5F4F] hover:bg-[#2D5F4F]/5"
+            onClick={() => setAOrdonnance("oui-sans")}
+          >
+            <GroupRadio
+              checked={aOrdonnance === "oui-sans"}
+              className="mt-0.5"
+            />
+            <Label className="ml-2 sm:ml-3 text-sm sm:text-base font-medium cursor-pointer group-hover:text-primary">
               Oui, sans mention &quot;à domicile&quot;
             </Label>
           </div>
 
           {/* Option 3 */}
-          <div className="flex items-start p-3 sm:p-4 rounded-lg border-2 border-border hover:border-primary hover:bg-primary/10 cursor-pointer transition-all">
-            <RadioGroupItem value="non" id="non" className="mt-0.5" />
-            <Label
-              htmlFor="non"
-              className="ml-2 sm:ml-3 text-sm sm:text-base font-medium cursor-pointer"
-            >
+          <div
+            className="flex items-start p-3 sm:p-4 rounded-lg border transition-all cursor-pointer group border-gray-200 hover:border-[#2D5F4F] hover:bg-[#2D5F4F]/5"
+            onClick={() => setAOrdonnance("non")}
+          >
+            <GroupRadio checked={aOrdonnance === "non"} className="mt-0.5" />
+            <Label className="ml-2 sm:ml-3 text-sm sm:text-base font-medium cursor-pointer group-hover:text-primary">
               Non
             </Label>
           </div>
-        </RadioGroup>
+        </div>
 
         {/* Note informative */}
         {(aOrdonnance === "oui-domicile" || aOrdonnance === "oui-sans") && (
-          <div className="mt-3 sm:mt-4 p-3 sm:p-4 bg-muted rounded-lg border border-border">
-            <p className="text-xs sm:text-sm text-foreground">
+          <div className="mt-3 sm:mt-4 p-3 sm:p-4 bg-[#F9F7F2] rounded-lg border border-[#2D5F4F]/20">
+            <p className="text-xs sm:text-sm text-[#1a1a1a]">
               {aOrdonnance === "oui-sans" && (
                 <>
                   ℹ️ Si l&apos;ordonnance ne précise pas &quot;à domicile&quot;,
@@ -122,8 +121,8 @@ export default function OrdonnancePage() {
 
       {/* Détails ordonnance */}
       {(aOrdonnance === "oui-domicile" || aOrdonnance === "oui-sans") && (
-        <div className="bg-card rounded-lg border border-border p-4 sm:p-6 mb-4 sm:mb-6 shadow-sm">
-          <h3 className="text-base sm:text-lg font-semibold text-foreground mb-3 sm:mb-4">
+        <div className="bg-white rounded-lg border-none p-4 sm:p-6 mb-4 sm:mb-6 shadow-sm">
+          <h3 className="text-lg sm:text-xl font-cormorant-garamond font-semibold text-[#2D5F4F] mb-3 sm:mb-4">
             Ajoutez votre ordonnance si vous l&apos;avez à disposition
             (facultatif)
           </h3>
@@ -135,7 +134,7 @@ export default function OrdonnancePage() {
 
             <button
               type="button"
-              className="w-full px-3 sm:px-4 py-2 sm:py-3 border-2 border-dashed border-primary rounded-lg text-sm sm:text-base text-primary hover:bg-primary/10 transition-all font-medium"
+              className="w-full px-3 sm:px-4 py-2 sm:py-3 border-2 border-dashed border-[#2D5F4F]/30 rounded-lg text-sm sm:text-base text-[#2D5F4F] hover:bg-[#2D5F4F]/5 transition-all font-medium"
             >
               + Ajouter un document
             </button>

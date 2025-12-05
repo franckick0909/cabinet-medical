@@ -73,6 +73,14 @@ export async function submitDemande(input: DemandeInput) {
       }
     }
 
+    console.log("🔍 submitDemande - Données reçues:", {
+      soin: soin.type,
+      datePreferee: disponibilite.datePreferee,
+      heurePreferee: disponibilite.heurePreferee,
+      urgence: disponibilite.urgence,
+      lieu: disponibilite.lieu,
+    });
+
     // Créer la demande
     const demande = await prisma.demande.create({
       data: {
@@ -83,7 +91,7 @@ export async function submitDemande(input: DemandeInput) {
           details: soin.details,
           ordonnanceDetails: ordonnance.aOrdonnance ? ordonnance : null,
           datePreferee: disponibilite.datePreferee
-            ? new Date(disponibilite.datePreferee)
+            ? new Date(disponibilite.datePreferee + "T00:00:00")
             : null,
           heurePreferee: disponibilite.heurePreferee,
           urgence: disponibilite.urgence,
@@ -93,11 +101,18 @@ export async function submitDemande(input: DemandeInput) {
         urgence: disponibilite.urgence,
         statut: "EN_ATTENTE",
         dateRdv: disponibilite.datePreferee
-          ? new Date(disponibilite.datePreferee)
+          ? new Date(disponibilite.datePreferee + "T00:00:00")
           : null,
         heureRdv: disponibilite.heurePreferee,
         lieu: disponibilite.lieu,
       },
+    });
+
+    console.log("🔍 submitDemande - Demande créée:", {
+      id: demande.id,
+      dateRdv: demande.dateRdv,
+      heureRdv: demande.heureRdv,
+      statut: demande.statut,
     });
 
     return {

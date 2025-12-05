@@ -32,6 +32,7 @@ export interface PatientInfo {
 }
 
 export interface PatientStats {
+  rdvDemain: number;
   totalPatients: number;
   patientsActifs: number;
   nouveauxPatients: number;
@@ -39,6 +40,10 @@ export interface PatientStats {
   rdvAujourdhui: number;
   rdvSemaine: number;
   rdvMois: number;
+  // Nouvelles statistiques patients
+  patientsAujourdhui: number;
+  patientsCetteSemaine: number;
+  patientsCeMois: number;
   pathologiesFrequentes: Array<{ nom: string; count: number }>;
 
   // Statistiques détaillées
@@ -246,6 +251,16 @@ export class PatientService {
         (d.statut === "CONFIRMEE" || d.statut === "EN_COURS")
     ).length;
 
+    // RDV demain
+    const demain = new Date(aujourdhui);
+    demain.setDate(demain.getDate() + 1);
+    const rdvDemain = demandes.filter(
+      (d) =>
+        d.dateRdv &&
+        d.dateRdv.toDateString() === demain.toDateString() &&
+        (d.statut === "CONFIRMEE" || d.statut === "EN_COURS")
+    ).length;
+
     const rdvSemaine = demandes.filter(
       (d) =>
         d.dateRdv &&
@@ -274,6 +289,11 @@ export class PatientService {
     const unMoisAgo = new Date();
     unMoisAgo.setMonth(unMoisAgo.getMonth() - 1);
 
+    const debutMois = new Date(
+      aujourdhui.getFullYear(),
+      aujourdhui.getMonth(),
+      1
+    );
     const finMois = new Date(
       aujourdhui.getFullYear(),
       aujourdhui.getMonth() + 1,
@@ -288,6 +308,45 @@ export class PatientService {
         d.dateRdv <= finMois &&
         (d.statut === "CONFIRMEE" || d.statut === "EN_COURS")
     ).length;
+
+    // Patients uniques du jour (tous les patients du planning aujourd'hui)
+    const patientsAujourdhui = new Set(
+      demandes
+        .filter((d) => {
+          if (!d.dateRdv) return false;
+          const demandeDate = new Date(d.dateRdv);
+          return demandeDate.toDateString() === aujourdhui.toDateString();
+        })
+        .map((d) =>
+          `${d.patient.nom}-${d.patient.prenom}-${d.patient.telephone}`.toLowerCase()
+        )
+    ).size;
+
+    // Patients uniques de la semaine (tous les patients du planning cette semaine)
+    const patientsCetteSemaine = new Set(
+      demandes
+        .filter((d) => {
+          if (!d.dateRdv) return false;
+          const demandeDate = new Date(d.dateRdv);
+          return demandeDate >= debutSemaine && demandeDate <= finSemaine;
+        })
+        .map((d) =>
+          `${d.patient.nom}-${d.patient.prenom}-${d.patient.telephone}`.toLowerCase()
+        )
+    ).size;
+
+    // Patients uniques du mois (tous les patients du planning ce mois)
+    const patientsCeMois = new Set(
+      demandes
+        .filter((d) => {
+          if (!d.dateRdv) return false;
+          const demandeDate = new Date(d.dateRdv);
+          return demandeDate >= debutMois && demandeDate <= finMois;
+        })
+        .map((d) =>
+          `${d.patient.nom}-${d.patient.prenom}-${d.patient.telephone}`.toLowerCase()
+        )
+    ).size;
 
     // Statistiques des soins
     const soinsTermines = demandes.filter(
@@ -368,8 +427,14 @@ export class PatientService {
 
       // RDV
       rdvAujourdhui,
+      rdvDemain,
       rdvSemaine,
       rdvMois,
+
+      // Patients uniques
+      patientsAujourdhui,
+      patientsCetteSemaine,
+      patientsCeMois,
 
       // Soins
       soinsTermines,

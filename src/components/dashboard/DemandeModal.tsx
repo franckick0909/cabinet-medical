@@ -49,11 +49,11 @@ const urgenceLabels = {
   URGENTE: "Urgente",
 };
 
-const urgenceBadgeVariants = {
-  FAIBLE: "success" as const, // 🟢 Vert
-  NORMALE: "warning" as const, // 🟡 Jaune
-  ELEVEE: "info" as const, // 🟣 Violet
-  URGENTE: "destructive" as const, // 🔴 Rouge
+const urgenceBadgeStyles = {
+  FAIBLE: "bg-[#C8D96F]/20 text-[#2D5F4F] border-[#C8D96F]/50",
+  NORMALE: "bg-blue-50 text-blue-700 border-blue-200",
+  ELEVEE: "bg-orange-50 text-orange-700 border-orange-200",
+  URGENTE: "bg-red-50 text-red-700 border-red-200",
 };
 
 const statutLabels = {
@@ -64,12 +64,12 @@ const statutLabels = {
   ANNULEE: "Annulée",
 };
 
-const statutBadgeVariants = {
-  EN_ATTENTE: "secondary" as const,
-  CONFIRMEE: "default" as const,
-  EN_COURS: "outline" as const,
-  TERMINEE: "secondary" as const,
-  ANNULEE: "destructive" as const,
+const statutBadgeStyles = {
+  EN_ATTENTE: "bg-yellow-50 text-yellow-700 border-yellow-200",
+  CONFIRMEE: "bg-[#2D5F4F] text-white border-[#2D5F4F]",
+  EN_COURS: "bg-blue-50 text-blue-700 border-blue-200",
+  TERMINEE: "bg-green-50 text-green-700 border-green-200",
+  ANNULEE: "bg-red-50 text-red-700 border-red-200",
 };
 
 // Composant helper pour afficher une ligne d'info
@@ -152,22 +152,21 @@ export function DemandeModal({
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-[95vw] sm:max-w-4xl md:max-w-5xl lg:max-w-6xl xl:max-w-7xl max-h-[90vh] p-0 flex flex-col overflow-hidden [&>button]:hidden">
-        {/* Header fixe */}
-        <div className="px-6 pt-6 pb-4 border-b border-border relative">
-          {/* Bouton fermer custom */}
-          <Button
-            variant="ghost"
-            size="icon"
+      <DialogContent className="max-w-[95vw] sm:max-w-4xl md:max-w-5xl lg:max-w-6xl xl:max-w-7xl max-h-[90vh] p-0 flex flex-col overflow-hidden [&>button]:hidden bg-white">
+        {/* Bouton fermer custom - Positionné en absolu par rapport au DialogContent (qui est fixed, donc contexte de positionnement) */}
+        <div className="absolute right-2 top-2 sm:right-4 sm:top-4 z-[60]">
+          <button
             onClick={onClose}
-            className="absolute sm:right-2 sm:top-2 right-4 top-4 sm:h-12 sm:w-12 h-10 w-10 rounded-full hover:bg-accent z-50 group border-0 shadow-none"
+            className="flex items-center justify-center h-8 w-8 sm:h-10 sm:w-10 rounded-full bg-white/50 hover:bg-[#C8D96F]/30 hover:text-[#2D5F4F] transition-all duration-400 ease-in-out hover:rotate-180 text-foreground "
+            type="button"
           >
-            <X
-              className="sm:!h-8 !h-6 sm:!w-8 !w-6 group-hover:rotate-180 transition-all duration-400"
-              strokeWidth={1.5}
-            />
+            <X className="h-5 w-5 sm:h-6 sm:w-6" strokeWidth={1.5} />
             <span className="sr-only">Fermer</span>
-          </Button>
+          </button>
+        </div>
+
+        {/* Header fixe */}
+        <div className="px-6 pt-6 pb-4 border-b border-border">
 
           <DialogHeader>
             <div className="flex items-start justify-between pr-10">
@@ -181,10 +180,10 @@ export function DemandeModal({
                 </DialogDescription>
               </div>
               <div className="flex items-center gap-2 flex-wrap pr-4">
-                <Badge variant={urgenceBadgeVariants[demande.urgence]}>
+                <Badge className={`border ${urgenceBadgeStyles[demande.urgence]}`}>
                   {urgenceLabels[demande.urgence]}
                 </Badge>
-                <Badge variant={statutBadgeVariants[demande.statut]}>
+                <Badge className={`border ${statutBadgeStyles[demande.statut]}`}>
                   {statutLabels[demande.statut]}
                 </Badge>
               </div>
@@ -193,16 +192,22 @@ export function DemandeModal({
 
           {/* Actions rapides */}
           <div className="flex gap-2 mt-4">
-            <Button asChild variant="default" size="sm">
-              <a href={`tel:${demande.patient.telephone}`} className="flex items-center justify-center gap-2">
+            <Button asChild variant="filled" size="sm">
+              <a
+                href={`tel:${demande.patient.telephone}`}
+                className="flex items-center justify-center gap-2"
+              >
                 <Phone className="w-4 h-4" />
                 <span className="hidden sm:block">Appeler</span>
               </a>
-            </Button>  
+            </Button>
             {demande.patient.email &&
               !demande.patient.email.includes("@temp.local") && (
-                <Button asChild variant="secondary" size="sm">
-                  <a href={`mailto:${demande.patient.email}`} className="flex items-center justify-center gap-2">
+                <Button asChild variant="filled" size="sm">
+                  <a
+                    href={`mailto:${demande.patient.email}`}
+                    className="flex items-center justify-center gap-2"
+                  >
                     <Mail className="w-5 h-5" />
                     <span className="hidden sm:block">Email</span>
                   </a>
@@ -449,7 +454,7 @@ export function DemandeModal({
                 return (
                   <Button
                     key={statut}
-                    variant={isActive ? statutBadgeVariants[statut] : "outline"}
+                    variant={isActive ? "filled" : "outlined"}
                     size="sm"
                     onClick={() => handleUpdateStatut(statut)}
                     disabled={isUpdating || isActive}
@@ -467,7 +472,7 @@ export function DemandeModal({
         <div className="px-6 py-3 border-t border-border bg-muted/30">
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 mb-3">
             <Button
-              variant="outline"
+              variant="outlined"
               size="sm"
               onClick={() => setShowDeleteDialog(true)}
               disabled={isUpdating}

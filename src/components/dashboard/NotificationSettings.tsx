@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/custom/Button";
 import { Card } from "@/components/custom/Card";
-import { Checkbox } from "@/components/custom/Checkbox";
+import { GroupCheckbox } from "@/components/custom/GroupCheckbox";
 import { Input } from "@/components/custom/Input";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -151,7 +151,7 @@ export function NotificationSettings() {
             >
               <div className="flex items-start justify-between">
                 <div className="flex items-start gap-3 flex-1">
-                  <Checkbox
+                  <GroupCheckbox
                     checked={rule.enabled}
                     onCheckedChange={() => toggleRule(rule.id)}
                   />
@@ -271,7 +271,7 @@ export function NotificationSettings() {
           </div>
         </div>
         <div className="mt-4">
-          <Button variant="outline" className="mr-2">
+          <Button variant="outlined" className="mr-2">
             <Settings className="w-4 h-4 mr-2" />
             Tester la Configuration
           </Button>
@@ -342,7 +342,7 @@ export function NotificationSettings() {
           </div>
         </div>
         <div className="mt-4">
-          <Button variant="outline" className="mr-2">
+          <Button variant="outlined" className="mr-2">
             <MessageSquare className="w-4 h-4 mr-2" />
             Envoyer SMS Test
           </Button>

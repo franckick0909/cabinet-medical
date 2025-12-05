@@ -1,10 +1,11 @@
 "use client";
 
-import { ModeToggle } from "@/components/mode-toggle";
 import { SlideMobileMenu } from "@/components/ui/SlideMobileMenu";
+import { AnimatePresence, motion } from "framer-motion";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
+import { SimpleThemeToggle } from "../ui/SimpleThemeToggle";
 
 export function Header() {
   const pathname = usePathname();
@@ -26,113 +27,73 @@ export function Header() {
     setIsMobileMenuOpen(false);
   };
 
-  // Préparer les items du menu mobile
-  const menuItems = [
-    {
-      id: "header-home",
-      href: "/",
-      label: "Home",
-      icon: "🏠",
-      isActive: pathname === "/",
-    },
-    {
-      id: "header-dashboard",
-      href: "/dashboard",
-      label: "Dashboard",
-      icon: "📊",
-      isActive: pathname?.includes("/dashboard"),
-    },
-    {
-      id: "header-demande",
-      href: "/demande/soins",
-      label: "Nouvelle demande",
-      icon: "➕",
-      isActive: pathname?.includes("/demande"),
-    },
-  ];
-
   return (
     <>
-      <header className="fixed top-0 left-0 right-0 z-50 backdrop-blur-xl mx-2 sm:mx-4 lg:mx-auto lg:max-w-7xl h-16 sm:h-18 py-2 sm:py-4 rounded-none sm:rounded-full bg-primary-foreground/10 mt-2 sm:mt-4 sm:border  border-border px-3 sm:px-4 lg:px-6 xl:px-8 transition-all duration-300">
-        <div className="max-w-7xl mx-auto">
-          <div className="flex items-center justify-between h-full">
-            {/* Logo */}
+      <header className="fixed top-0 left-0 right-0 z-[100]">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 mix-blend-difference">
+          <div className="flex items-center justify-between h-16 ">
+            {/* Logo minimaliste */}
             <Link
               href="/"
-              className="flex items-center gap-2 sm:gap-3 hover:opacity-80 transition-opacity flex-shrink-0"
+              className="flex items-center gap-2 group"
               onClick={closeMobileMenu}
             >
-              <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-blue-200 rounded-lg flex items-center justify-center">
-                <span className="text-background text-base font-semibold">
-                  H
-                </span>
-              </div>
-              <span className="text-foreground font-normal text-2xl xl:text-2xl font-kaushan-script truncate">
-                <span className="hidden sm:inline pr-4">Cabinet Harmonie</span>
-                <span className="sm:hidden pr-4">Harmonie</span>
+              <span className="text-xl font-medium text-foreground group-hover:text-primary transition-colors duration-300 font-marcellus uppercase tracking-tight">
+                Harmonie
               </span>
             </Link>
 
-            {/* Navigation Desktop */}
-            <nav className="hidden lg:flex items-center gap-4 xl:gap-8 font-normal text-xl xl:text-2xl font-kaushan-script">
-              <Link
-                href="/"
-                className={`transition-colors hover:text-primary px-3 py-1 rounded-md ${
-                  pathname === "/"
-                    ? "text-primary bg-primary/10"
-                    : "text-foreground/80 dark:text-foreground/70 hover:text-foreground hover:bg-primary/5"
-                }`}
-              >
-                Home
-              </Link>
-              <Link
-                href="/dashboard"
-                className={`transition-colors hover:text-primary px-3 py-1 rounded-md ${
-                  pathname?.includes("/dashboard")
-                    ? "text-primary bg-primary/10"
-                    : "text-foreground/80 dark:text-foreground/70 hover:text-foreground hover:bg-primary/5"
-                }`}
-              >
-                Dashboard
-              </Link>
-              <Link
-                href="/demande/soins"
-                className={`transition-colors hover:text-primary px-3 py-1 rounded-md whitespace-nowrap ${
-                  pathname?.includes("/demande")
-                    ? "text-primary bg-primary/10"
-                    : "text-foreground/80 dark:text-foreground/70 hover:text-foreground hover:bg-primary/5"
-                }`}
-              >
-                Nouvelle demande
-              </Link>
-            </nav>
-
-            {/* Actions */}
-            <div className="flex items-center gap-2 sm:gap-4 flex-shrink-0">
-              <div className="hidden sm:block">
-                <ModeToggle />
+            {/* Actions droite */}
+            <motion.div
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, ease: "easeOut" }}
+              className="relative flex items-center py-2 px-4 rounded-full gap-12 mix-blend-difference justify-center bg-foreground backdrop-blur-sm border border-primary-foreground/10"
+            >
+              {/* Theme toggle - visible partout */}
+              <div className="relative z-10">
+                <SimpleThemeToggle />
               </div>
 
-              {/* Menu mobile */}
-              <button
+              {/* Séparateur élégant avec gradient */}
+              <div className="h-full w-px bg-gradient-to-b from-transparent via-background to-transparent absolute left-1/2 -translate-x-1/2" />
+
+              {/* Menu button avec animation - visible partout */}
+              <motion.button
                 type="button"
-                aria-label="Ouvrir le menu mobile"
-                className="lg:hidden px-4 py-2 text-foreground/80 hover:text-primary transition-colors rounded-full hover:bg-primary/5 font-kaushan-script font-normal text-xl xl:text-2xl border border-border/50 hover:border-primary/20"
                 onClick={toggleMobileMenu}
+                className="relative z-10 overflow-hidden h-6 flex items-center justify-center text-background"
+                aria-label={
+                  isMobileMenuOpen ? "Fermer le menu" : "Ouvrir le menu"
+                }
               >
-                {isMobileMenuOpen ? "Fermer" : "Menu"}
-              </button>
-            </div>
+                <AnimatePresence mode="wait">
+                  <motion.span
+                    key={isMobileMenuOpen ? "fermer" : "menu"}
+                    initial={{ y: 20, opacity: 0 }}
+                    animate={{ y: 0, opacity: 1 }}
+                    exit={{ y: -20, opacity: 0 }}
+                    transition={{
+                      type: "spring",
+                      stiffness: 400,
+                      damping: 25,
+                      mass: 0.8,
+                    }}
+                    className="text-xs font-medium uppercase tracking-wider block"
+                  >
+                    {isMobileMenuOpen ? "Fermer" : "Menu"}
+                  </motion.span>
+                </AnimatePresence>
+              </motion.button>
+            </motion.div>
           </div>
         </div>
       </header>
 
-      {/* Menu mobile en glissière */}
+      {/* Menu fullscreen avec images */}
       <SlideMobileMenu
         isOpen={isMobileMenuOpen}
         onClose={closeMobileMenu}
-        menuItems={menuItems}
-        showModeToggle={true}
       />
     </>
   );

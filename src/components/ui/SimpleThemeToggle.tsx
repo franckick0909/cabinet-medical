@@ -35,8 +35,9 @@ export function SimpleThemeToggle() {
 
   return (
     <button
+      type="button"
       onClick={toggleTheme}
-      className="p-2 rounded-full bg-muted/50 hover:bg-muted/80 transition-all duration-200 hover:scale-105"
+      className="p-2 rounded-full bg-muted hover:bg-muted/70 transition-all duration-200 hover:scale-105"
       aria-label="Changer le thème"
       title={`Passer en mode ${theme === "dark" ? "clair" : "sombre"}`}
     >

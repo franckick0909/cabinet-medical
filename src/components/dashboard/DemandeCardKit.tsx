@@ -85,11 +85,15 @@ export function DemandeCardKit({ demande, onClick }: DemandeCardKitProps) {
           <Badge
             variant={urgenceBadgeVariants[demande.urgence]}
             onClick={handleClick}
-            className={`py-1 h-auto text-[10px] px-1 lg:px-2 lg:text-xs rounded-full select-none ${
-              isDragging ? "opacity-50" : ""
-            }`}
+            className={`py-1 h-auto text-[10px] px-1 lg:px-2 rounded-full select-none border shadow-sm max-w-full ${
+              demande.urgence === "URGENTE"
+                ? "bg-red-100 text-red-700 border-red-200 hover:bg-red-200"
+                : demande.urgence === "ELEVEE"
+                ? "bg-orange-100 text-orange-700 border-orange-200 hover:bg-orange-200"
+                : "bg-[#2D5F4F] text-white border-[#2D5F4F] hover:bg-[#1a3a30]"
+            } ${isDragging ? "opacity-50" : ""}`}
           >
-            <span className="font-medium text-[10px] lg:text-xs truncate whitespace-nowrap">
+            <span className="font-medium text-[10px] truncate whitespace-nowrap max-w-full block">
               <span className="lg:hidden uppercase">
                 {demande.patient.prenom.charAt(0).toUpperCase()}
                 {demande.patient.nom.charAt(0).toUpperCase()}
@@ -102,7 +106,7 @@ export function DemandeCardKit({ demande, onClick }: DemandeCardKitProps) {
         </div>
       </HoverCardTrigger>
 
-      <HoverCardContent className="w-full" side="right" align="start">
+      <HoverCardContent className="w-full bg-white/50 backdrop-blur-sm border-white/20 shadow-lg" side="right" align="start">
         <div className="space-y-3">
           {/* Header */}
           <div>

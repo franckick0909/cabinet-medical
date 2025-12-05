@@ -1,12 +1,13 @@
 "use client";
 
+import { GroupCheckbox } from "@/components/custom/GroupCheckbox";
+import { GroupRadio } from "@/components/custom/GroupRadio";
+import { Input } from "@/components/custom/Input";
 import { FormNavigation } from "@/components/demande/FormNavigation";
 import { PageHeader } from "@/components/demande/PageHeader";
 import { AddressAutocomplete } from "@/components/ui/AddressAutocomplete";
-import { Checkbox } from "@/components/custom/Checkbox";
-import { Input } from "@/components/custom/Input";
 import { Label } from "@/components/ui/label";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+// import { RadioGroup } from "@/components/ui/radio-group";
 import { useDemandeStore } from "@/store/demandeStore";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
@@ -79,8 +80,8 @@ export default function PatientPage() {
         continueText="Voir le récapitulatif"
       />
 
-      <div className="bg-muted rounded-lg border border-border p-4 mb-6">
-        <p className="text-sm text-muted-foreground">
+      <div className="bg-[#F9F7F2] rounded-lg border border-[#2D5F4F]/20 p-4 mb-6">
+        <p className="text-sm text-[#1a1a1a]">
           Saisissez vos coordonnées afin qu&apos;un professionnel de santé
           qualifié et disponible prenne contact avec vous pour convenir
           d&apos;un rendez-vous.
@@ -89,47 +90,41 @@ export default function PatientPage() {
 
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="space-y-4 sm:space-y-6 bg-card rounded-lg border border-border p-4 sm:p-6 shadow-sm"
+        className="space-y-4 sm:space-y-6 bg-white rounded-lg border-none p-4 sm:p-6 shadow-sm"
       >
         {/* Civilité */}
         <div className="">
-          <Label className="block text-base sm:text-xl font-semibold text-foreground mb-3 sm:mb-4">
+          <Label className="block text-xl sm:text-2xl font-cormorant-garamond font-bold text-[#2D5F4F] mb-3 sm:mb-4">
             Civilité
           </Label>
 
-          <RadioGroup
-            value={civilite}
-            onValueChange={handleCiviliteChange}
-            className="flex gap-2 sm:gap-4"
-          >
-            <div className="flex-1 flex items-center justify-center p-3 sm:p-4 rounded-lg border-2 border-border hover:border-primary hover:bg-primary/10 cursor-pointer transition-all">
-              <RadioGroupItem
-                value="Madame"
-                id="civilite-madame"
+          <div className="flex gap-2 sm:gap-4">
+            <div
+              className="flex-1 flex items-center justify-center p-3 sm:p-4 rounded-lg border transition-all cursor-pointer group border-gray-200 hover:border-[#2D5F4F] hover:bg-[#2D5F4F]/5"
+              onClick={() => handleCiviliteChange("Madame")}
+            >
+              <GroupRadio
+                checked={civilite === "Madame"}
                 className="mr-2 sm:mr-3 flex-shrink-0"
               />
-              <Label
-                htmlFor="civilite-madame"
-                className="text-sm sm:text-base font-medium text-foreground cursor-pointer"
-              >
+              <Label className="text-sm sm:text-base font-medium text-foreground cursor-pointer group-hover:text-primary">
                 Madame
               </Label>
             </div>
 
-            <div className="flex-1 flex items-center justify-center p-3 sm:p-4 rounded-lg border-2 border-border hover:border-primary hover:bg-primary/10 cursor-pointer transition-all">
-              <RadioGroupItem
-                value="Monsieur"
-                id="civilite-monsieur"
+            <div
+              className="flex-1 flex items-center justify-center p-3 sm:p-4 rounded-lg border transition-all cursor-pointer group border-gray-200 hover:border-[#2D5F4F] hover:bg-[#2D5F4F]/5"
+              onClick={() => handleCiviliteChange("Monsieur")}
+            >
+              <GroupRadio
+                checked={civilite === "Monsieur"}
                 className="mr-2 sm:mr-3 flex-shrink-0"
               />
-              <Label
-                htmlFor="civilite-monsieur"
-                className="text-sm sm:text-base font-medium text-foreground cursor-pointer"
-              >
+              <Label className="text-sm sm:text-base font-medium text-foreground cursor-pointer group-hover:text-primary">
                 Monsieur
               </Label>
             </div>
-          </RadioGroup>
+          </div>
           {errors.civilite && (
             <p className="mt-2 text-sm text-destructive">
               {errors.civilite.message}
@@ -178,7 +173,7 @@ export default function PatientPage() {
 
         {/* Contact */}
         <div className="">
-          <h3 className="text-base sm:text-xl font-semibold text-foreground mb-3 sm:mb-4">
+          <h3 className="text-xl sm:text-2xl font-cormorant-garamond font-bold text-[#2D5F4F] mb-3 sm:mb-4">
             Contact
           </h3>
           <div className="space-y-3 sm:space-y-4">
@@ -212,9 +207,9 @@ export default function PatientPage() {
               />
             </div>
 
-            {/* Checkbox "Je n'ai pas d'email" */}
-            <div className="flex items-center p-3 sm:p-4 rounded-lg border-2 border-border hover:border-primary hover:bg-primary/10 cursor-pointer transition-all">
-              <Checkbox
+            {/* GroupCheckbox "Je n'ai pas d'email" */}
+            <div className="flex items-center p-3 sm:p-4 rounded-lg border transition-all border-gray-200 hover:border-[#2D5F4F] hover:bg-[#2D5F4F]/5 cursor-pointer">
+              <GroupCheckbox
                 id="pas-email"
                 checked={pasEmail}
                 onCheckedChange={(checked) => {
@@ -252,8 +247,8 @@ export default function PatientPage() {
         </div>
 
         {/* Adresse */}
-        <div className="bg-card rounded-lg border border-border p-4 sm:p-6 shadow-sm">
-          <h3 className="text-base sm:text-xl font-semibold text-foreground mb-3 sm:mb-4">
+        <div className="bg-white rounded-lg border-none p-4 sm:p-6 shadow-sm">
+          <h3 className="text-xl sm:text-2xl font-cormorant-garamond font-bold text-[#2D5F4F] mb-3 sm:mb-4">
             Adresse{" "}
           </h3>
           <p className="text-xs sm:text-sm text-muted-foreground mb-3 sm:mb-4">
@@ -274,8 +269,8 @@ export default function PatientPage() {
               placeholder="Ex: 75002 15 rue de la Paix ou 15 rue de la Paix"
             />
 
-            <div className="bg-primary/10 rounded-lg border-2 border-primary/30 p-3 sm:p-4">
-              <p className="text-xs sm:text-sm text-foreground">
+            <div className="bg-[#2D5F4F]/5 rounded-lg border border-[#2D5F4F]/10 p-3 sm:p-4">
+              <p className="text-xs sm:text-sm text-[#2D5F4F]">
                 💡 <strong>Astuce :</strong> Tapez au moins 3 caractères. Vous
                 pouvez commencer par votre code postal (ex: 75002 rue de la
                 Paix) ou directement par votre numéro et rue (ex: 15 rue de la

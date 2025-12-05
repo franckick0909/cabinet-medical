@@ -15,6 +15,11 @@ interface DashboardTabsOptimizedProps {
   isModalOpen: boolean;
   isLoading: boolean;
   currentWeekStart: Date;
+  patientStats: {
+    patientsAujourdhui: number;
+    patientsCetteSemaine: number;
+    patientsCeMois: number;
+  };
   onDemandeSelect: (demande: Demande) => void;
   onModalClose: () => void;
   onWeekChange: (date: Date) => void;
@@ -29,6 +34,7 @@ interface DashboardTabsOptimizedProps {
 export function DashboardTabsOptimized({
   demandes,
   currentWeekStart,
+  patientStats,
   onDemandeSelect,
   onWeekChange,
   onDemandeUpdate,
@@ -96,7 +102,12 @@ export function DashboardTabsOptimized({
     <DashboardLayout
       activeTab={activeTab}
       onTabChange={setActiveTab}
-      stats={stats}
+      stats={{
+        ...stats,
+        patientsAujourdhui: patientStats.patientsAujourdhui,
+        patientsCetteSemaine: patientStats.patientsCetteSemaine,
+        patientsCeMois: patientStats.patientsCeMois,
+      }}
     >
       {renderTabContent()}
     </DashboardLayout>

@@ -175,52 +175,52 @@ export function NotificationCenter({
   };
 
   return (
-    <div className="h-full flex flex-col">
-      {/* Header */}
-      <div className="flex-shrink-0 p-6 border-b border-border bg-background/95 backdrop-blur">
+    <div className="h-full flex flex-col bg-surface text-on-surface">
+      {/* Header Material Design 3 */}
+      <div className="flex-shrink-0 p-6 border-b border-outline-variant bg-surface/95 backdrop-blur-sm">
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-2xl font-bold text-foreground">
+            <h1 className="headline-medium text-on-surface">
               Centre de Notifications
             </h1>
-            <p className="text-muted-foreground">
+            <p className="body-medium text-on-surface-variant">
               Gérez les rappels et notifications automatiques
             </p>
           </div>
-          <div className="flex items-center gap-2">
-            <Badge variant="secondary">
+          <div className="flex items-center gap-3">
+            <Badge variant="tonal" className="secondary-container">
               {pendingNotifications.length} en attente
             </Badge>
-            <Badge variant="outline">
+            <Badge variant="outlined" className="tertiary-container">
               {confirmationNeeded.length} à confirmer
             </Badge>
           </div>
         </div>
 
-        {/* Tabs */}
-        <div className="flex gap-1 mt-4">
+        {/* Tabs Material Design 3 */}
+        <div className="flex gap-2 mt-6">
           <Button
-            variant={activeTab === "pending" ? "default" : "ghost"}
-            size="sm"
+            variant={activeTab === "pending" ? "filled" : "text"}
+            size="md"
             onClick={() => setActiveTab("pending")}
           >
-            <Bell className="w-4 h-4 mr-2" />
+            <Bell className="w-5 h-5 mr-2" />
             En attente ({pendingNotifications.length})
           </Button>
           <Button
-            variant={activeTab === "sent" ? "default" : "ghost"}
-            size="sm"
+            variant={activeTab === "sent" ? "filled" : "text"}
+            size="md"
             onClick={() => setActiveTab("sent")}
           >
-            <Send className="w-4 h-4 mr-2" />
+            <Send className="w-5 h-5 mr-2" />
             Confirmations ({confirmationNeeded.length})
           </Button>
           <Button
-            variant={activeTab === "settings" ? "default" : "ghost"}
-            size="sm"
+            variant={activeTab === "settings" ? "filled" : "text"}
+            size="md"
             onClick={() => setActiveTab("settings")}
           >
-            <Settings className="w-4 h-4 mr-2" />
+            <Settings className="w-5 h-5 mr-2" />
             Paramètres
           </Button>
         </div>
@@ -229,27 +229,27 @@ export function NotificationCenter({
       {/* Content */}
       <div className="flex-1 overflow-auto p-6">
         {activeTab === "pending" && (
-          <div className="space-y-4">
-            <h2 className="text-lg font-semibold">
+          <div className="space-y-6">
+            <h2 className="title-large text-on-surface">
               Notifications automatiques en attente
             </h2>
             {pendingNotifications.length === 0 ? (
-              <Card className="p-8 text-center">
-                <Bell className="w-12 h-12 mx-auto text-muted-foreground mb-4" />
-                <h3 className="font-medium mb-2">
+              <Card variant="elevated" className="p-8 text-center">
+                <Bell className="w-12 h-12 mx-auto text-on-surface-variant mb-4" />
+                <h3 className="title-medium text-on-surface mb-2">
                   Aucune notification en attente
                 </h3>
-                <p className="text-muted-foreground">
+                <p className="body-medium text-on-surface-variant">
                   Les notifications automatiques apparaîtront ici selon vos
                   règles configurées.
                 </p>
               </Card>
             ) : (
               pendingNotifications.map((notification) => (
-                <Card key={notification.id} className="p-4">
+                <Card key={notification.id} variant="elevated" className="p-6">
                   <div className="flex items-center justify-between">
                     <div className="flex-1">
-                      <div className="flex items-center gap-2 mb-2">
+                      <div className="flex items-center gap-3 mb-3">
                         <Badge
                           className={getNotificationTypeColor(
                             notification.type
@@ -260,7 +260,7 @@ export function NotificationCenter({
                             "Confirmation"}
                           {notification.type === "follow-up" && "Suivi"}
                         </Badge>
-                        <span className="text-sm text-muted-foreground">
+                        <span className="body-small text-on-surface-variant">
                           Programmé pour{" "}
                           {notification.scheduledFor.toLocaleString("fr-FR")}
                         </span>
@@ -296,7 +296,7 @@ export function NotificationCenter({
                         {notification.channels.map((channel) => (
                           <Badge
                             key={channel}
-                            variant="outline"
+                            variant="outlined"
                             className="text-xs"
                           >
                             {channel === "sms" ? (
@@ -316,7 +316,7 @@ export function NotificationCenter({
                     </div>
 
                     <div className="flex items-center gap-2">
-                      <Button variant="outline" size="sm">
+                      <Button variant="outlined" size="sm">
                         <X className="w-4 h-4" />
                         Annuler
                       </Button>
@@ -387,7 +387,7 @@ export function NotificationCenter({
 
                     <div className="flex items-center gap-2">
                       <Button
-                        variant="outline"
+                        variant="outlined"
                         size="sm"
                         onClick={() =>
                           sendManualNotification(demande.id, "sms")
@@ -397,7 +397,7 @@ export function NotificationCenter({
                         SMS
                       </Button>
                       <Button
-                        variant="outline"
+                        variant="outlined"
                         size="sm"
                         onClick={() =>
                           sendManualNotification(demande.id, "email")
@@ -464,13 +464,13 @@ export function NotificationCenter({
 
                     <div className="flex items-center gap-2">
                       <Button
-                        variant={rule.active ? "default" : "outline"}
+                        variant={rule.active ? "filled" : "outlined"}
                         size="sm"
                         onClick={() => toggleRule(rule.id)}
                       >
                         {rule.active ? "Actif" : "Inactif"}
                       </Button>
-                      <Button variant="ghost" size="sm">
+                      <Button variant="outlined" size="sm">
                         <Settings className="w-4 h-4" />
                       </Button>
                     </div>
@@ -484,13 +484,13 @@ export function NotificationCenter({
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
                   <span>Notifications par email activées</span>
-                  <Button variant="outline" size="sm">
+                  <Button variant="outlined" size="sm">
                     Activé
                   </Button>
                 </div>
                 <div className="flex items-center justify-between">
                   <span>Notifications SMS activées</span>
-                  <Button variant="outline" size="sm">
+                  <Button variant="outlined" size="sm">
                     Activé
                   </Button>
                 </div>

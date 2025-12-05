@@ -1,4 +1,5 @@
 import { RecapSidebar } from "@/components/demande/RecapSidebar";
+import HarmonieHeader from "@/components/harmonie/HarmonieHeader";
 
 export default function DemandeLayout({
   children,
@@ -6,14 +7,15 @@ export default function DemandeLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-muted to-accent dark:from-background dark:via-muted dark:to-accent pt-16">
-      <div className="w-full px-2 sm:px-4 lg:px-6 xl:px-8 py-4 md:py-8">
+    <div className="min-h-screen bg-[#F9F7F2] text-[#1a1a1a]">
+      <HarmonieHeader />
+      <div className="w-full px-2 sm:px-4 lg:px-6 xl:px-12 py-8 pt-24">
         <div className="flex flex-col lg:flex-row gap-6 lg:gap-8 items-start">
           {/* Contenu principal */}
           <div className="w-full lg:flex-[2] min-w-0">{children}</div>
 
           {/* Sidebar récapitulative - cachée sur mobile, visible sur desktop */}
-          <div className="hidden lg:block lg:flex-[1] lg:sticky lg:top-20 max-w-md">
+          <div className="hidden lg:block lg:flex-[1] lg:sticky lg:top-24 max-w-md">
             <RecapSidebar />
           </div>
         </div>

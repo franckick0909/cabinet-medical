@@ -270,7 +270,7 @@ export function PlanningView({
           {/* Sélecteur de vue */}
           <div className="flex items-center gap-2">
             <Button
-              variant={viewType === "week" ? "default" : "outline"}
+              variant={viewType === "week" ? "filled" : "outlined"}
               size="sm"
               onClick={() => setViewType("week")}
             >
@@ -278,7 +278,7 @@ export function PlanningView({
               Semaine
             </Button>
             <Button
-              variant={viewType === "month" ? "default" : "outline"}
+              variant={viewType === "month" ? "filled" : "outlined"}
               size="sm"
               onClick={() => setViewType("month")}
             >
@@ -291,16 +291,16 @@ export function PlanningView({
         {/* Navigation et statistiques */}
         <div className="flex flex-wrap gap-2 items-center justify-between">
           <div className="flex items-center justify-between w-full sm:w-auto gap-2">
-            <Button variant="outline" size="sm" onClick={goToPrevious}>
+            <Button variant="outlined" size="sm" onClick={goToPrevious}>
               <ChevronLeft className="w-4 h-4" />
               <span className="hidden sm:inline ml-1">
                 {viewType === "week" ? "Semaine précédente" : "Mois précédent"}
               </span>
             </Button>
-            <Button variant="outline" size="sm" onClick={goToToday}>
+            <Button variant="outlined" size="sm" onClick={goToToday}>
               Aujourd&apos;hui
             </Button>
-            <Button variant="outline" size="sm" onClick={goToNext}>
+            <Button variant="outlined" size="sm" onClick={goToNext}>
               <span className="hidden sm:inline mr-1">
                 {viewType === "week" ? "Semaine suivante" : "Mois suivant"}
               </span>
@@ -375,9 +375,9 @@ export function PlanningView({
                   return (
                     <div
                       key={day.toISOString()}
-                      className={`min-h-[120px] p-2 border-r border-b border-border ${
-                        !isCurrentMonth ? "bg-muted/20" : ""
-                      } ${isToday ? "bg-primary/5" : ""}`}
+                      className={`min-h-[120px] p-2 border-r border-b border-[#2D5F4F]/10 ${
+                        !isCurrentMonth ? "bg-[#F9F7F2]/50" : "bg-white"
+                      } ${isToday ? "bg-[#C8D96F]/10" : ""}`}
                     >
                       <div className="flex items-center justify-between mb-2">
                         <span
@@ -414,7 +414,7 @@ export function PlanningView({
                                   | "default"
                                   | "secondary"
                                   | "destructive"
-                                  | "outline"
+                                  | "outlined"
                               }
                               className="w-full justify-start text-[10px] px-1 py-0.5 h-auto mb-1"
                             >
@@ -428,7 +428,7 @@ export function PlanningView({
                                   | "default"
                                   | "secondary"
                                   | "destructive"
-                                  | "outline"
+                                  | "outlined"
                               }
                               className="w-full justify-start text-[9px] px-1 py-0.5 h-auto"
                             >

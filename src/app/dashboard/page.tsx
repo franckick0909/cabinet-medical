@@ -1,6 +1,8 @@
 "use client";
 
 import { getDemandes } from "@/actions/dashboard";
+import { getPatientStats } from "@/actions/patientStats";
+import { refreshPlanningStats } from "@/actions/planningStats";
 import { DashboardTabsOptimized } from "@/components/dashboard/DashboardTabsOptimized";
 import { DemandeModal } from "@/components/dashboard/DemandeModal";
 import type { Demande } from "@/types/demande";
@@ -11,6 +13,11 @@ export default function DashboardPage() {
   const [selectedDemande, setSelectedDemande] = useState<Demande | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [patientStats, setPatientStats] = useState({
+    patientsAujourdhui: 0,
+    patientsCetteSemaine: 0,
+    patientsCeMois: 0,
+  });
   const [currentWeekStart, setCurrentWeekStart] = useState<Date>(() => {
     // Calculer le début de la semaine (lundi)
     const today = new Date();
@@ -38,6 +45,14 @@ export default function DashboardPage() {
       if (result.success && result.data) {
         setDemandes(result.data as unknown as Demande[]);
       }
+
+      // Mettre à jour les statistiques de planning
+      await refreshPlanningStats();
+
+      // Récupérer les statistiques de patients
+      const patientStatsResult = await getPatientStats();
+      console.log("🔍 Statistiques patients récupérées:", patientStatsResult);
+      setPatientStats(patientStatsResult);
     } catch (error) {
       console.error("Erreur lors du chargement des demandes:", error);
     } finally {
@@ -89,6 +104,7 @@ export default function DashboardPage() {
         isModalOpen={isModalOpen}
         isLoading={isLoading}
         currentWeekStart={currentWeekStart}
+        patientStats={patientStats}
         onDemandeSelect={handleDemandeClick}
         onModalClose={handleModalClose}
         onWeekChange={setCurrentWeekStart}

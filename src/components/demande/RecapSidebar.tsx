@@ -2,15 +2,15 @@
 
 import { Button } from "@/components/custom/Button";
 import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+    AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { Badge } from "@/components/ui/badge";
 import { useDemandeStore } from "@/store/demandeStore";
@@ -65,7 +65,7 @@ export function RecapSidebar() {
           {getPreviousStep() && (
             <Button
               type="button"
-              variant="outline"
+              variant="outlined"
               onClick={() => router.push(getPreviousStep()!)}
               className="w-full sm:flex-1 lg:w-full h-auto px-3 sm:px-4 py-2 sm:py-3 border-2 text-sm sm:text-base font-medium"
             >
@@ -82,8 +82,8 @@ export function RecapSidebar() {
             <AlertDialogTrigger asChild>
               <Button
                 type="button"
-                variant="outline"
-                className="w-full sm:flex-1 lg:w-full h-auto px-3 sm:px-4 py-2 sm:py-3 border border-red-500 text-red-500 hover:bg-red-500 hover:text-white text-sm sm:text-base font-medium transition-all"
+                variant="destructive"
+                className="w-full sm:flex-1 lg:w-full h-auto px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base font-medium"
               >
                 <RotateCcw className="w-4 h-4 sm:w-5 sm:h-5 mr-2" />
                 <span className="hidden sm:inline">Recommencer la demande</span>
@@ -111,8 +111,8 @@ export function RecapSidebar() {
           </AlertDialog>
         </div>
 
-        <div className="bg-card rounded-lg border border-border p-4 sm:p-6 shadow-sm">
-          <h2 className="text-base sm:text-lg lg:text-xl font-semibold text-foreground mb-4 sm:mb-6">
+        <div className="bg-white rounded-lg shadow-sm p-4 sm:p-6">
+          <h2 className="text-xl sm:text-2xl font-cormorant-garamond font-bold text-[#2D5F4F] mb-4 sm:mb-6">
             Récapitulatif de votre demande
           </h2>
 
@@ -124,8 +124,7 @@ export function RecapSidebar() {
                 <div className="flex-shrink-0 mt-0.5 sm:mt-1">
                   {isStepCompleted("soins") ? (
                     <Badge
-                      variant="default"
-                      className="w-5 h-5 sm:w-6 sm:h-6 rounded-full p-0 flex items-center justify-center"
+                      className="w-5 h-5 sm:w-6 sm:h-6 rounded-full p-0 flex items-center justify-center bg-[#C8D96F] hover:bg-[#C8D96F] text-[#1a1a1a]"
                     >
                       <Check className="w-3 h-3 sm:w-4 sm:h-4" />
                     </Badge>
@@ -153,10 +152,10 @@ export function RecapSidebar() {
                   )}
                 </div>
               </div>
-              <div className="ml-7 sm:ml-9">
+                <div className="ml-7 sm:ml-9">
                 {soin ? (
-                  <div className="text-sm sm:text-base text-foreground bg-primary/10 rounded p-2 sm:p-3">
-                    <p className="font-medium">{soin.details.titre}</p>
+                  <div className="text-sm sm:text-base text-[#1a1a1a] bg-[#F9F7F2] rounded p-2 sm:p-3 border border-[#2D5F4F]/10">
+                    <p className="font-medium text-[#2D5F4F]">{soin.details.titre}</p>
                     <p className="text-xs text-muted-foreground mt-1">
                       {Object.entries(soin.details)
                         .filter(([key]) => key !== "titre")
@@ -182,8 +181,7 @@ export function RecapSidebar() {
                 <div className="flex-shrink-0 mt-0.5 sm:mt-1">
                   {isStepCompleted("ordonnance") ? (
                     <Badge
-                      variant="default"
-                      className="w-5 h-5 sm:w-6 sm:h-6 rounded-full p-0 flex items-center justify-center"
+                      className="w-5 h-5 sm:w-6 sm:h-6 rounded-full p-0 flex items-center justify-center bg-[#C8D96F] hover:bg-[#C8D96F] text-[#1a1a1a]"
                     >
                       <Check className="w-3 h-3 sm:w-4 sm:h-4" />
                     </Badge>
@@ -213,10 +211,10 @@ export function RecapSidebar() {
               </div>
               <div className="ml-7 sm:ml-9">
                 {ordonnance ? (
-                  <div className="text-sm sm:text-base text-foreground">
+                  <div className="text-sm sm:text-base text-[#1a1a1a]">
                     {ordonnance.aOrdonnance ? (
-                      <div className="bg-primary/10 rounded p-2 sm:p-3">
-                        <p className="font-medium">Ordonnance présente</p>
+                      <div className="bg-[#F9F7F2] rounded p-2 sm:p-3 border border-[#2D5F4F]/10">
+                        <p className="font-medium text-[#2D5F4F]">Ordonnance présente</p>
                         {ordonnance.prescritPar && (
                           <p className="text-sm sm:text-base text-muted-foreground mt-1">
                             Dr. {ordonnance.prescritPar}
@@ -247,8 +245,7 @@ export function RecapSidebar() {
                 <div className="flex-shrink-0 mt-0.5 sm:mt-1">
                   {isStepCompleted("disponibilites") ? (
                     <Badge
-                      variant="default"
-                      className="w-5 h-5 sm:w-6 sm:h-6 rounded-full p-0 flex items-center justify-center"
+                      className="w-5 h-5 sm:w-6 sm:h-6 rounded-full p-0 flex items-center justify-center bg-[#C8D96F] hover:bg-[#C8D96F] text-[#1a1a1a]"
                     >
                       <Check className="w-3 h-3 sm:w-4 sm:h-4" />
                     </Badge>
@@ -278,9 +275,9 @@ export function RecapSidebar() {
               </div>
               <div className="ml-7 sm:ml-9">
                 {disponibilite ? (
-                  <div className="text-sm sm:text-base text-foreground space-y-2">
+                  <div className="text-sm sm:text-base text-[#1a1a1a] space-y-2">
                     {disponibilite.datePreferee && (
-                      <div className="bg-primary/10 rounded p-2 sm:p-3">
+                      <div className="bg-[#F9F7F2] rounded p-2 sm:p-3 border border-[#2D5F4F]/10">
                         <p className="text-xs sm:text-sm text-muted-foreground">
                           À partir du
                         </p>
@@ -324,8 +321,7 @@ export function RecapSidebar() {
                 <div className="flex-shrink-0 mt-0.5 sm:mt-1">
                   {isStepCompleted("patient") ? (
                     <Badge
-                      variant="default"
-                      className="w-5 h-5 sm:w-6 sm:h-6 rounded-full p-0 flex items-center justify-center"
+                      className="w-5 h-5 sm:w-6 sm:h-6 rounded-full p-0 flex items-center justify-center bg-[#C8D96F] hover:bg-[#C8D96F] text-[#1a1a1a]"
                     >
                       <Check className="w-3 h-3 sm:w-4 sm:h-4" />
                     </Badge>
@@ -355,8 +351,8 @@ export function RecapSidebar() {
               </div>
               <div className="ml-7 sm:ml-9">
                 {patient ? (
-                  <div className="text-sm sm:text-base text-foreground bg-primary/10 rounded p-2 sm:p-3">
-                    <p className="font-medium">
+                  <div className="text-sm sm:text-base text-[#1a1a1a] bg-[#F9F7F2] rounded p-2 sm:p-3 border border-[#2D5F4F]/10">
+                    <p className="font-medium text-[#2D5F4F]">
                       {patient.prenom} {patient.nom}
                     </p>
                     {patient.email && (
@@ -379,8 +375,8 @@ export function RecapSidebar() {
         </div>
 
         {/* Note informative */}
-        <div className="mt-3 sm:mt-4 p-3 sm:p-4 bg-primary/10 border border-primary/30 rounded-lg">
-          <p className="text-xs sm:text-sm lg:text-base text-primary">
+        <div className="mt-3 sm:mt-4 p-3 sm:p-4 bg-[#2D5F4F]/5 border border-[#2D5F4F]/10 rounded-lg">
+          <p className="text-xs sm:text-sm lg:text-base text-[#2D5F4F]">
             💡 <strong>Astuce :</strong> Vos informations sont sauvegardées
             automatiquement. Vous pouvez modifier chaque section à tout moment.
           </p>

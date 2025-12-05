@@ -1,19 +1,19 @@
 "use client";
 
 import { Button } from "@/components/custom/Button";
-import { Checkbox } from "@/components/custom/Checkbox";
+import { GroupCheckbox } from "@/components/custom/GroupCheckbox";
+import { GroupRadio } from "@/components/custom/GroupRadio";
+import { Input } from "@/components/custom/Input";
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from "@/components/custom/Select";
 import { FormNavigation } from "@/components/demande/FormNavigation";
 import { PageHeader } from "@/components/demande/PageHeader";
-import { Input } from "@/components/custom/Input";
 import { Label } from "@/components/ui/label";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/custom/Select";
 import { useDemandeStore } from "@/store/demandeStore";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -57,7 +57,12 @@ export default function DisponibilitesPage() {
     // Construire la chaîne des créneaux
     const heurePreferee = touteLaJournee
       ? "Toute la journée"
-      : creneaux.map((c) => `De ${c.debut}h à ${c.fin}h`).join(", ");
+      : creneaux.some((c) => c.debut && c.fin)
+        ? creneaux
+            .filter((c) => c.debut && c.fin)
+            .map((c) => `De ${c.debut}h à ${c.fin}h`)
+            .join(", ")
+        : "À définir avec le professionnel";
 
     setDisponibilite({
       datePreferee: dateDebut,
@@ -84,54 +89,46 @@ export default function DisponibilitesPage() {
           !lieuSoins ||
           !dateDebut ||
           !duree ||
-          (duree === "autre" && !dureePersonnalisee) ||
-          (!touteLaJournee && creneaux.some((c) => !c.debut || !c.fin))
+          (duree === "autre" && !dureePersonnalisee)
         }
       />
 
       <div className="space-y-4 sm:space-y-6">
         {/* Lieu des soins */}
-        <div className="bg-card rounded-lg border border-border p-4 sm:p-6 shadow-sm">
-          <Label className="block text-sm sm:text-base font-medium text-foreground mb-3 sm:mb-4">
+        <div className="bg-white rounded-lg border-none p-4 sm:p-6 shadow-sm">
+          <Label className="block text-xl sm:text-2xl font-cormorant-garamond font-bold text-[#2D5F4F] mb-3 sm:mb-4">
             Lieu des soins *
           </Label>
 
-          <RadioGroup
-            value={lieuSoins}
-            onValueChange={setLieuSoins}
-            className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3"
-          >
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3">
             {[
               { value: "À domicile", label: "À domicile" },
               { value: "En cabinet", label: "En cabinet" },
             ].map((option) => (
               <div
                 key={option.value}
-                className="flex items-start p-3 sm:p-4 rounded-lg border-2 border-border hover:border-primary hover:bg-primary/10 cursor-pointer transition-all"
+                className="flex items-start p-3 sm:p-4 rounded-lg border transition-all cursor-pointer group border-gray-200 hover:border-[#2D5F4F] hover:bg-[#2D5F4F]/5"
+                onClick={() => setLieuSoins(option.value)}
               >
-                <RadioGroupItem
-                  value={option.value}
-                  id={`lieu-${option.value}`}
+                <GroupRadio
+                  checked={lieuSoins === option.value}
                   className="mt-0.5"
                 />
-                <Label
-                  htmlFor={`lieu-${option.value}`}
-                  className="ml-2 sm:ml-3 text-sm sm:text-base font-medium text-foreground leading-tight cursor-pointer"
-                >
+                <Label className="ml-2 sm:ml-3 text-sm sm:text-base font-medium text-foreground leading-tight cursor-pointer group-hover:text-primary">
                   {option.label}
                 </Label>
               </div>
             ))}
-          </RadioGroup>
+          </div>
         </div>
 
         {/* Date de début */}
-        <div className="bg-card rounded-lg border border-border p-4 sm:p-6 shadow-sm space-y-2">
+        <div className="bg-white rounded-lg border-none p-4 sm:p-6 shadow-sm space-y-2">
           <Label
             htmlFor="date-debut"
-            className="block text-sm sm:text-base font-medium text-foreground"
+            className="block text-xl sm:text-2xl font-cormorant-garamond font-bold text-[#2D5F4F]"
           >
-            Date de début des soins *
+            Date *
           </Label>
           <Input
             id="date-debut"
@@ -144,16 +141,12 @@ export default function DisponibilitesPage() {
         </div>
 
         {/* Durée des soins */}
-        <div className="bg-card rounded-lg border border-border p-4 sm:p-6 shadow-sm">
-          <Label className="block text-sm sm:text-base font-medium text-foreground mb-3 sm:mb-4">
+        <div className="bg-white rounded-lg border-none p-4 sm:p-6 shadow-sm">
+          <Label className="block text-xl sm:text-2xl font-cormorant-garamond font-bold text-[#2D5F4F] mb-3 sm:mb-4">
             Durée des soins (en jours) *
           </Label>
 
-          <RadioGroup
-            value={duree}
-            onValueChange={setDuree}
-            className="grid grid-cols-2 sm:grid-cols-3 gap-2 sm:gap-3"
-          >
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 sm:gap-3">
             {[
               { value: "1", label: "1 jour" },
               { value: "7", label: "7 jours" },
@@ -165,26 +158,23 @@ export default function DisponibilitesPage() {
             ].map((option) => (
               <div
                 key={option.value}
-                className="flex items-start p-2 sm:p-4 rounded-lg border-2 border-border hover:border-primary hover:bg-primary/10 cursor-pointer transition-all"
+                className="flex items-start p-2 sm:p-4 rounded-lg border transition-all cursor-pointer group border-gray-200 hover:border-[#2D5F4F] hover:bg-[#2D5F4F]/5"
+                onClick={() => setDuree(option.value)}
               >
-                <RadioGroupItem
-                  value={option.value}
-                  id={`duree-${option.value}`}
+                <GroupRadio
+                  checked={duree === option.value}
                   className="mt-0.5"
                 />
-                <Label
-                  htmlFor={`duree-${option.value}`}
-                  className="ml-2 sm:ml-3 text-xs sm:text-base font-medium text-foreground leading-tight cursor-pointer"
-                >
+                <Label className="ml-2 sm:ml-3 text-xs sm:text-base font-medium text-foreground leading-tight cursor-pointer group-hover:text-primary">
                   {option.label}
                 </Label>
               </div>
             ))}
-          </RadioGroup>
+          </div>
 
           {/* Champ conditionnel pour durée personnalisée */}
           {duree === "autre" && (
-            <div className="mt-3 sm:mt-4 p-3 sm:p-4 bg-primary/10 rounded-lg border-2 border-primary/30">
+            <div className="mt-3 sm:mt-4 p-3 sm:p-4 bg-[#2D5F4F]/5 rounded-lg border border-[#2D5F4F]/20">
               <Label
                 htmlFor="duree-personnalisee"
                 className="block text-sm font-medium text-foreground mb-2"
@@ -204,9 +194,9 @@ export default function DisponibilitesPage() {
         </div>
 
         {/* Disponibilités horaires */}
-        <div className="bg-card rounded-lg border border-border p-4 sm:p-6 shadow-sm">
-          <Label className="block text-sm sm:text-base font-medium text-foreground mb-3 sm:mb-4">
-            Disponibilités horaires *
+        <div className="bg-white rounded-lg border-none p-4 sm:p-6 shadow-sm">
+          <Label className="block text-xl sm:text-2xl font-cormorant-garamond font-bold text-[#2D5F4F] mb-3 sm:mb-4">
+            Disponibilités horaires
           </Label>
 
           <p className="text-xs sm:text-sm text-muted-foreground mb-3 sm:mb-4">
@@ -214,9 +204,9 @@ export default function DisponibilitesPage() {
             de santé
           </p>
 
-          {/* Checkbox "Toute la journée" */}
-          <div className="flex items-center p-3 sm:p-4 rounded-lg border-2 border-border hover:border-primary hover:bg-primary/10 cursor-pointer transition-all mb-3 sm:mb-4">
-            <Checkbox
+          {/* GroupCheckbox "Toute la journée" */}
+          <div className="flex items-center p-3 sm:p-4 rounded-lg border transition-all mb-3 sm:mb-4 border-gray-200 hover:border-[#2D5F4F] hover:bg-[#2D5F4F]/5 cursor-pointer">
+            <GroupCheckbox
               id="toute-la-journee"
               checked={touteLaJournee}
               onCheckedChange={(checked) => setTouteLaJournee(checked === true)}
@@ -321,7 +311,7 @@ export default function DisponibilitesPage() {
 
                 <Button
                   type="button"
-                  variant="outline"
+                  variant="outlined"
                   size="sm"
                   onClick={() => {
                     setCreneaux([...creneaux, { debut: "", fin: "" }]);
@@ -337,8 +327,8 @@ export default function DisponibilitesPage() {
 
         {/* Note informative si domicile */}
         {lieuSoins === "À domicile" && (
-          <div className="bg-primary/10 rounded-lg border-2 border-primary/30 p-4 sm:p-6">
-            <p className="text-xs sm:text-sm text-foreground">
+          <div className="bg-[#2D5F4F]/5 rounded-lg border border-[#2D5F4F]/20 p-4 sm:p-6">
+            <p className="text-xs sm:text-sm text-[#2D5F4F]">
               ℹ️ <strong>À l&apos;étape suivante</strong>, nous vous demanderons
               l&apos;adresse complète où les soins seront réalisés.
             </p>

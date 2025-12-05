@@ -233,63 +233,71 @@ export function DemandeCard({
         </div>
       </HoverCardTrigger>
 
-      <HoverCardContent className="w-full" side="right" align="start">
-        <div className="space-y-3">
-          {/* Header */}
+      <HoverCardContent
+        className="w-full elevation-3 bg-surface border-outline-variant"
+        side="right"
+        align="start"
+      >
+        <div className="space-y-4">
+          {/* Header Material Design 3 */}
           <div>
-            <h4 className="text-sm font-semibold">
+            <h4 className="title-medium text-on-surface">
               {demande.patient.prenom} {demande.patient.nom}
             </h4>
-            <p className="text-xs text-muted-foreground">
+            <p className="body-small text-on-surface-variant">
               {demande.patient.telephone}
             </p>
           </div>
 
-          {/* Badges */}
+          {/* Badges Material Design 3 */}
           <div className="flex items-center gap-2 flex-wrap">
             <Badge
               variant={urgenceBadgeVariants[demande.urgence]}
-              className="text-xs"
+              className="label-small"
             >
               {urgenceLabels[demande.urgence]}
             </Badge>
             <Badge
               variant={statutBadgeVariants[demande.statut]}
-              className="text-xs"
+              className="label-small"
             >
               {statutLabels[demande.statut]}
             </Badge>
           </div>
 
-          {/* Info */}
-          <div className="space-y-1.5 text-xs">
-            <div className="flex items-start gap-2">
-              <span className="text-muted-foreground min-w-[60px]">Soin:</span>
-              <span className="font-medium">{demande.typeSoin}</span>
+          {/* Info Material Design 3 */}
+          <div className="space-y-2 body-small">
+            <div className="flex items-start gap-3">
+              <span className="text-on-surface-variant min-w-[60px]">
+                Soin:
+              </span>
+              <span className="text-on-surface font-medium">
+                {demande.typeSoin}
+              </span>
             </div>
             {demande.dateRdv && (
-              <div className="flex items-start gap-2">
-                <span className="text-muted-foreground min-w-[60px]">
+              <div className="flex items-start gap-3">
+                <span className="text-on-surface-variant min-w-[60px]">
                   Date:
                 </span>
-                <span>
+                <span className="text-on-surface">
                   {new Date(demande.dateRdv).toLocaleDateString("fr-FR")}
                   {demande.heureRdv && ` à ${demande.heureRdv}`}
                 </span>
               </div>
             )}
             {demande.lieu && (
-              <div className="flex items-start gap-2">
-                <span className="text-muted-foreground min-w-[60px]">
+              <div className="flex items-start gap-3">
+                <span className="text-on-surface-variant min-w-[60px]">
                   Lieu:
                 </span>
-                <span>📍 {demande.lieu}</span>
+                <span className="text-on-surface">📍 {demande.lieu}</span>
               </div>
             )}
           </div>
 
-          {/* CTA */}
-          <div className="pt-2 border-t text-xs text-muted-foreground">
+          {/* CTA Material Design 3 */}
+          <div className="pt-3 border-t border-outline-variant body-small text-on-surface-variant">
             Cliquez pour voir les détails complets
           </div>
         </div>

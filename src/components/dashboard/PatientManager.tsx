@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/custom/Button";
 import { Card } from "@/components/custom/Card";
-import { Checkbox } from "@/components/custom/Checkbox";
+import { GroupCheckbox } from "@/components/custom/GroupCheckbox";
 import { Input } from "@/components/custom/Input";
 import { Badge } from "@/components/ui/badge";
 import { PatientService, type PatientInfo } from "@/services/patientService";
@@ -280,14 +280,14 @@ export function PatientManager({
 
           <div className="flex gap-2">
             <Button
-              variant={showFilters ? "default" : "outline"}
+              variant={showFilters ? "filled" : "outlined"}
               onClick={() => setShowFilters(!showFilters)}
             >
               <Filter className="w-4 h-4 mr-2" />
               Filtres
             </Button>
 
-            <Button variant="outline" onClick={clearAllFilters}>
+            <Button variant="outlined" onClick={clearAllFilters}>
               <X className="w-4 h-4 mr-2" />
               Effacer
             </Button>
@@ -297,7 +297,7 @@ export function PatientManager({
         {/* Filtres rapides */}
         <div className="flex flex-wrap gap-2 mt-4">
           <Button
-            variant={filters.urgences ? "destructive" : "outline"}
+            variant={filters.urgences ? "destructive" : "outlined"}
             size="sm"
             onClick={() =>
               setFilters((prev) => ({ ...prev, urgences: !prev.urgences }))
@@ -308,7 +308,7 @@ export function PatientManager({
           </Button>
 
           <Button
-            variant={filters.actifs ? "default" : "outline"}
+            variant={filters.actifs ? "filled" : "outlined"}
             size="sm"
             onClick={() =>
               setFilters((prev) => ({ ...prev, actifs: !prev.actifs }))
@@ -319,7 +319,7 @@ export function PatientManager({
           </Button>
 
           <Button
-            variant={filters.nouveaux ? "secondary" : "outline"}
+            variant={filters.nouveaux ? "filled" : "outlined"}
             size="sm"
             onClick={() =>
               setFilters((prev) => ({ ...prev, nouveaux: !prev.nouveaux }))
@@ -330,7 +330,7 @@ export function PatientManager({
           </Button>
 
           <Button
-            variant={filters.rdvAujourdhui ? "secondary" : "outline"}
+            variant={filters.rdvAujourdhui ? "filled" : "outlined"}
             size="sm"
             onClick={() =>
               setFilters((prev) => ({
@@ -359,7 +359,7 @@ export function PatientManager({
                       key={pathologie}
                       className="flex items-center gap-2 cursor-pointer"
                     >
-                      <Checkbox
+                      <GroupCheckbox
                         checked={filters.pathologies.includes(pathologie)}
                         onCheckedChange={() =>
                           toggleFilter("pathologies", pathologie)
@@ -382,7 +382,7 @@ export function PatientManager({
                       key={infirmiere}
                       className="flex items-center gap-2 cursor-pointer"
                     >
-                      <Checkbox
+                      <GroupCheckbox
                         checked={filters.infirmieres.includes(infirmiere)}
                         onCheckedChange={() =>
                           toggleFilter("infirmieres", infirmiere)
@@ -403,21 +403,21 @@ export function PatientManager({
         <div className="flex items-center gap-2 mt-4 pt-4 border-t">
           <span className="text-sm text-muted-foreground">Trier par:</span>
           <Button
-            variant={sortBy === "urgence" ? "default" : "ghost"}
+            variant={sortBy === "urgence" ? "filled" : "ghost"}
             size="sm"
             onClick={() => setSortBy("urgence")}
           >
             Urgence
           </Button>
           <Button
-            variant={sortBy === "nom" ? "default" : "ghost"}
+            variant={sortBy === "nom" ? "filled" : "ghost"}
             size="sm"
             onClick={() => setSortBy("nom")}
           >
             Nom
           </Button>
           <Button
-            variant={sortBy === "date" ? "default" : "ghost"}
+            variant={sortBy === "date" ? "filled" : "ghost"}
             size="sm"
             onClick={() => setSortBy("date")}
           >
@@ -467,10 +467,10 @@ export function PatientManager({
                     {getStatutLabel(patient)}
                   </Badge>
                   {patient.estUrgent && (
-                    <Badge variant="destructive" className="animate-pulse">
+                    <Badge variant="destructive" className="animate-pulse text-white dark:text-background">
                       <AlertTriangle className="w-3 h-3 mr-1" />
                       Urgent
-                    </Badge>
+                    </Badge>  
                   )}
                 </div>
 
@@ -502,19 +502,19 @@ export function PatientManager({
                 {patient.pathologiesRecurrentes.length > 0 && (
                   <div className="flex flex-wrap gap-1 mb-2">
                     {patient.pathologiesRecurrentes
-                      .slice(0, 3)
+                      .slice(0, 10)
                       .map((pathologie) => (
                         <Badge
                           key={pathologie}
-                          variant="outline"
+                          variant="outlined"
                           className="text-xs"
                         >
                           {pathologie}
                         </Badge>
                       ))}
-                    {patient.pathologiesRecurrentes.length > 3 && (
-                      <Badge variant="outline" className="text-xs">
-                        +{patient.pathologiesRecurrentes.length - 3}
+                    {patient.pathologiesRecurrentes.length > 10 && (
+                      <Badge variant="outlined" className="text-xs">
+                        +{patient.pathologiesRecurrentes.length - 10}
                       </Badge>
                     )}
                   </div>
@@ -537,13 +537,13 @@ export function PatientManager({
               </div>
 
               <div className="flex gap-2">
-                <Button variant="outline" size="sm">
+                <Button variant="outlined" size="sm">
                   <Eye className="w-4 h-4" />
                 </Button>
-                <Button variant="outline" size="sm">
+                <Button variant="outlined" size="sm">
                   <History className="w-4 h-4" />
                 </Button>
-                <Button variant="outline" size="sm">
+                <Button variant="outlined" size="sm">
                   <Phone className="w-4 h-4" />
                 </Button>
               </div>
@@ -643,7 +643,7 @@ export function PatientManager({
                           Par: {soin.infirmiere}
                         </div>
                       )}
-                      <Badge variant="outline" className="text-xs">
+                      <Badge variant="outlined" className="text-xs">
                         {soin.statut}
                       </Badge>
                     </div>

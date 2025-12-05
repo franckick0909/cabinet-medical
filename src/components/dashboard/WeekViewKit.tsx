@@ -125,7 +125,11 @@ export function WeekViewKit({
 
         // Pour "Toute la journée"
         if (hour === 0) {
-          return !demande.heureRdv || demande.heureRdv === "Toute la journée";
+          return (
+            !demande.heureRdv ||
+            demande.heureRdv === "Toute la journée" ||
+            demande.heureRdv === "À définir avec le professionnel"
+          );
         }
 
         // Pour une heure spécifique
@@ -163,7 +167,11 @@ export function WeekViewKit({
             <div
               key={index}
               className={`px-2 sm:px-4 py-3 text-center border-r border-border ${
-                isToday ? "bg-primary/10 text-primary font-semibold" : ""
+                isToday
+                  ? "bg-[#C8D96F] text-[#1a1a1a] font-bold"
+                  : index % 2 === 0
+                  ? "bg-[#F9F7F2]"
+                  : "bg-white"
               }`}
             >
               <div className="text-xs sm:text-sm font-medium">
@@ -254,8 +262,12 @@ function DropZoneKit({
     <div
       ref={setNodeRef}
       className={`p-1 border-r border-border relative min-h-[60px] sm:min-h-[80px] ${
-        isToday ? "bg-primary/5" : ""
-      } ${isOver ? "bg-blue-100 border-blue-300" : ""}`}
+        isToday
+          ? "bg-[#C8D96F]/10"
+          : day.getDay() % 2 === 0
+          ? "bg-[#F9F7F2]/30"
+          : "bg-white"
+      } ${isOver ? "bg-[#2D5F4F]/20 border-[#2D5F4F]" : ""}`}
       onClick={handleClick}
     >
       {/* Layout responsive avec CSS Grid */}

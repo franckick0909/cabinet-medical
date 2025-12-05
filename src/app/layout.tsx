@@ -1,23 +1,68 @@
-import { Header } from "@/components/layout/Header";
+import SmoothScroll from "@/components/common/SmoothScroll";
 import { ThemeProvider } from "@/components/theme-provider";
 import type { Metadata } from "next";
-import { Geist, Geist_Mono, Kaushan_Script } from "next/font/google";
+import {
+  Bebas_Neue,
+  Cormorant_Garamond,
+  Inter,
+  Oswald,
+  Syne,
+} from "next/font/google";
+import localFont from "next/font/local";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const inter = Inter({
+  variable: "--font-inter",
+  weight: ["300", "400", "500", "600", "700"],
   subsets: ["latin"],
+  display: "swap",
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const bebasNeue = Bebas_Neue({
+  variable: "--font-bebas-neue",
+  weight: ["400"],
   subsets: ["latin"],
+  display: "swap",
+});
+const cormorantGaramond = Cormorant_Garamond({
+  variable: "--font-cormorant-garamond",
+  weight: ["300", "400", "500", "600", "700"],
+  subsets: ["latin"],
+  display: "swap",
 });
 
-const kaushanScript = Kaushan_Script({
-  variable: "--font-kaushan-script",
-  weight: "400",
+const oswald = Oswald({
+  variable: "--font-oswald",
+  weight: ["300", "400", "500", "600", "700"],
   subsets: ["latin"],
+  display: "swap",
+});
+
+// Syne - Police moderne et distinctive pour les titres
+const syne = Syne({
+  variable: "--font-syne",
+  weight: ["400", "500", "600", "700", "800"],
+  subsets: ["latin"],
+  display: "swap",
+});
+
+// Police Stardom - locale
+const stardom = localFont({
+  src: [
+    {
+      path: "../../public/fonts/Stardom-Regular.woff2",
+      weight: "400",
+      style: "normal",
+    },
+    {
+      path: "../../public/fonts/Stardom-Regular.woff",
+      weight: "400",
+      style: "normal",
+    },
+  ],
+  variable: "--font-stardom",
+  display: "swap",
+  fallback: ["sans-serif"],
 });
 
 export const metadata: Metadata = {
@@ -34,7 +79,7 @@ export default function RootLayout({
   return (
     <html lang="fr" suppressHydrationWarning>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} ${kaushanScript.variable} antialiased`}
+        className={`${inter.variable} ${oswald.variable} ${syne.variable} ${stardom.variable} ${bebasNeue.variable} ${cormorantGaramond.variable} font-inter antialiased`}
       >
         <ThemeProvider
           attribute="class"
@@ -42,8 +87,9 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <Header />
-          {children}
+          <SmoothScroll>
+            {children}
+          </SmoothScroll>
         </ThemeProvider>
       </body>
     </html>
